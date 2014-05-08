@@ -1,10 +1,18 @@
 #include <cstdlib>
-#include <iostream>
+
+#include "ImportData.h"
 
 using namespace std;
 
 int main()
 {
-	cout << "Hello !" << endl;
+// Initialize
+	ImportData *imp = new ImportData();
+
+// Begin
+
+
+// Finalize
+	delete imp;
 	return EXIT_SUCCESS;
 }
