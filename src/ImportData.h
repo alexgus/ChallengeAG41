@@ -62,6 +62,13 @@ private:
 	 * Parse the file and extract informations
 	 */
 	void startParsing();
+
+	/**
+	 * Search the string toFind in s and if there is an
+	 * occurrence of toFind in s it extract the value after the equal
+	 * character of s in val
+	 */
+	void setValue(string *s, string *toFind, int* val);
 };
 
 #endif /* IMPORTDATA_H_ */

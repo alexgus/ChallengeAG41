@@ -17,7 +17,7 @@ ImportData::ImportData()
 	{
 		this->cfile.open(this->FILE.c_str(),fstream::in);
 	}
-	catch(ios_base::failure f)
+	catch(ios_base::failure &f)
 	{
 		cout << "Error opening " << this->FILE << " :" << f.what() << endl;
 	}
@@ -44,12 +44,36 @@ data* ImportData::getData()
 
 void ImportData::startParsing()
 {
-	string tmp;
+	string tmpS;
+
+	string n = string("n");
+	string m = string("m");
+	string c = string("c");
+	string eta = string("eta");
+	string beta = string("beta");
 
 	while(!this->cfile.eof())
 	{
-		getline(this->cfile,tmp);
-		cout << tmp << endl;
+		getline(this->cfile,tmpS);
+
+		this->setValue(&tmpS, &n, &this->d->n);
+		this->setValue(&tmpS, &m, &this->d->m);
+		this->setValue(&tmpS, &c, &this->d->c);
+		this->setValue(&tmpS, &eta, &this->d->eta);
+		this->setValue(&tmpS, &beta, &this->d->beta);
 	}
 
+}
+
+void ImportData::setValue(string *s, string *toFind, int *val)
+{
+	size_t i, pos;
+
+	pos = s->find(*toFind); // FIXME Bug beta//eta
+	if(pos == string::npos)
+		return;
+
+	for(i = pos + toFind->length() + 1; i < s->length(); i++)
+		*val = ((*val)*10) + ((*s)[i] - '0');
+	cout << *val << endl;
 }
