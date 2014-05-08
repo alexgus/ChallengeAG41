@@ -69,11 +69,10 @@ void ImportData::setValue(string *s, string *toFind, int *val)
 {
 	size_t i, pos;
 
-	pos = s->find(*toFind); // FIXME Bug beta//eta
-	if(pos == string::npos)
+	pos = s->find(*toFind);
+	if(pos != 0) // If not find or not corresponding
 		return;
 
 	for(i = pos + toFind->length() + 1; i < s->length(); i++)
 		*val = ((*val)*10) + ((*s)[i] - '0');
-	cout << *val << endl;
 }
