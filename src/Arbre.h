@@ -8,6 +8,8 @@
 #ifndef ARBRE_H_
 #define ARBRE_H_
 
+#include <iostream>
+
 #include "Client.h"
 
 /**
@@ -27,6 +29,7 @@ private:
 	int c;
 	int m;
 	int n;
+
 	Client *lClient;
 
 	int t;
@@ -34,6 +37,8 @@ private:
 	void addTime(int t);
 
 	int getMinCost();
+
+	void delClient(int id);
 };
 
 #endif /* ARBRE_H_ */

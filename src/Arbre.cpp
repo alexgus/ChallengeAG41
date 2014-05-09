@@ -20,7 +20,14 @@ Arbre::Arbre(data* d)
 	for(i=0;i<d->n;i++)
 		this->lClient[i] = Client(i,d);
 
-	// TODO Check for unused clients
+	for(i=0; i < this->n ;i++)
+	{
+		if(this->lClient[i].getSCost() == 0)
+		{
+			this->delClient(this->lClient[i].getId());
+			i--;
+		}
+	}
 }
 
 Arbre::~Arbre()
@@ -33,6 +40,9 @@ Arbre::~Arbre()
 
 void Arbre::start()
 {
+	while(this->n > 1)
+	{
+	}
 }
 
 void Arbre::addTime(int t)
@@ -53,4 +63,28 @@ int Arbre::getMinCost()
 			min = this->lClient[i].getFullCost();
 	}
 	return min;
+}
+
+void Arbre::delClient(int id)
+{
+	int i=0,cpt=0;
+
+	while(i < this->n && this->lClient[i].getId() != id)
+		i++;
+	if(i >= this->n)
+		return;
+
+	Client *tmp = (Client*) malloc(sizeof(Client)*(this->n-1));
+
+	for(i=0;i< this->n;i++)
+	{
+		if(this->lClient[i].getId() != id)
+		{
+			tmp[cpt] = this->lClient[i];
+			cpt++;
+		}
+	}
+
+	this->lClient = tmp;
+	this->n--;
 }
