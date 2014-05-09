@@ -6,6 +6,8 @@
 
 using namespace std;
 
+typedef unsigned int date;
+
 int main()
 {
 // Declaration
