@@ -9,30 +9,26 @@
 
 using namespace std;
 
-typedef unsigned int date;
-
 /**
  * print a matrix
  */
-void printMatrix(int d[MAX_TAU])
+void printTable(int *d, int max)
 {
     int i;
 
-    for(i=1; i<=MAX_TAU; i++)
-    	cout << setw(SETW) << i;
-    cout << endl;
-    for(i=0; i<MAX_TAU; i++)
+    for(i=0; i<max; i++)
     	cout << setw(SETW) << d[i];
 }
 
 int main()
 {
 // Declaration
+	int i;
 	data *d;
 	ImportData *imp;
 
 // Initialize
-	cout << "Initialize Data" << endl;
+	cout << "Initializing Data" << endl;
 	imp = new ImportData();
 	d = imp->getData();
 
@@ -42,7 +38,21 @@ int main()
 		 << "c    : " << d->c				 << endl
 		 << "eta  : " << d->eta				 << endl
 		 << "beta : " << d->beta			 << endl
-		 << "tau  : " << endl; printMatrix(d->tau);
+		 << "tau  : Distance entre le fournisseur et les clients" << endl;
+    for(i=1; i<=MAX_TAU; i++)
+    	cout << setw(SETW) << i;
+    cout << endl;
+    printTable(d->tau, MAX_TAU);
+
+    cout << endl << endl << endl
+    	<< "Dates dues et clients associés aux produits demandés" << endl
+    	<< " i ";
+    for(i=1; i<=d->n; i++)
+       	cout << setw(SETW) << i;
+    cout << endl;
+	cout << "cl "; printTable(d->cl, d->n);
+	cout << endl;
+	cout << "di "; printTable(d->d, d->n);
 
 // Begin
 

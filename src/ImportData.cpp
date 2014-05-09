@@ -52,12 +52,12 @@ void ImportData::startParsing()
 	string eta = string("eta");
 	string beta = string("beta");
 	string tau = string("tau");
+	string cli = string("cli");
+	string di = string("di");
 
 	while(!this->cfile.eof())
 	{
 		getline(this->cfile,tmpS);
-
-
 
 		this->setValue(&tmpS, &n, &this->d->n);
 		this->setValue(&tmpS, &m, &this->d->m);
@@ -65,6 +65,8 @@ void ImportData::startParsing()
 		this->setValue(&tmpS, &eta, &this->d->eta);
 		this->setValue(&tmpS, &beta, &this->d->beta);
 		this->setTable(&tmpS, &tau, this->d->tau);
+		this->setTable(&tmpS, &cli, this->d->cl);
+		this->setTable(&tmpS, &di, this->d->d);
 	}
 }
 
@@ -73,7 +75,7 @@ void ImportData::setValue(string *s, string *toFind, int *val)
 	size_t i, pos;
 
 	pos = s->find(*toFind);
-	if(pos != 0) // If not find or not corresponding
+	if(pos != 0 || (*s)[toFind->length()] != '=') // If not find or not corresponding
 		return;
 
 	for(i = toFind->length() + 1; i < s->length(); i++)
@@ -85,11 +87,11 @@ void ImportData::setTable(string* s, string* toFind, int* val)
 	size_t i = 0, pos, cpt = 0;
 
 	pos = s->find(*toFind);
-	if(pos != 0) // If not find or not corresponding
+	if(pos != 0 || (*s)[toFind->length()] != '=') // If not find or not corresponding
 		return;
 
 	i = toFind->length();
-	while(i < s->length() && cpt < MAX_TAU)
+	while(i < s->length() && (cpt < MAX_TAU || cpt < MAX_N))
 	{
 		for(i = i + 1; (*s)[i] != ' ' && i < s->length(); i++)
 			val[cpt] = ((val[cpt])*10) + ((*s)[i] - '0');

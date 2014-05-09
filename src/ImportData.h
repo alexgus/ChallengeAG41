@@ -13,10 +13,12 @@
 
 #include <iostream>
 
-#define MAX_TAU 6
+#define MAX_TAU 15
+#define MAX_N	30
 
 using namespace std;
 
+// FIXME add double value for beta (using ratio claas too)
 typedef struct inputData
 {
 	int n;				// Number batch to deliver
@@ -25,6 +27,8 @@ typedef struct inputData
 	int eta;			// Constant of the deliver cost
 	int beta;			// Storage's cost function h
 	int tau[MAX_TAU];	// Travel time between 0 and a client
+	int cl[MAX_N];		// Merchandise i to deliver to cl[i]
+	int d[MAX_N];		// Date to deliver merchandise i
 } data;
 
 /**
