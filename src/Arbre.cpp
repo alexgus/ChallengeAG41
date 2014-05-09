@@ -40,8 +40,21 @@ Arbre::~Arbre()
 
 void Arbre::start()
 {
+	int min, id, val;
+	Client c;
+
 	while(this->n > 1)
 	{
+		cout << "t = " << this->t << endl;
+
+		this->getMinCost(&min,&id);
+		cout << "The min cost is " << min << " and the corresponding client " << id << endl;
+
+		c = this->getClient(id);
+		val = c.getFullCost();
+		this->addTime(val);
+
+		this->delClient(id);
 	}
 }
 
@@ -52,17 +65,21 @@ void Arbre::addTime(int t)
 		this->lClient[i].addTime(t);
 }
 
-int Arbre::getMinCost()
+void Arbre::getMinCost(int *id, int *min)
 {
-	int i,min;
+	int i;
 
-	min = this->lClient[0].getFullCost();
+	*min = this->lClient[0].getFullCost();
+	*id= this->lClient[0].getId();
+
 	for(i=1;i<this->n;i++)
 	{
 		if(this->lClient[i].getFullCost() < m)
-			min = this->lClient[i].getFullCost();
+		{
+			*min = this->lClient[i].getFullCost();
+			*id = this->lClient[i].getId();
+		}
 	}
-	return min;
 }
 
 void Arbre::delClient(int id)
@@ -87,4 +104,14 @@ void Arbre::delClient(int id)
 
 	this->lClient = tmp;
 	this->n--;
+}
+
+Client& Arbre::getClient(int id)
+{
+	int i=0;
+	while(i< this->n && this->lClient[i].getId() != id)
+		i++;
+	if(i >= this->n)
+		throw exception();
+	return this->lClient[i];
 }

@@ -12,6 +12,8 @@
 
 #include "Client.h"
 
+using namespace std;
+
 /**
  * Define the algorithm
  */
@@ -36,9 +38,11 @@ private:
 
 	void addTime(int t);
 
-	int getMinCost();
+	void getMinCost(int* id, int* min);
 
 	void delClient(int id);
+
+	Client& getClient(int id);
 };
 
 #endif /* ARBRE_H_ */
