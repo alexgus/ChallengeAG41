@@ -17,7 +17,7 @@ Arbre::Arbre(data* d)
 	// Create clients
 	int i;
 	this->lClient = (Client*) malloc(sizeof(Client)*d->n);
-	for(i=0;i<d->n;i++)
+	for(i=1;i<=d->n;i++)
 		this->lClient[i] = Client(i,d);
 
 	for(i=0; i < this->n ;i++)
