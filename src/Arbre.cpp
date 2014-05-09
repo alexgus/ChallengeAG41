@@ -43,7 +43,7 @@ void Arbre::start()
 	int min, id, val;
 	Client c;
 
-	while(this->n > 1)
+	while(this->n > 0)
 	{
 		cout << "t = " << this->t << endl;
 
@@ -63,6 +63,7 @@ void Arbre::addTime(int t)
 	int i;
 	for(i=0;i<this->n;i++)
 		this->lClient[i].addTime(t);
+	this->t += t;
 }
 
 void Arbre::getMinCost(int *id, int *min)
