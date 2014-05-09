@@ -55,6 +55,7 @@ int main()
 	cout << "cl "; printTable(d->cl, d->n);
 	cout << endl;
 	cout << "di "; printTable(d->d, d->n);
+	cout << endl;
 
 // Begin
 	arbre = new Arbre(d);
