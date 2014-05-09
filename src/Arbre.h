@@ -21,12 +21,19 @@ public:
 
 	virtual ~Arbre();
 
+	void start();
+
 private:
 	int c;
 	int m;
 	int n;
 	Client *lClient;
 
+	int t;
+
+	void addTime(int t);
+
+	int getMinCost();
 };
 
 #endif /* ARBRE_H_ */
