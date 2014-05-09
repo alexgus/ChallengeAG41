@@ -13,15 +13,18 @@
 
 #include <iostream>
 
+#define MAX_TAU 6
+
 using namespace std;
 
 typedef struct inputData
 {
-	int n;		// Number batch to deliver
-	int m;		// Number of clients (client 0 is the provider)
-	int c;		// Capacity of the conveyer
-	int eta;	// Constant of the deliver cost
-	int beta;	// Storage's cost function h
+	int n;				// Number batch to deliver
+	int m;				// Number of clients (client 0 is the provider)
+	int c;				// Capacity of the conveyer
+	int eta;			// Constant of the deliver cost
+	int beta;			// Storage's cost function h
+	int tau[MAX_TAU];	// Travel time between 0 and a client
 } data;
 
 /**
@@ -69,6 +72,13 @@ private:
 	 * character of s in val
 	 */
 	void setValue(string *s, string *toFind, int* val);
+
+	/**
+	 * Search the string toFind in s and if there is an
+	 * occurrence of toFind in s it extract the value after the equal
+	 * character of s in val table
+	 */
+	void setTable(string *s, string *toFind, int* val);
 };
 
 #endif /* IMPORTDATA_H_ */

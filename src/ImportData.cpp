@@ -51,18 +51,21 @@ void ImportData::startParsing()
 	string c = string("c");
 	string eta = string("eta");
 	string beta = string("beta");
+	string tau = string("tau");
 
 	while(!this->cfile.eof())
 	{
 		getline(this->cfile,tmpS);
+
+
 
 		this->setValue(&tmpS, &n, &this->d->n);
 		this->setValue(&tmpS, &m, &this->d->m);
 		this->setValue(&tmpS, &c, &this->d->c);
 		this->setValue(&tmpS, &eta, &this->d->eta);
 		this->setValue(&tmpS, &beta, &this->d->beta);
+		this->setTable(&tmpS, &tau, this->d->tau);
 	}
-
 }
 
 void ImportData::setValue(string *s, string *toFind, int *val)
@@ -73,6 +76,23 @@ void ImportData::setValue(string *s, string *toFind, int *val)
 	if(pos != 0) // If not find or not corresponding
 		return;
 
-	for(i = pos + toFind->length() + 1; i < s->length(); i++)
+	for(i = toFind->length() + 1; i < s->length(); i++)
 		*val = ((*val)*10) + ((*s)[i] - '0');
+}
+
+void ImportData::setTable(string* s, string* toFind, int* val)
+{
+	size_t i = 0, pos, cpt = 0;
+
+	pos = s->find(*toFind);
+	if(pos != 0) // If not find or not corresponding
+		return;
+
+	i = toFind->length();
+	while(i < s->length() && cpt < MAX_TAU)
+	{
+		for(i = i + 1; (*s)[i] != ' ' && i < s->length(); i++)
+			val[cpt] = ((val[cpt])*10) + ((*s)[i] - '0');
+		cpt++;
+	}
 }
