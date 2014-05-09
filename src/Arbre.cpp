@@ -47,7 +47,7 @@ void Arbre::start()
 	{
 		cout << "t = " << this->t << endl;
 
-		this->getMinCost(&min,&id);
+		this->getMinCost(&id,&min);
 		cout << "The min cost is " << min << " and the corresponding client " << id << endl;
 
 		c = this->getClient(id);
