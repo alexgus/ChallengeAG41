@@ -35,6 +35,11 @@ public:
 	virtual ~Client();
 
 	/**
+	 * Get id of the client
+	 */
+	int getId();
+
+	/**
 	 * The time passed
 	 */
 	void addTime(const int toAdd);
@@ -55,9 +60,9 @@ public:
 	int getFullCost();
 
 	/**
-	 * Delete some batch
+	 * Delete batch
 	 */
-	void delBatch(int *id);
+	void delBatch(int id);
 
 private:
 

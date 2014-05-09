@@ -92,3 +92,41 @@ void Client::calcSCost()
 	for(i=0; i < this->nbBatch; i++)
 		this->sCost += this->beta * (this->date[i] - this->t);
 }
+
+int Client::getId()
+{
+	return this->id;
+}
+
+void Client::delBatch(int id)
+{
+	int i,cpt = 0;
+	bool find = false;
+
+	for(i=0;i< this->nbBatch;i++)
+	{
+		if(this->batch[i] == id)
+			find = true;
+	}
+
+	if(!find)
+		return;
+
+	int* tmpB = (int*) malloc(sizeof(int)*(this->nbBatch-1));
+	int* tmpD = (int*) malloc(sizeof(int)*(this->nbBatch-1));
+
+	for(i=0;i< this->nbBatch;i++)
+	{
+		if(this->batch[i] != id)
+		{
+			tmpB[i] = this->batch[i];
+			tmpD[i] = this->date[i];
+			cpt++;
+		}
+	}
+
+	this->nbBatch--;
+	this->batch = tmpB;
+	this->date = tmpD;
+	this->calcSCost();
+}
