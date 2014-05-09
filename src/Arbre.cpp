@@ -92,19 +92,28 @@ void Arbre::delClient(int id)
 	if(i >= this->n)
 		return;
 
-	Client *tmp = (Client*) malloc(sizeof(Client)*(this->n-1));
-
-	for(i=0;i< this->n;i++)
+	if(this->n > 1)
 	{
-		if(this->lClient[i].getId() != id)
-		{
-			tmp[cpt] = this->lClient[i];
-			cpt++;
-		}
-	}
+		Client *tmp = (Client*) malloc(sizeof(Client)*(this->n-1));
 
-	this->lClient = tmp;
-	this->n--;
+		for(i=0;i< this->n;i++)
+		{
+			if(this->lClient[i].getId() != id)
+			{
+				tmp[cpt] = this->lClient[i];
+				cpt++;
+			}
+		}
+
+		this->lClient = tmp;
+		this->n--;
+	}
+	else
+	{
+		this->lClient[0].~Client();
+		free(this->lClient);
+		this->n = 0;
+	}
 }
 
 Client& Arbre::getClient(int id)
