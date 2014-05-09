@@ -4,6 +4,7 @@
 #include <iomanip>
 
 #include "ImportData.h"
+#include "Arbre.h"
 
 #define SETW 6
 
@@ -26,6 +27,7 @@ int main()
 	int i;
 	data *d;
 	ImportData *imp;
+	Arbre *arbre;
 
 // Initialize
 	cout << "Initializing Data" << endl;
@@ -55,8 +57,12 @@ int main()
 	cout << "di "; printTable(d->d, d->n);
 
 // Begin
+	arbre = new Arbre(d);
+	arbre->start();
 
 // Finalize
 	delete imp;
+	delete arbre;
+	free(d);
 	return EXIT_SUCCESS;
 }
