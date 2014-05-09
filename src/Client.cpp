@@ -36,14 +36,17 @@ Client::Client(int id, data* d)
 
 	// Allocate tables to their good size
 	this->nbBatch = cpt;
-	this->batch = (int*) malloc(sizeof(int)*cpt);
-	this->date = (int*) malloc(sizeof(int)*cpt);
-
-	// Copy to the new tables
-	for(i=0;i<cpt;i++)
+	if(cpt != 0)
 	{
-		this->batch[i] = tmpB[i];
-		this->date[i] = tmpD[i];
+		this->batch = (int*) malloc(sizeof(int)*cpt);
+		this->date = (int*) malloc(sizeof(int)*cpt);
+
+		// Copy to the new tables
+		for(i=0;i<cpt;i++)
+		{
+			this->batch[i] = tmpB[i];
+			this->date[i] = tmpD[i];
+		}
 	}
 
 	this->calcSCost();
@@ -55,8 +58,11 @@ Client::Client(int id, data* d)
 
 Client::~Client()
 {
-	free(this->batch);
-	free(this->date);
+	if(this->nbBatch != 0)
+	{
+		free(this->batch);
+		free(this->date);
+	}
 }
 
 void Client::addTime(int toAdd)
@@ -89,6 +95,7 @@ void Client::calcSCost()
 {
 	int i;
 
+	this->sCost = 0;
 	for(i=0; i < this->nbBatch; i++)
 		this->sCost += this->beta * (this->date[i] - this->t);
 }
