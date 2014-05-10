@@ -9,6 +9,16 @@
 
 Client::Client()
 {
+	this->id=0;
+	this->t = 0;
+	this->beta = 0;
+	this->eta = 0;
+	this->timeTransport = 0;
+	this->tCost = 0;
+	this->sCost = 0;
+	this->nbBatch = 0;
+	this->batch = NULL;
+	this->date = NULL;
 }
 
 Client::Client(int id, data* d)
@@ -18,6 +28,8 @@ Client::Client(int id, data* d)
 	this->beta = d->beta;
 	this->eta = d->eta;
 	this->timeTransport = d->tau[id];
+	this->tCost = 0;
+	this->sCost = 0;
 
 	// Fill Batch date and nbBatch
 	int i,cpt=0;
