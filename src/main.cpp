@@ -64,6 +64,5 @@ int main()
 // Finalize
 	delete imp;
 	delete arbre;
-	free(d);
 	return EXIT_SUCCESS;
 }
