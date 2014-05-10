@@ -40,23 +40,42 @@ Arbre::~Arbre()
 
 void Arbre::start()
 {
-	int min, id, val;
+	int cpt = 0, i, minCost, idClient, valSol = 0, time = 0;
+	int tabTime[80] = {0};
 	Client c;
 
 	while(this->n > 0)
 	{
 		cout << "t = " << this->t << endl;
 
-		this->getMinCost(&id,&min);
-		cout << "The min cost is " << min << " and the corresponding client is " << id << endl;
+		this->getMinCost(&idClient,&minCost);
+		cout << "The min cost is " << minCost << " and the corresponding client is " << idClient << endl;
 
-		c = this->getClient(id);
-		val += c.getFullCost();
-		this->addTime(c.getTCost());
+		c = this->getClient(idClient);
 
-		this->delClient(id);
+		// Increment the date
+		this->addTime(c.getTimeTransport()*2);
+		tabTime[cpt] = c.getTimeTransport();
+
+		// Increment the value of the solution
+		valSol += minCost + (tabTime[cpt]*2);
+
+		// Get the min date of the last client
+		if(this->n == 1)
+			time = c.getMinDate();
+
+		this->delClient(idClient);
+
+		cpt++;
 	}
-	cout << "Val : " << val << endl;
+
+	for(i=1; i < cpt;i++)
+		time -= tabTime[i]*2;
+
+	time -= tabTime[0];
+
+	cout << "T0 = " << time << endl;
+	cout << "Solution : " << valSol << endl;
 }
 
 void Arbre::addTime(int t)
@@ -110,11 +129,7 @@ void Arbre::delClient(int id)
 		this->n--;
 	}
 	else
-	{
-		this->lClient[0].~Client();
-		free(this->lClient);
 		this->n = 0;
-	}
 }
 
 Client& Arbre::getClient(int id)
