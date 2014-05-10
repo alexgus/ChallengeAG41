@@ -48,14 +48,15 @@ void Arbre::start()
 		cout << "t = " << this->t << endl;
 
 		this->getMinCost(&id,&min);
-		cout << "The min cost is " << min << " and the corresponding client " << id << endl;
+		cout << "The min cost is " << min << " and the corresponding client is " << id << endl;
 
 		c = this->getClient(id);
-		val = c.getFullCost();
-		this->addTime(val);
+		val += c.getFullCost();
+		this->addTime(c.getTCost());
 
 		this->delClient(id);
 	}
+	cout << "Val : " << val << endl;
 }
 
 void Arbre::addTime(int t)
