@@ -65,6 +65,11 @@ public:
 	int getTimeTransport();
 
 	/**
+	 * Return the minimum date for delivering a batch
+	 */
+	int getMinDate();
+
+	/**
 	 * Delete batch
 	 */
 	void delBatch(int id);

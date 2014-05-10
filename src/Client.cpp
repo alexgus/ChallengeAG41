@@ -28,7 +28,7 @@ Client::Client(int id, data* d)
 	{
 		if(d->cl[i] == id)
 		{
-			tmpB[cpt] = d->cl[i];
+			tmpB[cpt] = i;
 			tmpD[cpt] = d->d[i];
 			cpt++;
 		}
@@ -58,11 +58,11 @@ Client::Client(int id, data* d)
 
 Client::~Client()
 {
-	if(this->nbBatch != 0)
+	/*if(this->nbBatch != 0)
 	{
 		free(this->batch);
 		free(this->date);
-	}
+	}*/
 }
 
 void Client::addTime(int toAdd)
@@ -141,4 +141,18 @@ void Client::delBatch(int id)
 int Client::getTimeTransport()
 {
 	return this->timeTransport;
+}
+
+int Client::getMinDate()
+{
+	if(this->nbBatch == 0)
+		return -1;
+
+	int i, min = this->date[0];
+	for(i=0; i < this->nbBatch;i++)
+	{
+		if(min > this->date[i])
+			min = this->date[i];
+	}
+	return min;
 }
