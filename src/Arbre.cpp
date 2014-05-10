@@ -49,9 +49,9 @@ void Arbre::start()
 		cout << "t = " << this->t << endl;
 
 		this->getMinCost(&idClient,&minCost);
-		cout << "The min cost is " << minCost << " and the corresponding client is " << idClient << endl;
-
 		c = this->getClient(idClient);
+		cout << "The min cost is " << minCost << " (t=" << c.getTCost() << ", s=" << c.getSCost() << ") and the corresponding client is " << idClient << endl;
+
 
 		// Increment the date
 		this->addTime(c.getTimeTransport()*2);
