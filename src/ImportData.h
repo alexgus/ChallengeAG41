@@ -65,6 +65,13 @@ private:
 	/**
 	 * Search the string toFind in s and if there is an
 	 * occurrence of toFind in s it extract the value after the equal
+	 * character of s in val
+	 */
+	void setValue(string *s, string *toFind, double* val);
+
+	/**
+	 * Search the string toFind in s and if there is an
+	 * occurrence of toFind in s it extract the value after the equal
 	 * character of s in val table
 	 */
 	void setTable(string *s, string *toFind, int* val);
