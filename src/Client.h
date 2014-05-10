@@ -60,6 +60,11 @@ public:
 	int getFullCost();
 
 	/**
+	 * Get the time to go to the client
+	 */
+	int getTimeTransport();
+
+	/**
 	 * Delete batch
 	 */
 	void delBatch(int id);

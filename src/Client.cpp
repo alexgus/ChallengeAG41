@@ -137,3 +137,8 @@ void Client::delBatch(int id)
 	this->date = tmpD;
 	this->calcSCost();
 }
+
+int Client::getTimeTransport()
+{
+	return this->timeTransport;
+}
