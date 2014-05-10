@@ -82,6 +82,29 @@ void ImportData::setValue(string *s, string *toFind, int *val)
 		*val = ((*val)*10) + ((*s)[i] - '0');
 }
 
+void ImportData::setValue(string* s, string* toFind, double* val)
+{
+	size_t i,j,pos;
+
+	pos = s->find(*toFind);
+	if(pos != 0 || (*s)[toFind->length()] != '=') // If not find or not corresponding
+		return;
+
+	char* tmp = (char*) malloc(sizeof(char)*s->length());
+
+	for(i = 0 ; i < s->length(); i++)
+		tmp[i] = '\0';
+
+	j=0;
+	for(i = toFind->length() + 1; i < s->length(); i++)
+	{
+		tmp[j] = (*s)[i];
+		j++;
+	}
+
+	*val = atof(tmp);
+}
+
 void ImportData::setTable(string* s, string* toFind, int* val)
 {
 	size_t i = 0, pos, cpt = 0;

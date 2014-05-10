@@ -52,12 +52,12 @@ public:
 	/**
 	 * Return the storage cost
 	 */
-	int getSCost();
+	double getSCost();
 
 	/**
 	 * Return the storage cost + transport cost
 	 */
-	int getFullCost();
+	double getFullCost();
 
 	/**
 	 * Get the time to go to the client
@@ -84,7 +84,7 @@ private:
 	/**
 	 * Storage multiplier
 	 */
-	int beta;
+	double beta;
 
 	/**
 	 * Transport multiplier
@@ -104,7 +104,7 @@ private:
 	/**
 	 * Storage cost
 	 */
-	int sCost;
+	double sCost;
 
 	/**
 	 * Number of batch asked by the client

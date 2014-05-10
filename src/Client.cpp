@@ -76,12 +76,12 @@ int Client::getTCost()
 	return this->tCost;
 }
 
-int Client::getSCost()
+double Client::getSCost()
 {
 	return this->sCost;
 }
 
-int Client::getFullCost()
+double Client::getFullCost()
 {
 	return (this->tCost + this->sCost);
 }
@@ -97,7 +97,7 @@ void Client::calcSCost()
 
 	this->sCost = 0;
 	for(i=0; i < this->nbBatch; i++)
-		this->sCost += this->beta * (this->date[i] - this->t);
+		this->sCost += this->beta * (this->date[i] - this->t) * this->id;
 }
 
 int Client::getId()
