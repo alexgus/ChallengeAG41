@@ -100,7 +100,7 @@ double Client::getFullCost()
 
 void Client::calcTCost()
 {
-	this->tCost = this->timeTransport * this->eta;
+	this->tCost = this->timeTransport * this->eta * 2;
 }
 
 void Client::calcSCost()
