@@ -1,4 +1,6 @@
 #include <cstdlib>
+#include <cstring>
+
 
 #include <iostream>
 #include <iomanip>
@@ -8,6 +10,12 @@
 #define SETW 5
 
 using namespace std;
+
+/**
+ * Display all information if it is true.
+ * Command line option '-v'
+ */
+bool verbose = false;
 
 /**
  * print a matrix
@@ -20,7 +28,17 @@ void printTable(int *d, int max)
     	cout << setw(SETW) << d[i];
 }
 
-int main()
+void handle_arg(int argc, char *argv[])
+{
+	int i;
+	for(i=0;i< argc ; i++)
+	{
+		if(strcmp("-v",argv[i]) == 0)
+			verbose = true;
+	}
+}
+
+int main(int argc, char *argv[])
 {
 // Declaration
 	int i;
@@ -28,32 +46,35 @@ int main()
 	ImportData *imp;
 
 // Initialize
-	cout << "Initializing Data" << endl;
-	imp = new ImportData();
-	d = imp->getData();
+	handle_arg(argc, argv);
+	if(verbose)
+	{
+		cout << "Initializing Data" << endl;
+		imp = new ImportData();
+		d = imp->getData();
 
-	cout << "Initialized constants :" 		 << endl
-		 << "n    : " << d->n				 << endl
-		 << "m    : " << d->m				 << endl
-		 << "c    : " << d->c				 << endl
-		 << "eta  : " << d->eta				 << endl
-		 << "beta : " << d->beta			 << endl
-		 << "tau  : Distance entre le fournisseur et les clients" << endl;
-    for(i=1; i<=d->c; i++)
-    	cout << setw(SETW) << i;
-    cout << endl;
-    printTable(d->tau, d->c);
+		cout << "Initialized constants :" 		 << endl
+			 << "n    : " << d->n				 << endl
+			 << "m    : " << d->m				 << endl
+			 << "c    : " << d->c				 << endl
+			 << "eta  : " << d->eta				 << endl
+			 << "beta : " << d->beta			 << endl
+			 << "tau  : Distance entre le fournisseur et les clients" << endl;
+		for(i=1; i<=d->c; i++)
+			cout << setw(SETW) << i;
+		cout << endl;
+		printTable(d->tau, d->c);
 
-    cout << endl << endl << endl
-    	<< "Dates dues et clients associés aux produits demandés" << endl
-    	<< " i ";
-    for(i=1; i<=d->n; i++)
-       	cout << setw(SETW) << i;
-    cout << endl;
-	cout << "cl "; printTable(d->cl, d->n);
-	cout << endl;
-	cout << "di "; printTable(d->d, d->n);
-
+		cout << endl << endl << endl
+			<< "Dates dues et clients associés aux produits demandés" << endl
+			<< " i ";
+		for(i=1; i<=d->n; i++)
+			cout << setw(SETW) << i;
+		cout << endl;
+		cout << "cl "; printTable(d->cl, d->n);
+		cout << endl;
+		cout << "di "; printTable(d->d, d->n);
+	}
 // Begin
 
 // Finalize
