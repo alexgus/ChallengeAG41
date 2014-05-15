@@ -11,7 +11,6 @@
 #define MAX_TAU 15
 #define MAX_N	30
 
-// FIXME add double value for beta (using ratio claas too)
 typedef struct inputData
 {
 	int    n;			// Number batch to deliver
