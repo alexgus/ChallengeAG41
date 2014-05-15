@@ -8,6 +8,7 @@
 #ifndef TAB_H_
 #define TAB_H_
 
+#include <cstring>
 #include <iostream>
 
 #include "data.h"
@@ -22,6 +23,7 @@ class Tab
 public:
 	/**
 	 * Initialize the class
+	 * Default constructor
 	 */
 	Tab();
 
@@ -33,7 +35,7 @@ public:
 	/**
 	 * Initialize the class with data extracted
 	 */
-	Tab(inputData *d);
+	Tab(data *d);
 
 	/**
 	 * Destroyer of the class.
@@ -184,7 +186,7 @@ private:
 	/**
 	 * A copy of the data
 	 */
-	inputData * const d;
+	data * d;
 
 };
 
