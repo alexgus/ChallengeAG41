@@ -80,9 +80,9 @@ int main(int argc, char *argv[])
 
 	t = new Tab(d);
 // Begin
-
-
-
+	// Little algorithm
+	// Optimize t function of batch's date delivery
+	// Evaluate the solution and keep the way with t
 // Finalize
 	delete imp;
 	return EXIT_SUCCESS;
