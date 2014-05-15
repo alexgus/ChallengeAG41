@@ -10,8 +10,10 @@
 
 #include <cstring>
 #include <iostream>
+#include <vector>
 
 #include "data.h"
+#include "Client.h"
 
 using namespace std;
 
@@ -182,6 +184,11 @@ private:
 	 * The way choose at time t.
 	 */
 	int *way;
+
+	/**
+	 * List of clients
+	 */
+	vector<Client> lClient;
 
 	/**
 	 * A copy of the data
