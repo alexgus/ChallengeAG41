@@ -6,6 +6,7 @@
 #include <iomanip>
 
 #include "ImportData.h"
+#include "Tab.h"
 
 #define SETW 5
 
@@ -44,6 +45,7 @@ int main(int argc, char *argv[])
 	int i;
 	data *d;
 	ImportData *imp;
+	Tab *t;
 
 // Initialize
 	handle_arg(argc, argv);
@@ -75,7 +77,11 @@ int main(int argc, char *argv[])
 		cout << endl;
 		cout << "di "; printTable(d->d, d->n);
 	}
+
+	t = new Tab(d);
 // Begin
+
+
 
 // Finalize
 	delete imp;
