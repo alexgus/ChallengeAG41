@@ -5,7 +5,7 @@
 
 #include "ImportData.h"
 
-#define SETW 6
+#define SETW 5
 
 using namespace std;
 
@@ -39,10 +39,10 @@ int main()
 		 << "eta  : " << d->eta				 << endl
 		 << "beta : " << d->beta			 << endl
 		 << "tau  : Distance entre le fournisseur et les clients" << endl;
-    for(i=1; i<=MAX_TAU; i++)
+    for(i=1; i<=d->c; i++)
     	cout << setw(SETW) << i;
     cout << endl;
-    printTable(d->tau, MAX_TAU);
+    printTable(d->tau, d->c);
 
     cout << endl << endl << endl
     	<< "Dates dues et clients associés aux produits demandés" << endl
