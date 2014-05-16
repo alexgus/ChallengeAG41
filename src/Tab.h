@@ -173,7 +173,7 @@ private:
 	/**
 	 * Size of the matrix
 	 */
-	int iMax,jMax;
+	int iMax;
 
 	/**
 	 * The data matrix with cost
@@ -188,7 +188,7 @@ private:
 	/**
 	 * List of clients
 	 */
-	vector<Client> lClient;
+	vector<Client*> lClient;
 
 	/**
 	 * A copy of the data
