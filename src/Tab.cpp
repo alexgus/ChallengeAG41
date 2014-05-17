@@ -64,9 +64,8 @@ Tab::Tab(data* d)
 			{
 				// i = client number i (i in [1..m])
 				// j = new created client (i is composed of many j)
-				// n = The total numbre of j.
 				// data to extract batch
-				this->lClient.push_back(new Client(i,j,n,d));
+				this->lClient.push_back(new Client(i,j,d));
 				this->iMax++;
 			}
 		}
