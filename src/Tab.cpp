@@ -45,7 +45,7 @@ Tab::Tab(data* d)
 	this->t = 0;
 
 	// Initialize tabs function of batch and clients
-	int nbBpC[d->m] = {-1}; // Nb batch / Client
+	int nbBpC[d->m+1] = {0}; // Nb batch / Client
 	int i,j,n;
 
 	this->iMax = 0;
