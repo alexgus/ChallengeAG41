@@ -47,7 +47,8 @@ Tab::Tab(data* d)
 
 	// Initialize tabs function of batch and clients
 	int nbBpC[d->m+1] = {0}; // Nb batch / Client
-	int i,j,n;
+	int i,j;
+	double n;
 
 	this->nbClients = 0;
 
@@ -57,12 +58,12 @@ Tab::Tab(data* d)
 
 	// Create
 	this->lClient = new vector<Client*>();
-	for(i=0;i<d->n;i++)
+	for(i=1;i<=d->n;i++)
 	{
 		if(nbBpC[i] >= 1)
 		{
-			n = (nbBpC[i]/d->c)+1; // n = number of client to create
-			for(j=0;j<n;j++)
+			n = (nbBpC[i]/(double)d->c) + 1; // n = number of client to create
+			for(j=1;j<n;j++)
 			{
 				// i = client number i (i in [1..m])
 				// j = new created client (i is composed of many j)

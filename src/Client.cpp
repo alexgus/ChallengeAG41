@@ -38,6 +38,7 @@ Client::Client(int id, int n, data* d)
 
 	int* tmpB = (int*) malloc(sizeof(int)*d->n);
 	int* tmpD = (int*) malloc(sizeof(int)*d->n);
+
 	for(i=0; i < d->n ;i++)
 	{
 		if(d->cl[i] == id)
@@ -47,6 +48,9 @@ Client::Client(int id, int n, data* d)
 			cpt++;
 		}
 	}
+
+	if(cpt == 0)
+		throw "nbBatch <= 0 !";
 
 	// Sort tabs
 	int j,k,swapD,swapB;
@@ -83,21 +87,29 @@ Client::Client(int id, int n, data* d)
 	}
 
 	// Allocate tables to their good size
-	this->nbBatch = cpt - (this->id2 * d->c);
-	if(this->nbBatch != 0)
+	/*if(((this->id2 * d->c) + d->c) > cpt)
+		this->nbBatch = (this->id2 * d->c + d->c) - cpt;
+	else
+		this->nbBatch = d->c;*/
+	if(cpt > d->c)
 	{
-		this->batch = (int*) malloc(sizeof(int)*this->nbBatch);
-		this->date = (int*) malloc(sizeof(int)*this->nbBatch);
-
-		// Copy to the new tables
-		for(i=0;i<this->nbBatch;i++)
-		{
-			this->batch[i] = tmpB[(this->id2 * d->c)+i];
-			this->date[i] = tmpD[(this->id2 * d->c)+i];
-		}
+		if(this->id2*d->c <= cpt)
+			this->nbBatch = d->c;
+		else
+			this->nbBatch = (this->id2 * d->c) - cpt;
 	}
 	else
-		throw "nbBatch = 0 !";
+		this->nbBatch = cpt;
+
+	this->batch = (int*) malloc(sizeof(int)*this->nbBatch);
+	this->date = (int*) malloc(sizeof(int)*this->nbBatch);
+
+	// Copy to the new tables
+	for(i=0;i<this->nbBatch;i++)
+	{
+		this->batch[i] = tmpB[(this->id2 - 1)+i];
+		this->date[i] = tmpD[(this->id2 -1)+i];
+	}
 
 	// init cost
 	this->calcSCost();
