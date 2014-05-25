@@ -47,6 +47,7 @@ public:
 
 	/**
 	 * Check if the ways choose make an Hamiltonian path
+	 * @return true if hamiltonian false otherwise
 	 */
 	bool checkHamiltonian();
 
