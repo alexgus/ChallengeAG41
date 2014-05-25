@@ -16,6 +16,7 @@ Tab::Tab()
 	this->t = 0;
 	this->way = 0;
 	this->lClient = 0;
+	this->sol =0;
 }
 
 Tab::Tab(Tab& t)
@@ -27,6 +28,7 @@ Tab::Tab(Tab& t)
 	this->nbClients = t.nbClients;
 	this->t = t.t;
 	this->lClient = new vector<Client*>(*(t.lClient));
+	this->sol = t.sol;
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
@@ -73,6 +75,8 @@ Tab::Tab(data* d)
 			}
 		}
 	}
+
+	this->sol = new Solution(this->lClient);
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients

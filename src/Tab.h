@@ -16,6 +16,7 @@
 
 #include "data.h"
 #include "Client.h"
+#include "Solution.h"
 
 using namespace std;
 
@@ -176,6 +177,15 @@ public:
 	 */
 	int getCol0(int j);
 
+	/**
+	 * Return the current solution of the tab
+	 * @return The solution
+	 */
+	const Solution* getSol() const
+	{
+		return sol;
+	}
+
 private:
 
 	/**
@@ -207,6 +217,11 @@ private:
 	 * List of clients
 	 */
 	vector<Client*> *lClient;
+
+	/**
+	 * Solution of the current tab
+	 */
+	Solution *sol;
 
 	/**
 	 * A copy of the data
