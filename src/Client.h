@@ -78,6 +78,18 @@ public:
 	int getMinDate();
 
 	/**
+	 * Add time to batch delivery date
+	 * @param Time to add
+	 */
+	void addTimeToDate(int t);
+
+	/**
+	 * Remove time to batch delivery date
+	 * @param Time to remove
+	 */
+	void remTimeToDate(int t);
+
+	/**
 	 * Delete batch
 	 */
 	void delBatch(int id);

@@ -162,6 +162,22 @@ void Client::remTime(int t)
 	this->calcSCost();
 }
 
+void Client::addTimeToDate(int t)
+{
+	int i;
+
+	for(i=0;i<this->nbBatch;i++)
+		this->date[i] += t;
+}
+
+void Client::remTimeToDate(int t)
+{
+	int i;
+
+	for(i=0;i<this->nbBatch;i++)
+		this->date[i] -= t;
+}
+
 void Client::calcSCost()
 {
 	int i;
