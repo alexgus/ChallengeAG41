@@ -81,16 +81,7 @@ Tab::Tab(data* d)
 	for(i=0;i < this->nbClients;i++)
 		this->way[i] = -1;
 
-	for(i=0;i < this->nbClients;i++)
-	{
-		for(j=0;j<this->nbClients;j++)
-		{
-			if(i != j)
-				this->mat[i][j] = this->lClient[i]->getFullCost();
-			else
-				this->mat[i][j] = -1;
-		}
-	}
+	this->computeCost();
 }
 
 Tab::~Tab()
@@ -185,22 +176,46 @@ void Tab::deleteWay()
 
 void Tab::computeCost()
 {
+	int i,j;
+
+	for(i=0;i < this->nbClients;i++)
+	{
+		for(j=0;j<this->nbClients;j++)
+		{
+			if(i != j || this->mat[i][j] != -1)
+				this->mat[i][j] = this->lClient[i]->getFullCost();
+			else
+				this->mat[i][j] = -1;
+		}
+	}
 }
 
 void Tab::addTime(int t)
 {
+	int i;
+
+	for(i=0; i< this->nbClients;i++)
+		this->lClient[i]->addTime(t);
+	this->computeCost();
 }
 
 void Tab::remTime(int t)
 {
+	int i;
+
+	for(i=0; i< this->nbClients;i++)
+		//this->lClient[i]->remTime(t); // TODO remTime in Client class
+	this->computeCost();
 }
 
 void Tab::operator >>(int time)
 {
+	this->remTime(time);
 }
 
 void Tab::operator <<(int t)
 {
+	this->addTime(t);
 }
 
 bool Tab::checkHamiltonian()

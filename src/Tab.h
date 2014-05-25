@@ -110,12 +110,12 @@ public:
 	void remTime(int t);
 
 	/**
-	 * Alias of the addTime method
+	 * Alias of the remTime method
 	 */
 	void operator>>(int time);
 
 	/**
-	 * Alias of the remTime method
+	 * Alias of the addTime method
 	 */
 	void operator<<(int t);
 
