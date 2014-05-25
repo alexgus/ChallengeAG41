@@ -128,20 +128,51 @@ Tab& Tab::operator =(Tab& t)
 	return *this;
 }
 
-double Tab::getMinLine(int i, int j)
+double Tab::getMinLine(int i, int j = -1)
 {
+	int min;
+	int itJ;
+
+	for(itJ=0;itJ<this->nbClients;itJ++)
+	{
+		if(itJ != j && min > this->mat[i][itJ])
+			min = this->mat[i][itJ];
+	}
+
+	return min;
 }
 
-double Tab::getMinCol(int j, int i)
+double Tab::getMinCol(int j, int i = -1)
 {
+	int min;
+	int itI;
+
+	for(itI=0;itI<this->nbClients;itI++)
+	{
+		if(itI != i && min > this->mat[itI][j])
+			min = this->mat[itI][j];
+	}
+
+	return min;
 }
 
 void Tab::subtract(double n)
 {
+	int i,j;
+
+	for(i=0;i < this->nbClients;i++)
+	{
+		for(j=0;j<this->nbClients;j++)
+		{
+			if(i != j)
+				this->mat[i][j] -= n;
+		}
+	}
 }
 
 void Tab::operator -(double n)
 {
+	this->subtract(n);
 }
 
 int Tab::maxPenality()
