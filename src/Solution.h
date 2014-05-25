@@ -46,6 +46,17 @@ public:
 	void addWay(int i);
 
 	/**
+	 * Delete the way nb i in solution tab.
+	 * @param The i-eme way to delete
+	 */
+	void deleteWay(int i);
+
+	/**
+	 * Delete the last way from the solution tab
+	 */
+	void deleteLastWay();
+
+	/**
 	 * Check if the ways choose make an Hamiltonian path
 	 * @return true if hamiltonian false otherwise
 	 */

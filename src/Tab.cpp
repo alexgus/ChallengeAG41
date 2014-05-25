@@ -194,10 +194,6 @@ int Tab::maxPenality(int *iMax, int *jMax)
 	return max;
 }
 
-void Tab::deleteWay()
-{
-}
-
 void Tab::computeCost()
 {
 	int i,j;

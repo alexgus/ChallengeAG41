@@ -91,11 +91,6 @@ public:
 	int maxPenality(int *iMax, int *jMax);
 
 	/**
-	 * Delete way (entry of the tab)
-	 */
-	void deleteWay();
-
-	/**
 	 * Compute cost in the matrix
 	 */
 	void computeCost();

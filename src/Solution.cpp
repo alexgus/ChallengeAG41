@@ -63,3 +63,14 @@ double Solution::evaluate()
 
 	return this->eval;
 }
+
+void Solution::deleteWay(int i)
+{
+	this->way[i] = -1;
+}
+
+void Solution::deleteLastWay()
+{
+	this->way[this->nbW-1] = -1;
+	this->nbW--;
+}
