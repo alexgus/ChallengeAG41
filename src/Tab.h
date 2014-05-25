@@ -122,11 +122,6 @@ public:
 	void operator<<(int t);
 
 	/**
-	 * Check if the ways choose make an Hamiltonian path
-	 */
-	bool checkHamiltonian();
-
-	/**
 	 * Get the matrix at time t
 	 * @return The matrix at time t
 	 */

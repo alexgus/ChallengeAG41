@@ -238,11 +238,6 @@ void Tab::operator <<(int t)
 	this->addTime(t);
 }
 
-bool Tab::checkHamiltonian()
-{
-	return false;
-}
-
 void Tab::printMatrix()
 {
 	int i,j;
