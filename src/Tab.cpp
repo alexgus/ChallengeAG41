@@ -221,7 +221,7 @@ void Tab::remTime(int t)
 	int i;
 
 	for(i=0; i< this->nbClients;i++)
-		//this->lClient[i]->remTime(t); // TODO remTime in Client class
+		this->lClient[i]->remTime(t);
 	this->computeCost();
 }
 
@@ -237,6 +237,7 @@ void Tab::operator <<(int t)
 
 bool Tab::checkHamiltonian()
 {
+	return false;
 }
 
 void Tab::printMatrix()

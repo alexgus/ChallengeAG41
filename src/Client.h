@@ -48,6 +48,11 @@ public:
 	void addTime(const int toAdd);
 
 	/**
+	 * Remove time for avoid problems when calculating cost
+	 */
+	void remTime(int t);
+
+	/**
 	 * Return the transport Cost
 	 */
 	int getTCost();

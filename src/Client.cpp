@@ -144,6 +144,12 @@ void Client::calcTCost()
 	this->tCost = this->timeTransport * this->eta * 2;
 }
 
+void Client::remTime(int t)
+{
+	this->t -= t;
+	this->calcSCost();
+}
+
 void Client::calcSCost()
 {
 	int i;
