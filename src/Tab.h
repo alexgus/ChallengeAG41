@@ -160,6 +160,11 @@ public:
 		return eval;
 	}
 
+	/**
+	 * Print the matrix cost
+	 */
+	void printMatrix();
+
 private:
 
 	/**

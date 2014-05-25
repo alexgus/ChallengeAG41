@@ -84,16 +84,13 @@ Tab::Tab(data* d)
 	for(i=0;i < this->nbClients;i++)
 	{
 		for(j=0;j<this->nbClients;j++)
-			this->mat[i][j] = this->lClient[i]->getFullCost();
+		{
+			if(i != j)
+				this->mat[i][j] = this->lClient[i]->getFullCost();
+			else
+				this->mat[i][j] = -1;
+		}
 	}
-
-	// Debug
-    for(j=0;j<this->nbClients;j++)
-    {
-    	for(i=0; i<this->nbClients; i++)
-    		cout << setw(5) << this->mat[j][i];
-    	cout << endl;
-    }
 }
 
 Tab::~Tab()
@@ -151,4 +148,16 @@ void Tab::operator <<(int t)
 
 bool Tab::checkHamiltonian()
 {
+}
+
+void Tab::printMatrix()
+{
+	int i,j;
+
+	for(j=0;j<this->nbClients;j++)
+	{
+		for(i=0; i<this->nbClients; i++)
+			cout << setw(5) << this->mat[j][i];
+		cout << endl;
+	}
 }

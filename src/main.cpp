@@ -80,6 +80,8 @@ int main(int argc, char *argv[])
 	}
 
 	t = new Tab(d);
+	cout << endl << "Base Matrix" << endl;
+	t->printMatrix();
 // Begin
 	// Little algorithm
 	// Optimize t function of batch's date delivery
