@@ -83,9 +83,11 @@ public:
 
 	/**
 	 * Compute the max penalty
+	 * @param iMax The line of the 0 with max penalities
+	 * @param jMax The column of the 0 with max penalities
 	 * @return the max penalty
 	 */
-	int maxPenality();
+	int maxPenality(int *iMax, int *jMax);
 
 	/**
 	 * Delete way (entry of the tab)
@@ -164,6 +166,20 @@ public:
 	 * Print the matrix cost
 	 */
 	void printMatrix();
+
+	/**
+	 * Get the number of 0 in the line i
+	 * @param i The line to check 0
+	 * @return the number of 0
+	 */
+	int getLine0(int i);
+
+	/**
+	 * Get the number of 0 in the column j
+	 * @param j The column to check 0
+	 * @return the number of 0
+	 */
+	int getCol0(int j);
 
 private:
 

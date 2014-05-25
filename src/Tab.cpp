@@ -166,8 +166,25 @@ void Tab::operator -(double n)
 	this->subtract(n);
 }
 
-int Tab::maxPenality()
+int Tab::maxPenality(int *iMax, int *jMax)
 {
+	int i,j;
+	int max;
+
+	for(i=0;i<this->nbClients;i++)
+	{
+		for(j=0;j<this->nbClients;j++)
+		{
+			if(this->mat[i][j] == 0)
+			{
+				*iMax = i;
+				*jMax = j;
+				max = (this->getCol0(j) - 1) + (this->getLine0(i) - 1);
+			}
+		}
+	}
+
+	return max;
 }
 
 void Tab::deleteWay()
@@ -232,4 +249,22 @@ void Tab::printMatrix()
 			cout << setw(5) << this->mat[j][i];
 		cout << endl;
 	}
+}
+
+int Tab::getLine0(int i)
+{
+	int j,nb = 0;
+	for(j=0;j < this->nbClients; j++)
+		if(this->mat[i][j] == 0)
+			nb++;
+	return nb;
+}
+
+int Tab::getCol0(int j)
+{
+	int i,nb = 0;
+	for(i=0;i < this->nbClients; i++)
+		if(this->mat[i][j] == 0)
+			nb++;
+	return nb;
 }
