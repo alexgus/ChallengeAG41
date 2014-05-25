@@ -9,8 +9,10 @@
 #define TAB_H_
 
 #include <cstring>
-#include <iostream>
 #include <vector>
+
+#include <iostream>
+#include <iomanip>
 
 #include "data.h"
 #include "Client.h"
@@ -173,7 +175,7 @@ private:
 	/**
 	 * Size of the matrix
 	 */
-	int iMax;
+	int nbClients;
 
 	/**
 	 * The data matrix with cost

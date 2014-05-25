@@ -11,7 +11,7 @@ Tab::Tab()
 {
 	this->d = 0;
 	this->eval = 0;
-	this->iMax = 0;
+	this->nbClients = 0;
 	this->mat = 0;
 	this->t = 0;
 	this->way = 0;
@@ -23,18 +23,18 @@ Tab::Tab(Tab& t)
 
 	this->d = t.d;
 	this->eval = t.eval;
-	this->iMax = t.iMax;
+	this->nbClients = t.nbClients;
 	this->t = t.t;
 	this->lClient = vector<Client*>(t.lClient);
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-	this->mat = new double*[this->iMax];
-	for(i=0;i<this->iMax;i++)
-		this->mat[i] = new double[this->iMax];
+	this->mat = new double*[this->nbClients];
+	for(i=0;i<this->nbClients;i++)
+		this->mat[i] = new double[this->nbClients];
 
 	// Fill it
-	memcpy(this->mat,t.mat,sizeof(double)*this->iMax*this->iMax);
+	memcpy(this->mat,t.mat,sizeof(double)*this->nbClients*this->nbClients);
 	memcpy(this->way,t.way,sizeof(int)*(this->d->n/this->d->c)*this->d->m);
 }
 
@@ -48,7 +48,7 @@ Tab::Tab(data* d)
 	int nbBpC[d->m+1] = {0}; // Nb batch / Client
 	int i,j,n;
 
-	this->iMax = 0;
+	this->nbClients = 0;
 
 	// Compute the nb of batch per client
 	for(i=0;i<d->n;i++)
@@ -57,35 +57,43 @@ Tab::Tab(data* d)
 	// Create
 	for(i=0;i<d->n;i++)
 	{
-		if(nbBpC[i] >= 0)
+		if(nbBpC[i] >= 1)
 		{
-			n = nbBpC[i]/d->c; // n = number of client to create
+			n = (nbBpC[i]/d->c)+1; // n = number of client to create
 			for(j=0;j<n;j++)
 			{
 				// i = client number i (i in [1..m])
 				// j = new created client (i is composed of many j)
 				// data to extract batch
 				this->lClient.push_back(new Client(i,j,d));
-				this->iMax++;
+				this->nbClients++;
 			}
 		}
 	}
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-	this->mat = new double*[this->iMax];
-	for(i=0;i<this->iMax;i++)
-		this->mat[i] = new double[this->iMax];
+	this->mat = new double*[this->nbClients];
+	for(i=0;i<this->nbClients;i++)
+		this->mat[i] = new double[this->nbClients];
 
 	// Fill tabs
-	for(i=0;i < this->iMax;i++)
+	for(i=0;i < this->nbClients;i++)
 		this->way[i] = -1;
 
-	for(i=0;i < this->iMax;i++)
+	for(i=0;i < this->nbClients;i++)
 	{
-		for(j=0;j<this->iMax;i++)
+		for(j=0;j<this->nbClients;j++)
 			this->mat[i][j] = this->lClient[i]->getFullCost();
 	}
+
+	// Debug
+    for(j=0;j<this->nbClients;j++)
+    {
+    	for(i=0; i<this->nbClients; i++)
+    		cout << setw(5) << this->mat[j][i];
+    	cout << endl;
+    }
 }
 
 Tab::~Tab()

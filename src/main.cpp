@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
 		cout << "cl "; printTable(d->cl, d->n);
 		cout << endl;
 		cout << "di "; printTable(d->d, d->n);
+		cout << endl;
 	}
 
 	t = new Tab(d);
