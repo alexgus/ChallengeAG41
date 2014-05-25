@@ -50,6 +50,39 @@ public:
 	 */
 	bool checkHamiltonian();
 
+	/**
+	 * Compute the value of the solution
+	 * @return the current evaluation of the solution
+	 */
+	double evaluate();
+
+	/**
+	 * Get the current evaluation
+	 * @return The evaluation
+	 */
+	double getEval() const
+	{
+		return eval;
+	}
+
+	/**
+	 * Get the current nb of client in the solution's tab
+	 * @return The nb of current client in the solution's tab
+	 */
+	int getNbW() const
+	{
+		return nbW;
+	}
+
+	/**
+	 * Get the solution's tab
+	 * @return The solution's tab
+	 */
+	int* getWay() const
+	{
+		return way;
+	}
+
 private:
 
 	/**
@@ -61,6 +94,11 @@ private:
 	 * The way tab to follow
 	 */
 	int *way;
+
+	/**
+	 * the current nb of way in the tab
+	 */
+	int nbW;
 
 	/**
 	 * List of clients
