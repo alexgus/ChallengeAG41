@@ -199,7 +199,7 @@ void Tab::computeCost()
 	{
 		for(j=0;j<this->nbClients;j++)
 		{
-			if(i != j || this->mat[i][j] != -1)
+			if(i != j && this->mat[i][j] != -1)
 				this->mat[i][j] = this->lClient[i]->getFullCost();
 			else
 				this->mat[i][j] = -1;
