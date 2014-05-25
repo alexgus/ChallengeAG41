@@ -15,6 +15,7 @@ Tab::Tab()
 	this->mat = 0;
 	this->t = 0;
 	this->way = 0;
+	this->lClient = 0;
 }
 
 Tab::Tab(Tab& t)
@@ -25,7 +26,7 @@ Tab::Tab(Tab& t)
 	this->eval = t.eval;
 	this->nbClients = t.nbClients;
 	this->t = t.t;
-	this->lClient = vector<Client*>(t.lClient);
+	this->lClient = new vector<Client*>(*(t.lClient));
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
@@ -55,6 +56,7 @@ Tab::Tab(data* d)
 		nbBpC[d->cl[i]]++;
 
 	// Create
+	this->lClient = new vector<Client*>();
 	for(i=0;i<d->n;i++)
 	{
 		if(nbBpC[i] >= 1)
@@ -65,7 +67,7 @@ Tab::Tab(data* d)
 				// i = client number i (i in [1..m])
 				// j = new created client (i is composed of many j)
 				// data to extract batch
-				this->lClient.push_back(new Client(i,j,d));
+				this->lClient->push_back(new Client(i,j,d));
 				this->nbClients++;
 			}
 		}
@@ -91,7 +93,7 @@ Tab::~Tab()
 	for(i=0;i < this->nbClients;i++)
 	{
 		delete this->mat[i];
-		delete this->lClient[i];
+		delete this->lClient->at(i);
 	}
 	delete this->mat;
 }
@@ -104,7 +106,7 @@ Tab& Tab::operator =(Tab& t)
 	this->eval = t.eval;
 	this->nbClients = t.nbClients;
 	this->t = t.t;
-	this->lClient = vector<Client*>(t.lClient);
+	this->lClient = new vector<Client*>(*(t.lClient));
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
@@ -200,7 +202,7 @@ void Tab::computeCost()
 		for(j=0;j<this->nbClients;j++)
 		{
 			if(i != j && this->mat[i][j] != -1)
-				this->mat[i][j] = this->lClient[i]->getFullCost();
+				this->mat[i][j] = this->lClient->at(i)->getFullCost();
 			else
 				this->mat[i][j] = -1;
 		}
@@ -212,7 +214,7 @@ void Tab::addTime(int t)
 	int i;
 
 	for(i=0; i< this->nbClients;i++)
-		this->lClient[i]->addTime(t);
+		this->lClient->at(i)->addTime(t);
 	this->computeCost();
 }
 
@@ -221,7 +223,7 @@ void Tab::remTime(int t)
 	int i;
 
 	for(i=0; i< this->nbClients;i++)
-		this->lClient[i]->remTime(t);
+		this->lClient->at(i)->remTime(t);
 	this->computeCost();
 }
 

@@ -211,7 +211,7 @@ private:
 	/**
 	 * List of clients
 	 */
-	vector<Client*> lClient;
+	vector<Client*> *lClient;
 
 	/**
 	 * A copy of the data
