@@ -49,12 +49,13 @@ int main(int argc, char *argv[])
 
 // Initialize
 	handle_arg(argc, argv);
+
+	// Data
+	imp = new ImportData();
+	d = imp->getData();
+
 	if(verbose)
 	{
-		cout << "Initializing Data" << endl;
-		imp = new ImportData();
-		d = imp->getData();
-
 		cout << "Initialized constants :" 		 << endl
 			 << "n    : " << d->n				 << endl
 			 << "m    : " << d->m				 << endl
@@ -79,14 +80,18 @@ int main(int argc, char *argv[])
 		cout << endl;
 	}
 
+	// Structure
 	t = new Tab(d);
 	cout << endl << "Base Matrix" << endl;
 	t->printMatrix();
+
 // Begin
 	// Little algorithm
 	// Optimize t function of batch's date delivery
 	// Evaluate the solution and keep the way with t
+
 // Finalize
 	delete imp;
+	delete t;
 	return EXIT_SUCCESS;
 }

@@ -33,8 +33,6 @@ Client::Client(int id, int n, data* d)
 	this->tCost = 0;
 	this->sCost = 0;
 
-
-
 	// Fill Batch date and nbBatch corresponding to the right client
 	int i,cpt=0;
 
@@ -111,11 +109,13 @@ Client::Client(int id, int n, data* d)
 
 Client::~Client()
 {
-	/*if(this->nbBatch != 0)
+	if(this->nbBatch != 0)
 	{
 		free(this->batch);
+		this->batch = NULL;
 		free(this->date);
-	}*/
+		this->date = NULL;
+	}
 }
 
 void Client::addTime(int toAdd)

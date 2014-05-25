@@ -95,11 +95,37 @@ Tab::Tab(data* d)
 
 Tab::~Tab()
 {
+	int i;
 
+	for(i=0;i < this->nbClients;i++)
+	{
+		delete this->mat[i];
+		delete this->lClient[i];
+	}
+	delete this->mat;
 }
 
 Tab& Tab::operator =(Tab& t)
 {
+	int i;
+
+	this->d = t.d;
+	this->eval = t.eval;
+	this->nbClients = t.nbClients;
+	this->t = t.t;
+	this->lClient = vector<Client*>(t.lClient);
+
+	// Allocate memory
+	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
+	this->mat = new double*[this->nbClients];
+	for(i=0;i<this->nbClients;i++)
+		this->mat[i] = new double[this->nbClients];
+
+	// Fill it
+	memcpy(this->mat,t.mat,sizeof(double)*this->nbClients*this->nbClients);
+	memcpy(this->way,t.way,sizeof(int)*(this->d->n/this->d->c)*this->d->m);
+
+	return *this;
 }
 
 double Tab::getMinLine(int i, int j)
