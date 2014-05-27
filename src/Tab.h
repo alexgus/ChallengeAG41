@@ -130,10 +130,11 @@ public:
 	 * Return the current solution of the tab
 	 * @return The solution
 	 */
-	const Solution* getSol() const
+	Solution* getSol() const
 	{
 		return sol;
 	}
+
 int getNumberOfDelivery();
 private:
 

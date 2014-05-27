@@ -42,7 +42,7 @@ Tab::Tab(data* d)
 	// Initialize tabs function of batch and clients
 	int* nbBpC =(int*) malloc(sizeof (int)*(d->m+1));// Nb batch / Client
 	memset(nbBpC,0,sizeof(int)*(d->m+1));
-	int i,j, cpt;
+	int i,j, cpt = 0;
 	double n;
 
 	// Compute the nb of batch per client
@@ -197,5 +197,6 @@ void Tab::printCost()
 
 void Tab::deleteClientOrder(int numClient)
 {
+	this->sol->addWay(this->getMinClientLine());
 	lClient->erase(lClient->begin()+numClient);
 }

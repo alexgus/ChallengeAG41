@@ -51,7 +51,6 @@ int main(int argc, char *argv[])
 	vector<Client*> *lClient;
 // Initialize
 	handle_arg(argc, argv);
-	solution = new Solution();
 	// Data
 	imp = new ImportData();
 	d = imp->getData();
@@ -99,11 +98,11 @@ int main(int argc, char *argv[])
 		c = t->getMinClientLine();
 		tCost = c->getTCost();
 		t->addTime(tCost/d->eta);
-		solution->addWay(c);
 		t->deleteClientOrder(t->getMinIndexLine());
 	}
 	// Optimize t function of batch's date delivery
 	// Evaluate the solution and keep the way with t
+	solution = t->getSol();
 	lClient = solution->getClient();
 
 	if(verbose)
