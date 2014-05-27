@@ -74,7 +74,18 @@ public:
 	 * @param n Number to subtract
 	 */
 	void subtract(double n);
-
+	/*
+	 * substract val to the line i of the matrix
+	 * @param i line Number
+	 * @param val Value to substract
+	 */
+	void substractToLine(int i, double val);
+	/*
+	 * substract val to the col j of the matrix
+	 * @param j Col Number
+	 * @param val Value to substract
+	 */
+	void substractToCol(int j, double val);
 	/**
 	 * Subtract n to the entire matrix
 	 * Alias of the subtract method

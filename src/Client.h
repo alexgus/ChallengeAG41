@@ -13,7 +13,7 @@
 #include "data.h"
 
 /**
- * Define a Client with his products wanted
+ * Define a Client with the products he wants
  */
 class Client
 {
@@ -43,12 +43,12 @@ public:
 	int getId();
 
 	/**
-	 * The time passed
+	 * Add time to the current time
 	 */
 	void addTime(const int toAdd);
 
 	/**
-	 * Remove time for avoid problems when calculating cost
+	 * Remove time to avoid problems when calculating cost
 	 */
 	void remTime(int t);
 

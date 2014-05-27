@@ -48,7 +48,8 @@ Tab::Tab(data* d)
 	this->t = 0;
 
 	// Initialize tabs function of batch and clients
-	int nbBpC[d->m+1] = {0}; // Nb batch / Client
+	int* nbBpC =(int*) malloc(sizeof (int)*(d->m+1));// Nb batch / Client
+	memset(nbBpC,0,sizeof(int)*(d->m+1));
 	int i,j;
 	double n;
 
@@ -168,6 +169,21 @@ void Tab::subtract(double n)
 	}
 }
 
+void Tab::substractToLine(int i , double val){
+	int j;
+	for(j=0;j< this->nbClients;j++){
+		this->mat[i][j]-=val;
+	}
+}
+
+/*void Tab::substractToCol(int j, double val)
+{
+	int i;
+	for(i=0;i<this->mat[i];i++){
+		this->mat[i][j]-=val;
+	}
+}
+*/
 void Tab::operator -(double n)
 {
 	this->subtract(n);
@@ -258,6 +274,7 @@ int Tab::getLine0(int i)
 			nb++;
 	return nb;
 }
+
 
 int Tab::getCol0(int j)
 {

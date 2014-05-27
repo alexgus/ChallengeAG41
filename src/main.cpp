@@ -83,10 +83,19 @@ int main(int argc, char *argv[])
 	// Structure
 	t = new Tab(d);
 	cout << endl << "Base Matrix" << endl;
-	t->printMatrix();
+
+	if(verbose)
+		t->printMatrix();
 
 // Begin
 	// Little algorithm
+
+	double minLine,minCol;
+	// Get the minimum value for every line and substract it to the rest of the line
+
+
+
+
 	// Optimize t function of batch's date delivery
 	// Evaluate the solution and keep the way with t
 
