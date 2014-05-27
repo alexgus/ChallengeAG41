@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 
 #include "data.h"
 #include "Client.h"
@@ -54,52 +55,35 @@ public:
 	Tab& operator=(Tab& t);
 
 	/**
-	 * Get the minimum of the line
-	 * @param i The line to check
-	 * @param j The current column to exclude from the min. -1 if no exclude
-	 * @return the min of the line
+	 * Get the index of the minimum
+	 * @return the index of the column where the min is located
 	 */
-	double getMinLine(int i, int j);
-
-	/**
-	 * Get the minimum of the column
-	 * @param i The current columns to exclude from the min. -1 if no exclude
-	 * @param j The column to check
-	 * @return the min of the column
+	int getMinIndexLine();
+	/*
+	 * @return the client which has the minimum cost
 	 */
-	double getMinCol(int j, int i);
-
+	Client* getMinClientLine();
+	/*
+	 * @return the minimum cost
+	 */
+	double getMinValLine();
+	/*
+	 * delete the Client from lClient and set -1 to its cost in mat
+	 * @param numClient id of the client
+	 */
+	void deleteClientOrder(int numClient);
 	/**
 	 * Subtract n to the entire matrix
 	 * @param n Number to subtract
 	 */
 	void subtract(double n);
-	/*
-	 * substract val to the line i of the matrix
-	 * @param i line Number
-	 * @param val Value to substract
-	 */
-	void substractToLine(int i, double val);
-	/*
-	 * substract val to the col j of the matrix
-	 * @param j Col Number
-	 * @param val Value to substract
-	 */
-	void substractToCol(int j, double val);
+
 	/**
 	 * Subtract n to the entire matrix
 	 * Alias of the subtract method
 	 * @param n Number to subtract
 	 */
 	void operator-(double n);
-
-	/**
-	 * Compute the max penalty
-	 * @param iMax The line of the 0 with max penalities
-	 * @param jMax The column of the 0 with max penalities
-	 * @return the max penalty
-	 */
-	int maxPenality(int *iMax, int *jMax);
 
 	/**
 	 * Compute cost in the matrix
@@ -117,7 +101,10 @@ public:
 	 * @param t Time to remove
 	 */
 	void remTime(int t);
-
+/*
+ * Sort the mat array from lower cost to greater cost
+ */
+	void sort();
 	/**
 	 * Alias of the remTime method
 	 */
@@ -132,7 +119,7 @@ public:
 	 * Get the matrix at time t
 	 * @return The matrix at time t
 	 */
-	double** getMat() const
+	double* getMat() const
 	{
 		return mat;
 	}
@@ -174,14 +161,7 @@ public:
 	 * @param i The line to check 0
 	 * @return the number of 0
 	 */
-	int getLine0(int i);
-
-	/**
-	 * Get the number of 0 in the column j
-	 * @param j The column to check 0
-	 * @return the number of 0
-	 */
-	int getCol0(int j);
+	int getLine0();
 
 	/**
 	 * Return the current solution of the tab
@@ -191,7 +171,7 @@ public:
 	{
 		return sol;
 	}
-
+int getNumberOfDelivery();
 private:
 
 	/**
@@ -212,7 +192,7 @@ private:
 	/**
 	 * The data matrix with cost
 	 */
-	double **mat;
+	double *mat;
 
 	/**
 	 * The way choose at time t.
@@ -220,7 +200,7 @@ private:
 	int *way;
 
 	/**
-	 * List of clients
+	 * List of client
 	 */
 	vector<Client*> *lClient;
 

@@ -33,11 +33,14 @@ Solution::~Solution()
 		delete this->way;
 }
 
-void Solution::addWay(int i)
+void Solution::addWay(Client* c)
 {
+	this->lClient->push_back(c);
+	/*
 	this->way[this->nbW] = i;
 	this->nbW++;
 	this->evaluate();
+	*/
 }
 
 bool Solution::checkHamiltonian()

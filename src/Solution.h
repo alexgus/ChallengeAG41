@@ -43,7 +43,7 @@ public:
 	 * Add way in the tab
 	 * @param The number of client in the list
 	 */
-	void addWay(int i);
+	void addWay(Client * c);
 
 	/**
 	 * Delete the way nb i in solution tab.
@@ -93,6 +93,11 @@ public:
 	int* getWay() const
 	{
 		return way;
+	}
+
+	 vector<Client*>* getClient() const
+	{
+		return lClient;
 	}
 
 private:

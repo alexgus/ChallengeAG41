@@ -8,6 +8,7 @@
 #include "ImportData.h"
 #include "Tab.h"
 
+#include <vector>
 #define SETW 5
 
 using namespace std;
@@ -46,10 +47,10 @@ int main(int argc, char *argv[])
 	data *d;
 	ImportData *imp;
 	Tab *t;
-
+	Solution *solution;
 // Initialize
 	handle_arg(argc, argv);
-
+	solution = new Solution();
 	// Data
 	imp = new ImportData();
 	d = imp->getData();
@@ -87,18 +88,32 @@ int main(int argc, char *argv[])
 	if(verbose)
 		t->printMatrix();
 
+	cout <<"getNumberOfDelivery "<<t->getNumberOfDelivery()<<endl;
 // Begin
-	// Little algorithm
-
-	double minLine,minCol;
-	// Get the minimum value for every line and substract it to the rest of the line
-
-
-
-
+for(int i =0; i<t->getNumberOfDelivery();i++){
+	int min;
+	Client* c;
+	int tCost;
+cout<<i<<endl;
+	c = t->getMinClientLine();
+	tCost = c->getTCost();
+	t->addTime(tCost);
+	solution->addWay(c);
+	t->deleteClientOrder(t->getMinIndexLine());
+	cout<<i<<endl;
+}
 	// Optimize t function of batch's date delivery
 	// Evaluate the solution and keep the way with t
 
+cout<<"Affichage §§§§§§§"<<endl;
+
+vector<Client*> *lClient;
+
+lClient= solution->getClient();
+
+for(unsigned int i =0;i<lClient->size();i++){
+		cout<<lClient->at(i)->getId()<<" "<<lClient->at(i)->getId2()<<endl;
+	}
 // Finalize
 	delete imp;
 	delete t;

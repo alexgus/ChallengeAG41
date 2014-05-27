@@ -94,6 +94,16 @@ public:
 	 */
 	void delBatch(int id);
 
+	int getId2() const
+	{
+		return id2;
+	}
+
+	void setId2(int id2)
+	{
+		this->id2 = id2;
+	}
+
 private:
 
 	/**

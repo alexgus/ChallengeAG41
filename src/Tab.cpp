@@ -21,7 +21,6 @@ Tab::Tab()
 
 Tab::Tab(Tab& t)
 {
-	int i;
 
 	this->d = t.d;
 	this->eval = t.eval;
@@ -32,9 +31,7 @@ Tab::Tab(Tab& t)
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-	this->mat = new double*[this->nbClients];
-	for(i=0;i<this->nbClients;i++)
-		this->mat[i] = new double[this->nbClients];
+	this->mat = new double[this->nbClients];
 
 	// Fill it
 	memcpy(this->mat,t.mat,sizeof(double)*this->nbClients*this->nbClients);
@@ -81,9 +78,7 @@ Tab::Tab(data* d)
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-	this->mat = new double*[this->nbClients];
-	for(i=0;i<this->nbClients;i++)
-		this->mat[i] = new double[this->nbClients];
+	this->mat = new double[this->nbClients];
 
 	// Fill tabs
 	for(i=0;i < this->nbClients;i++)
@@ -98,7 +93,6 @@ Tab::~Tab()
 
 	for(i=0;i < this->nbClients;i++)
 	{
-		delete this->mat[i];
 		delete this->lClient->at(i);
 	}
 	delete this->mat;
@@ -106,7 +100,7 @@ Tab::~Tab()
 
 Tab& Tab::operator =(Tab& t)
 {
-	int i;
+
 
 	this->d = t.d;
 	this->eval = t.eval;
@@ -116,9 +110,8 @@ Tab& Tab::operator =(Tab& t)
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-	this->mat = new double*[this->nbClients];
-	for(i=0;i<this->nbClients;i++)
-		this->mat[i] = new double[this->nbClients];
+	this->mat = new double[this->nbClients];
+
 
 	// Fill it
 	memcpy(this->mat,t.mat,sizeof(double)*this->nbClients*this->nbClients);
@@ -127,102 +120,83 @@ Tab& Tab::operator =(Tab& t)
 	return *this;
 }
 
-double Tab::getMinLine(int i, int j = -1)
+int Tab::getMinIndexLine()
 {
 	int min;
 	int itJ;
 
 	for(itJ=0;itJ<this->nbClients;itJ++)
 	{
-		if(itJ != j && min > this->mat[i][itJ])
-			min = this->mat[i][itJ];
+		if(itJ != -1 && min > this->mat[itJ])
+			min = itJ;
 	}
 
 	return min;
 }
 
-double Tab::getMinCol(int j, int i = -1)
+Client* Tab::getMinClientLine()
 {
-	int min;
-	int itI;
+	double min;
+	Client* cMin;
+	int itJ;
 
-	for(itI=0;itI<this->nbClients;itI++)
-	{
-		if(itI != i && min > this->mat[itI][j])
-			min = this->mat[itI][j];
-	}
+			for(itJ=0;itJ<this->nbClients;itJ++)
+			{
+				if(itJ != -1 && min > this->mat[itJ])
+				{
+					min = this->mat[itJ];
+					cMin = this->lClient->at(itJ);
+				}
+			}
+			return cMin;
 
-	return min;
+}
+
+double Tab::getMinValLine()
+{
+	double min;
+		int itJ;
+
+		for(itJ=0;itJ<this->nbClients;itJ++)
+		{
+			if(itJ != -1 && min > this->mat[itJ])
+				min = mat[itJ];
+		}
+		return min;
+}
+
+int Tab::getNumberOfDelivery(){
+	return lClient->size();
 }
 
 void Tab::subtract(double n)
 {
-	int i,j;
+	int i;
 
 	for(i=0;i < this->nbClients;i++)
 	{
-		for(j=0;j<this->nbClients;j++)
-		{
-			if(i != j)
-				this->mat[i][j] -= n;
-		}
+
+				this->mat[i] -= n;
 	}
 }
 
-void Tab::substractToLine(int i , double val){
-	int j;
-	for(j=0;j< this->nbClients;j++){
-		this->mat[i][j]-=val;
-	}
-}
 
-/*void Tab::substractToCol(int j, double val)
-{
-	int i;
-	for(i=0;i<this->mat[i];i++){
-		this->mat[i][j]-=val;
-	}
-}
-*/
 void Tab::operator -(double n)
 {
 	this->subtract(n);
 }
 
-int Tab::maxPenality(int *iMax, int *jMax)
-{
-	int i,j;
-	int max;
-
-	for(i=0;i<this->nbClients;i++)
-	{
-		for(j=0;j<this->nbClients;j++)
-		{
-			if(this->mat[i][j] == 0)
-			{
-				*iMax = i;
-				*jMax = j;
-				max = (this->getCol0(j) - 1) + (this->getLine0(i) - 1);
-			}
-		}
-	}
-
-	return max;
-}
 
 void Tab::computeCost()
 {
-	int i,j;
+	int i;
 
 	for(i=0;i < this->nbClients;i++)
 	{
-		for(j=0;j<this->nbClients;j++)
-		{
-			if(i != j && this->mat[i][j] != -1)
-				this->mat[i][j] = this->lClient->at(i)->getFullCost();
-			else
-				this->mat[i][j] = -1;
-		}
+
+			if(this->mat[i] != -1)
+				this->mat[i] = this->lClient->at(i)->getFullCost();
+
 	}
 }
 
@@ -256,31 +230,51 @@ void Tab::operator <<(int t)
 
 void Tab::printMatrix()
 {
-	int i,j;
+	int j;
 
 	for(j=0;j<this->nbClients;j++)
 	{
-		for(i=0; i<this->nbClients; i++)
-			cout << setw(5) << this->mat[j][i];
+			cout << setw(5) << this->mat[j];
 		cout << endl;
 	}
 }
+int comprar(const void* elem1, const void *elem2)
+{
+	double* ele1 = (double*) elem1;
+	double* ele2 = (double*) elem2;
 
-int Tab::getLine0(int i)
+	if(*ele1<*ele2){
+		return -1;
+	}
+	else {
+		if(*ele1 ==*ele2){
+			return 0;
+		}
+		else{
+			return 1;
+		}
+	}
+
+
+}
+
+void Tab::sort()
+{
+	qsort(this->mat,nbClients,sizeof(double),comprar);
+}
+
+int Tab::getLine0()
 {
 	int j,nb = 0;
 	for(j=0;j < this->nbClients; j++)
-		if(this->mat[i][j] == 0)
+		if(this->mat[j] == 0)
 			nb++;
 	return nb;
 }
 
-
-int Tab::getCol0(int j)
+void Tab::deleteClientOrder(int numClient)
 {
-	int i,nb = 0;
-	for(i=0;i < this->nbClients; i++)
-		if(this->mat[i][j] == 0)
-			nb++;
-	return nb;
+	lClient->erase(lClient->begin()+numClient);
+	this->mat[numClient]= -1;
+
 }
