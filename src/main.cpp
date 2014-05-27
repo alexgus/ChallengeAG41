@@ -64,10 +64,10 @@ int main(int argc, char *argv[])
 			 << "eta  : " << d->eta				 << endl
 			 << "beta : " << d->beta			 << endl
 			 << "tau  : Distance entre le fournisseur et les clients" << endl;
-		for(i=1; i<=d->c; i++)
+		for(i=1; i<=d->m; i++)
 			cout << setw(SETW) << i;
 		cout << endl;
-		printTable(d->tau, d->c);
+		printTable(d->tau, d->m);
 
 		cout << endl << endl << endl
 			<< "Dates dues et clients associés aux produits demandés" << endl
