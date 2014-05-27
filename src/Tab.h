@@ -72,23 +72,6 @@ public:
 	 * @param numClient id of the client
 	 */
 	void deleteClientOrder(int numClient);
-	/**
-	 * Subtract n to the entire matrix
-	 * @param n Number to subtract
-	 */
-	void subtract(double n);
-
-	/**
-	 * Subtract n to the entire matrix
-	 * Alias of the subtract method
-	 * @param n Number to subtract
-	 */
-	void operator-(double n);
-
-	/**
-	 * Compute cost in the matrix
-	 */
-	void computeCost();
 
 	/**
 	 * Add time t to the current time for computing right cost.
@@ -101,10 +84,6 @@ public:
 	 * @param t Time to remove
 	 */
 	void remTime(int t);
-/*
- * Sort the mat array from lower cost to greater cost
- */
-	void sort();
 	/**
 	 * Alias of the remTime method
 	 */
@@ -114,15 +93,6 @@ public:
 	 * Alias of the addTime method
 	 */
 	void operator<<(int t);
-
-	/**
-	 * Get the matrix at time t
-	 * @return The matrix at time t
-	 */
-	double* getMat() const
-	{
-		return mat;
-	}
 
 	/**
 	 * Get the time of the current matrix
@@ -154,14 +124,7 @@ public:
 	/**
 	 * Print the matrix cost
 	 */
-	void printMatrix();
-
-	/**
-	 * Get the number of 0 in the line i
-	 * @param i The line to check 0
-	 * @return the number of 0
-	 */
-	int getLine0();
+	void printCost();
 
 	/**
 	 * Return the current solution of the tab
@@ -183,16 +146,6 @@ private:
 	 * Time for computing right cost
 	 */
 	int t;
-
-	/**
-	 * Size of the matrix
-	 */
-	int nbClients;
-
-	/**
-	 * The data matrix with cost
-	 */
-	double *mat;
 
 	/**
 	 * The way choose at time t.

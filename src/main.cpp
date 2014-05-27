@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 	cout << endl << "Base Matrix" << endl;
 
 	if(verbose)
-		t->printMatrix();
+		t->printCost();
 
 	j = t->getNumberOfDelivery();
 

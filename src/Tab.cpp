@@ -11,8 +11,6 @@ Tab::Tab()
 {
 	this->d = 0;
 	this->eval = 0;
-	this->nbClients = 0;
-	this->mat = 0;
 	this->t = 0;
 	this->way = 0;
 	this->lClient = 0;
@@ -24,17 +22,14 @@ Tab::Tab(Tab& t)
 
 	this->d = t.d;
 	this->eval = t.eval;
-	this->nbClients = t.nbClients;
 	this->t = t.t;
 	this->lClient = new vector<Client*>(*(t.lClient));
 	this->sol = t.sol;
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-	this->mat = new double[this->nbClients];
 
 	// Fill it
-	memcpy(this->mat,t.mat,sizeof(double)*this->nbClients*this->nbClients);
 	memcpy(this->way,t.way,sizeof(int)*(this->d->n/this->d->c)*this->d->m);
 }
 
@@ -47,10 +42,8 @@ Tab::Tab(data* d)
 	// Initialize tabs function of batch and clients
 	int* nbBpC =(int*) malloc(sizeof (int)*(d->m+1));// Nb batch / Client
 	memset(nbBpC,0,sizeof(int)*(d->m+1));
-	int i,j;
+	int i,j, cpt;
 	double n;
-
-	this->nbClients = 0;
 
 	// Compute the nb of batch per client
 	for(i=0;i<d->n;i++)
@@ -69,7 +62,7 @@ Tab::Tab(data* d)
 				// j = new created client (i is composed of many j)
 				// data to extract batch
 				this->lClient->push_back(new Client(i,j,d));
-				this->nbClients++;
+				cpt++;
 			}
 		}
 	}
@@ -78,24 +71,18 @@ Tab::Tab(data* d)
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-	this->mat = new double[this->nbClients];
 
 	// Fill tabs
-	for(i=0;i < this->nbClients;i++)
+	for(i=0;i < cpt;i++)
 		this->way[i] = -1;
-
-	this->computeCost();
 }
 
 Tab::~Tab()
 {
-	int i;
+	unsigned int i;
 
-	for(i=0;i < this->nbClients;i++)
-	{
+	for(i=0;i < this->lClient->size();i++)
 		delete this->lClient->at(i);
-	}
-	delete this->mat;
 }
 
 Tab& Tab::operator =(Tab& t)
@@ -104,17 +91,13 @@ Tab& Tab::operator =(Tab& t)
 
 	this->d = t.d;
 	this->eval = t.eval;
-	this->nbClients = t.nbClients;
 	this->t = t.t;
 	this->lClient = new vector<Client*>(*(t.lClient));
 
 	// Allocate memory
 	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-	this->mat = new double[this->nbClients];
-
 
 	// Fill it
-	memcpy(this->mat,t.mat,sizeof(double)*this->nbClients*this->nbClients);
 	memcpy(this->way,t.way,sizeof(int)*(this->d->n/this->d->c)*this->d->m);
 
 	return *this;
@@ -122,15 +105,15 @@ Tab& Tab::operator =(Tab& t)
 
 int Tab::getMinIndexLine()
 {
-	int min = this->mat[0];
+	int min = this->lClient->at(0)->getFullCost();
 	int minIndex = 0;
-	int itJ;
+	unsigned int itJ;
 
-	for(itJ=1;itJ<this->nbClients;itJ++)
+	for(itJ=1;itJ<this->lClient->size();itJ++)
 	{
-		if(min > this->mat[itJ])
+		if(min > this->lClient->at(itJ)->getFullCost())
 		{
-			min = mat[itJ];
+			min = this->lClient->at(itJ)->getFullCost();
 			minIndex = itJ;
 		}
 	}
@@ -140,32 +123,31 @@ int Tab::getMinIndexLine()
 
 Client* Tab::getMinClientLine()
 {
-	double min = this->mat[0];
+	double min = this->lClient->at(0)->getFullCost();
 	Client* cMin = this->lClient->at(0);
-	int itJ;
+	unsigned int itJ;
 
-	for(itJ=1;itJ<this->nbClients;itJ++)
+	for(itJ=1;itJ<this->lClient->size();itJ++)
 	{
-		if(min > this->mat[itJ])
+		if(min > this->lClient->at(itJ)->getFullCost())
 		{
-			min = this->mat[itJ];
+			min = this->lClient->at(itJ)->getFullCost();
 			cMin = this->lClient->at(itJ);
 		}
 	}
 
 	return cMin;
-
 }
 
 double Tab::getMinValLine()
 {
-	double min = this->mat[0];
-	int itJ;
+	double min = this->lClient->at(0)->getFullCost();
+	unsigned int itJ;
 
-	for(itJ=1;itJ<this->nbClients;itJ++)
+	for(itJ=1;itJ<this->lClient->size();itJ++)
 	{
-		if(min > this->mat[itJ])
-			min = mat[itJ];
+		if(min > this->lClient->at(itJ)->getFullCost())
+			min = this->lClient->at(itJ)->getFullCost();
 	}
 	return min;
 }
@@ -174,53 +156,22 @@ int Tab::getNumberOfDelivery(){
 	return lClient->size();
 }
 
-void Tab::subtract(double n)
-{
-	int i;
-
-	for(i=0;i < this->nbClients;i++)
-	{
-
-		this->mat[i] -= n;
-	}
-}
-
-
-void Tab::operator -(double n)
-{
-	this->subtract(n);
-}
-
-
-void Tab::computeCost()
-{
-	int i;
-
-	for(i=0;i < this->nbClients;i++)
-	{
-
-		if(this->mat[i] != -1)
-			this->mat[i] = this->lClient->at(i)->getFullCost();
-
-	}
-}
-
 void Tab::addTime(int t)
 {
-	int i;
+	unsigned int i;
 
-	for(i=0; i< this->nbClients;i++)
+	for(i=0; i< this->lClient->size();i++)
 		this->lClient->at(i)->addTime(t);
-	this->computeCost();
+	this->t += t;
 }
 
 void Tab::remTime(int t)
 {
-	int i;
+	unsigned int i;
 
-	for(i=0; i< this->nbClients;i++)
+	for(i=0; i< this->lClient->size();i++)
 		this->lClient->at(i)->remTime(t);
-	this->computeCost();
+	this->t -= t;
 }
 
 void Tab::operator >>(int time)
@@ -233,53 +184,18 @@ void Tab::operator <<(int t)
 	this->addTime(t);
 }
 
-void Tab::printMatrix()
+void Tab::printCost()
 {
-	int j;
+	unsigned int j;
 
-	for(j=0;j<this->nbClients;j++)
+	for(j=0;j<this->lClient->size();j++)
 	{
-		cout << setw(5) << this->mat[j];
+		cout << setw(5) << this->lClient->at(j)->getFullCost();
 		cout << endl;
 	}
-}
-int comprar(const void* elem1, const void *elem2)
-{
-	double* ele1 = (double*) elem1;
-	double* ele2 = (double*) elem2;
-
-	if(*ele1<*ele2){
-		return -1;
-	}
-	else {
-		if(*ele1 ==*ele2){
-			return 0;
-		}
-		else{
-			return 1;
-		}
-	}
-
-
-}
-
-void Tab::sort()
-{
-	qsort(this->mat,nbClients,sizeof(double),comprar);
-}
-
-int Tab::getLine0()
-{
-	int j,nb = 0;
-	for(j=0;j < this->nbClients; j++)
-		if(this->mat[j] == 0)
-			nb++;
-	return nb;
 }
 
 void Tab::deleteClientOrder(int numClient)
 {
 	lClient->erase(lClient->begin()+numClient);
-	this->mat[numClient]= -1;
-	this->nbClients--;
 }
