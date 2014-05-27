@@ -122,47 +122,52 @@ Tab& Tab::operator =(Tab& t)
 
 int Tab::getMinIndexLine()
 {
-	int min;
+	int min = this->mat[0];
+	int minIndex = 0;
 	int itJ;
 
-	for(itJ=0;itJ<this->nbClients;itJ++)
+	for(itJ=1;itJ<this->nbClients;itJ++)
 	{
-		if(itJ != -1 && min > this->mat[itJ])
-			min = itJ;
+		if(min > this->mat[itJ])
+		{
+			min = mat[itJ];
+			minIndex = itJ;
+		}
 	}
 
-	return min;
+	return minIndex;
 }
 
 Client* Tab::getMinClientLine()
 {
-	double min;
-	Client* cMin;
+	double min = this->mat[0];
+	Client* cMin = this->lClient->at(0);
 	int itJ;
 
-			for(itJ=0;itJ<this->nbClients;itJ++)
-			{
-				if(itJ != -1 && min > this->mat[itJ])
-				{
-					min = this->mat[itJ];
-					cMin = this->lClient->at(itJ);
-				}
-			}
-			return cMin;
+	for(itJ=1;itJ<this->nbClients;itJ++)
+	{
+		if(min > this->mat[itJ])
+		{
+			min = this->mat[itJ];
+			cMin = this->lClient->at(itJ);
+		}
+	}
+
+	return cMin;
 
 }
 
 double Tab::getMinValLine()
 {
-	double min;
-		int itJ;
+	double min = this->mat[0];
+	int itJ;
 
-		for(itJ=0;itJ<this->nbClients;itJ++)
-		{
-			if(itJ != -1 && min > this->mat[itJ])
-				min = mat[itJ];
-		}
-		return min;
+	for(itJ=1;itJ<this->nbClients;itJ++)
+	{
+		if(min > this->mat[itJ])
+			min = mat[itJ];
+	}
+	return min;
 }
 
 int Tab::getNumberOfDelivery(){
@@ -176,7 +181,7 @@ void Tab::subtract(double n)
 	for(i=0;i < this->nbClients;i++)
 	{
 
-				this->mat[i] -= n;
+		this->mat[i] -= n;
 	}
 }
 
@@ -194,8 +199,8 @@ void Tab::computeCost()
 	for(i=0;i < this->nbClients;i++)
 	{
 
-			if(this->mat[i] != -1)
-				this->mat[i] = this->lClient->at(i)->getFullCost();
+		if(this->mat[i] != -1)
+			this->mat[i] = this->lClient->at(i)->getFullCost();
 
 	}
 }
@@ -234,7 +239,7 @@ void Tab::printMatrix()
 
 	for(j=0;j<this->nbClients;j++)
 	{
-			cout << setw(5) << this->mat[j];
+		cout << setw(5) << this->mat[j];
 		cout << endl;
 	}
 }
@@ -276,5 +281,5 @@ void Tab::deleteClientOrder(int numClient)
 {
 	lClient->erase(lClient->begin()+numClient);
 	this->mat[numClient]= -1;
-
+	this->nbClients--;
 }

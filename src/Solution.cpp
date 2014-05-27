@@ -11,14 +11,14 @@ Solution::Solution()
 {
 	this->eval = 0;
 	this->way = 0;
-	this->lClient = 0;
+	this->lClient = new vector<Client*>();
 	this->nbW = 0;
 }
 
 Solution::Solution(vector<Client*>* lClient)
 {
 	this->eval = 0;
-	this->lClient = lClient;
+	this->lClient = new vector<Client*>;
 	this->way = new int[this->lClient->size()];
 	this->nbW = 0;
 

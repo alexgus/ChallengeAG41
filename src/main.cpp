@@ -88,28 +88,23 @@ int main(int argc, char *argv[])
 	if(verbose)
 		t->printMatrix();
 
-	cout <<"getNumberOfDelivery "<<t->getNumberOfDelivery()<<endl;
+
+	int j = t->getNumberOfDelivery();
 // Begin
-for(int i =0; i<t->getNumberOfDelivery();i++){
-	int min;
+for(int i =0; i<j;i++){
 	Client* c;
 	int tCost;
-cout<<i<<endl;
+
 	c = t->getMinClientLine();
 	tCost = c->getTCost();
-	t->addTime(tCost);
+	t->addTime(tCost/d->eta);
 	solution->addWay(c);
 	t->deleteClientOrder(t->getMinIndexLine());
-	cout<<i<<endl;
 }
 	// Optimize t function of batch's date delivery
 	// Evaluate the solution and keep the way with t
 
-cout<<"Affichage §§§§§§§"<<endl;
-
-vector<Client*> *lClient;
-
-lClient= solution->getClient();
+vector<Client*> *lClient = solution->getClient();
 
 for(unsigned int i =0;i<lClient->size();i++){
 		cout<<lClient->at(i)->getId()<<" "<<lClient->at(i)->getId2()<<endl;
