@@ -24,10 +24,10 @@ bool verbose = false;
  */
 void printTable(int *d, int max)
 {
-    int i;
+	int i;
 
-    for(i=0; i<max; i++)
-    	cout << setw(SETW) << d[i];
+	for(i=0; i<max; i++)
+		cout << setw(SETW) << d[i];
 }
 
 void handle_arg(int argc, char *argv[])
@@ -43,11 +43,12 @@ void handle_arg(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 // Declaration
-	int i;
+	int i,j;
 	data *d;
 	ImportData *imp;
 	Tab *t;
 	Solution *solution;
+	vector<Client*> *lClient;
 // Initialize
 	handle_arg(argc, argv);
 	solution = new Solution();
@@ -58,20 +59,20 @@ int main(int argc, char *argv[])
 	if(verbose)
 	{
 		cout << "Initialized constants :" 		 << endl
-			 << "n    : " << d->n				 << endl
-			 << "m    : " << d->m				 << endl
-			 << "c    : " << d->c				 << endl
-			 << "eta  : " << d->eta				 << endl
-			 << "beta : " << d->beta			 << endl
-			 << "tau  : Distance entre le fournisseur et les clients" << endl;
+				<< "n    : " << d->n				 << endl
+				<< "m    : " << d->m				 << endl
+				<< "c    : " << d->c				 << endl
+				<< "eta  : " << d->eta				 << endl
+				<< "beta : " << d->beta			 << endl
+				<< "tau  : Distance entre le fournisseur et les clients" << endl;
 		for(i=1; i<=d->m; i++)
 			cout << setw(SETW) << i;
 		cout << endl;
 		printTable(d->tau, d->m);
 
 		cout << endl << endl << endl
-			<< "Dates dues et clients associés aux produits demandés" << endl
-			<< " i ";
+				<< "Dates dues et clients associés aux produits demandés" << endl
+				<< " i ";
 		for(i=1; i<=d->n; i++)
 			cout << setw(SETW) << i;
 		cout << endl;
@@ -88,27 +89,27 @@ int main(int argc, char *argv[])
 	if(verbose)
 		t->printMatrix();
 
+	j = t->getNumberOfDelivery();
 
-	int j = t->getNumberOfDelivery();
 // Begin
-for(int i =0; i<j;i++){
-	Client* c;
-	int tCost;
+	for(int i =0; i<j;i++){
+		Client* c;
+		int tCost;
 
-	c = t->getMinClientLine();
-	tCost = c->getTCost();
-	t->addTime(tCost/d->eta);
-	solution->addWay(c);
-	t->deleteClientOrder(t->getMinIndexLine());
-}
+		c = t->getMinClientLine();
+		tCost = c->getTCost();
+		t->addTime(tCost/d->eta);
+		solution->addWay(c);
+		t->deleteClientOrder(t->getMinIndexLine());
+	}
 	// Optimize t function of batch's date delivery
 	// Evaluate the solution and keep the way with t
+	lClient = solution->getClient();
 
-vector<Client*> *lClient = solution->getClient();
+	if(verbose)
+		for(unsigned int i =0;i<lClient->size();i++)
+			cout<<lClient->at(i)->getId()<<" "<<lClient->at(i)->getId2()<<endl;
 
-for(unsigned int i =0;i<lClient->size();i++){
-		cout<<lClient->at(i)->getId()<<" "<<lClient->at(i)->getId2()<<endl;
-	}
 // Finalize
 	delete imp;
 	delete t;
