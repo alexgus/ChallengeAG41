@@ -8,12 +8,10 @@
 #ifndef TAB_H_
 #define TAB_H_
 
-#include <cstring>
 #include <vector>
 
 #include <iostream>
 #include <iomanip>
-#include <cstdlib>
 
 #include "data.h"
 #include "Client.h"
@@ -59,14 +57,17 @@ public:
 	 * @return the index of the column where the min is located
 	 */
 	int getMinIndexLine();
+
 	/*
 	 * @return the client which has the minimum cost
 	 */
 	Client* getMinClientLine();
+
 	/*
 	 * @return the minimum cost
 	 */
 	double getMinValLine();
+
 	/*
 	 * delete the Client from lClient and set -1 to its cost in mat
 	 * @param numClient id of the client
@@ -84,15 +85,6 @@ public:
 	 * @param t Time to remove
 	 */
 	void remTime(int t);
-	/**
-	 * Alias of the remTime method
-	 */
-	void operator>>(int time);
-
-	/**
-	 * Alias of the addTime method
-	 */
-	void operator<<(int t);
 
 	/**
 	 * Get the time of the current matrix
@@ -101,15 +93,6 @@ public:
 	int getTime() const
 	{
 		return t;
-	}
-
-	/**
-	 * Get the way choose at time t
-	 * @return Table of way. Length is given by getMat() method.
-	 */
-	const int* getWay() const
-	{
-		return way;
 	}
 
 	/**
@@ -122,11 +105,6 @@ public:
 	}
 
 	/**
-	 * Print the matrix cost
-	 */
-	void printCost();
-
-	/**
 	 * Return the current solution of the tab
 	 * @return The solution
 	 */
@@ -135,7 +113,16 @@ public:
 		return sol;
 	}
 
-int getNumberOfDelivery();
+	unsigned int getNumberOfDelivery() const
+	{
+		return this->lClient->size();
+	}
+
+	/**
+	 * Print the matrix cost
+	 */
+	void printCost();
+
 private:
 
 	/**
@@ -149,11 +136,6 @@ private:
 	int t;
 
 	/**
-	 * The way choose at time t.
-	 */
-	int *way;
-
-	/**
 	 * List of client
 	 */
 	vector<Client*> *lClient;
@@ -162,11 +144,6 @@ private:
 	 * Solution of the current tab
 	 */
 	Solution *sol;
-
-	/**
-	 * A copy of the data
-	 */
-	data * d;
 
 };
 

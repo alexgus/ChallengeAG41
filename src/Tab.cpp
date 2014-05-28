@@ -9,40 +9,28 @@
 
 Tab::Tab()
 {
-	this->d = 0;
 	this->eval = 0;
 	this->t = 0;
-	this->way = 0;
 	this->lClient = 0;
 	this->sol =0;
 }
 
 Tab::Tab(Tab& t)
 {
-
-	this->d = t.d;
 	this->eval = t.eval;
 	this->t = t.t;
 	this->lClient = new vector<Client*>(*(t.lClient));
 	this->sol = t.sol;
-
-	// Allocate memory
-	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-
-	// Fill it
-	memcpy(this->way,t.way,sizeof(int)*(this->d->n/this->d->c)*this->d->m);
 }
 
 Tab::Tab(data* d)
 {
-	this->d = d;
 	this->eval = 0;
 	this->t = 0;
 
 	// Initialize tabs function of batch and clients
-	int* nbBpC =(int*) malloc(sizeof (int)*(d->m+1));// Nb batch / Client
-	memset(nbBpC,0,sizeof(int)*(d->m+1));
-	int i,j, cpt = 0;
+	int* nbBpC = new int[d->m+1];// Nb batch / Client
+	int i,j;
 	double n;
 
 	// Compute the nb of batch per client
@@ -62,19 +50,13 @@ Tab::Tab(data* d)
 				// j = new created client (i is composed of many j)
 				// data to extract batch
 				this->lClient->push_back(new Client(i,j,d));
-				cpt++;
 			}
 		}
 	}
 
 	this->sol = new Solution(this->lClient);
 
-	// Allocate memory
-	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-
-	// Fill tabs
-	for(i=0;i < cpt;i++)
-		this->way[i] = -1;
+	delete nbBpC;
 }
 
 Tab::~Tab()
@@ -83,38 +65,30 @@ Tab::~Tab()
 
 	for(i=0;i < this->lClient->size();i++)
 		delete this->lClient->at(i);
+
+	delete this->sol;
 }
 
 Tab& Tab::operator =(Tab& t)
 {
-
-
-	this->d = t.d;
 	this->eval = t.eval;
 	this->t = t.t;
 	this->lClient = new vector<Client*>(*(t.lClient));
-
-	// Allocate memory
-	this->way = new int[(this->d->n/this->d->c)*this->d->m]; // (Number of batch / capacity of the transporter) * number of clients
-
-	// Fill it
-	memcpy(this->way,t.way,sizeof(int)*(this->d->n/this->d->c)*this->d->m);
 
 	return *this;
 }
 
 int Tab::getMinIndexLine()
 {
-	int min = this->lClient->at(0)->getFullCost();
 	int minIndex = 0;
-	unsigned int itJ;
+	vector<Client*>::iterator min = this->lClient->begin();
 
-	for(itJ=1;itJ<this->lClient->size();itJ++)
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 	{
-		if(min > this->lClient->at(itJ)->getFullCost())
+		if((*min)->getFullCost() > (*it)->getFullCost())
 		{
-			min = this->lClient->at(itJ)->getFullCost();
-			minIndex = itJ;
+			min = it;
+			minIndex = it - this->lClient->begin(); // Get the index from the begin (pointer size soustraction)
 		}
 	}
 
@@ -123,80 +97,55 @@ int Tab::getMinIndexLine()
 
 Client* Tab::getMinClientLine()
 {
-	double min = this->lClient->at(0)->getFullCost();
-	Client* cMin = this->lClient->at(0);
-	unsigned int itJ;
+	vector<Client*>::iterator min = this->lClient->begin();
 
-	for(itJ=1;itJ<this->lClient->size();itJ++)
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 	{
-		if(min > this->lClient->at(itJ)->getFullCost())
-		{
-			min = this->lClient->at(itJ)->getFullCost();
-			cMin = this->lClient->at(itJ);
-		}
+		if((*min)->getFullCost() > (*it)->getFullCost())
+			min = it;
 	}
 
-	return cMin;
+	return *min;
 }
 
 double Tab::getMinValLine()
 {
-	double min = this->lClient->at(0)->getFullCost();
-	unsigned int itJ;
+	vector<Client*>::iterator min = this->lClient->begin();
 
-	for(itJ=1;itJ<this->lClient->size();itJ++)
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 	{
-		if(min > this->lClient->at(itJ)->getFullCost())
-			min = this->lClient->at(itJ)->getFullCost();
+		if((*min)->getFullCost() > (*it)->getFullCost())
+			min = it;
 	}
-	return min;
-}
 
-int Tab::getNumberOfDelivery(){
-	return lClient->size();
+	return (*min)->getFullCost();
 }
 
 void Tab::addTime(int t)
 {
-	unsigned int i;
-
-	for(i=0; i< this->lClient->size();i++)
-		this->lClient->at(i)->addTime(t);
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
+		(*it)->addTime(t);
 	this->t += t;
 }
 
 void Tab::remTime(int t)
 {
-	unsigned int i;
-
-	for(i=0; i< this->lClient->size();i++)
-		this->lClient->at(i)->remTime(t);
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
+			(*it)->remTime(t);
 	this->t -= t;
-}
-
-void Tab::operator >>(int time)
-{
-	this->remTime(time);
-}
-
-void Tab::operator <<(int t)
-{
-	this->addTime(t);
-}
-
-void Tab::printCost()
-{
-	unsigned int j;
-
-	for(j=0;j<this->lClient->size();j++)
-	{
-		cout << setw(5) << this->lClient->at(j)->getFullCost();
-		cout << endl;
-	}
 }
 
 void Tab::deleteClientOrder(int numClient)
 {
 	this->sol->addWay(this->getMinClientLine());
 	lClient->erase(lClient->begin()+numClient);
+}
+
+void Tab::printCost()
+{
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
+	{
+		cout << setw(5) << (*it)->getFullCost();
+		cout << endl;
+	}
 }
