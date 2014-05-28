@@ -136,11 +136,9 @@ void Client::calcTCost()
 
 void Client::calcSCost()
 {
-	unsigned int i;
-
 	this->sCost = 0;
-	for(i=0; i < this->date->size(); i++)
-		this->sCost += this->beta * (this->date->at(i) - this->time) * this->id;
+	for(vector<int>::iterator it= this->date->begin(); it != this->date->end(); ++it)
+		this->sCost += this->beta * (*it - this->time) * this->id;
 }
 
 int Client::getMinDate()
@@ -148,14 +146,13 @@ int Client::getMinDate()
 	if(this->date->size() <= 0)
 		return -1;
 
-	unsigned int i;
-	int min = this->date->at(0);
+	vector<int>::iterator min = this->date->begin();
 
-	for(i=1; i < this->date->size();i++)
+	for(vector<int>::iterator it; it != this->date->end();++it)
 	{
-		if(min > this->date->at(i))
-			min = this->date->at(i);
+		if(*min > *it)
+			min = it;
 	}
 
-	return min;
+	return *min;
 }
