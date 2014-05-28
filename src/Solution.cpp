@@ -92,7 +92,7 @@ double Solution::evaluate()
 	{
 		c = this->lClient->at(i);
 		t += (c->getTCost()/2)/c->getEta();
-		c->setT(t);
+		c->setTime(t);
 		tCost += c->getTCost();
 		sCost += c->getSCost();
 		t += ((c->getTCost()/2)/c->getEta());
@@ -119,5 +119,5 @@ void Solution::setTime(int t)
 	unsigned int i;
 
 	for(i=0;i<this->lClient->size();i++)
-		this->lClient->at(i)->setT(t);
+		this->lClient->at(i)->setTime(t);
 }
