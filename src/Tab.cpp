@@ -30,6 +30,7 @@ Tab::Tab(data* d)
 
 	// Initialize tabs function of batch and clients
 	int* nbBpC = new int[d->m+1];// Nb batch / Client
+	memset(nbBpC,0,sizeof(int)*d->m+1);
 	int i,j;
 	double n;
 

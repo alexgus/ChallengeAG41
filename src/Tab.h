@@ -13,6 +13,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include <cstring>
+
 #include "data.h"
 #include "Client.h"
 #include "Solution.h"
