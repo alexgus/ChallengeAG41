@@ -99,6 +99,20 @@ public:
 		return id2;
 	}
 
+	/**
+	 * Set time current time of the client
+	 */
+	void setT(int t)
+	{
+		this->t = t;
+		this->calcSCost();
+	}
+
+	int getEta() const
+	{
+		return eta;
+	}
+
 private:
 
 	/**

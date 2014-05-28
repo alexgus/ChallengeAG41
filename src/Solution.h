@@ -69,6 +69,12 @@ public:
 	double evaluate();
 
 	/**
+	 * Set time in client
+	 * @param t The time to set
+	 */
+	void setTime(int t);
+
+	/**
 	 * Get the current evaluation
 	 * @return The evaluation
 	 */

@@ -62,7 +62,43 @@ bool Solution::checkHamiltonian()
 
 double Solution::evaluate()
 {
+	unsigned int i = this->lClient->size();
+	int t;
+	Client *c = this->lClient->at(i-1);
+	int tCost = 0, sCost = 0;
 
+// Find the right t
+	// Initialize
+	c = this->lClient->at(this->lClient->size()-1);
+	t = c->getMinDate();
+	this->setTime((c->getTCost()/2)/c->getEta());
+	t -= (c->getTCost()/2)/c->getEta();
+
+	// Iterate over the vector decreasingly
+	for(i=i-1; i > 0; i--)
+	{
+		c = this->lClient->at(i);
+		t -= (c->getTCost()/2)/c->getEta();
+
+		if(c->getMinDate() < t)
+			t = c->getMinDate();
+
+		t -= (c->getTCost()/2)/c->getEta();
+	}
+	// t is now corresponding to serve all clients correctly and it's placed in the first client
+
+	// Iterate for compute the evaluation
+	for(i = 0; i < this->lClient->size(); i++)
+	{
+		c = this->lClient->at(i);
+		t += (c->getTCost()/2)/c->getEta();
+		c->setT(t);
+		tCost += c->getTCost();
+		sCost += c->getSCost();
+		t += ((c->getTCost()/2)/c->getEta());
+	}
+
+	this->eval = tCost + sCost;
 
 	return this->eval;
 }
@@ -76,4 +112,12 @@ void Solution::deleteLastWay()
 {
 	this->way[this->nbW-1] = -1;
 	this->nbW--;
+}
+
+void Solution::setTime(int t)
+{
+	unsigned int i;
+
+	for(i=0;i<this->lClient->size();i++)
+		this->lClient->at(i)->setT(t);
 }

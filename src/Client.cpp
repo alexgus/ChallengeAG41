@@ -184,7 +184,7 @@ void Client::calcSCost()
 
 	this->sCost = 0;
 	for(i=0; i < this->nbBatch; i++)
-		this->sCost += this->beta * (this->date[i] - this->t);
+		this->sCost += this->beta * (this->date[i] - this->t) * this->id;
 }
 
 int Client::getId()
