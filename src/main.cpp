@@ -106,14 +106,21 @@ int main(int argc, char *argv[])
 		t->addTime(c->getTCost()/d->eta);
 		t->deleteClientOrder(t->getMinIndexLine());
 	}
-	// Optimize t function of batch's date delivery
-	// Evaluate the solution and keep the way with t
+
+	// Evaluate the solution
 	solution = t->getSol();
 	lClient = solution->getClient();
 
+	solution->evaluate();
+
 	if(verbose)
+	{
+		cout << "Travel solution :" << endl;
 		for(unsigned int i =0;i<lClient->size();i++)
 			cout<<lClient->at(i)->getId()<<" "<<lClient->at(i)->getId2()<<endl;
+	}
+
+	cout << "Final value of the solution " << solution->getEval() << endl;
 
 // Finalize
 	delete imp;
