@@ -93,11 +93,17 @@ int main(int argc, char *argv[])
 // Begin
 	for(int i =0; i<j;i++){
 		Client* c;
-		int tCost;
 
 		c = t->getMinClientLine();
-		tCost = c->getTCost();
-		t->addTime(tCost/d->eta);
+
+		// Adjust the time for non negative storage cost
+		if(c->getSCost() < 0)
+		{
+			t->remTime(t->getTime() - c->getMinDate());
+			c = t->getMinClientLine();
+		}
+
+		t->addTime(c->getTCost()/d->eta);
 		t->deleteClientOrder(t->getMinIndexLine());
 	}
 	// Optimize t function of batch's date delivery
