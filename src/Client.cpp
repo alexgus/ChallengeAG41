@@ -18,8 +18,8 @@ Client::Client()
 	this->tCost = 0;
 	this->sCost = 0;
 	this->nbBatch = 0;
-	this->batch = NULL;
-	this->date = NULL;
+	this->batch = 0;
+	this->date = 0;
 }
 
 Client::Client(int id, int n, data* d)
@@ -36,8 +36,8 @@ Client::Client(int id, int n, data* d)
 	// Fill Batch date and nbBatch corresponding to the right client
 	int i,cpt=0;
 
-	int* tmpB = (int*) malloc(sizeof(int)*d->n);
-	int* tmpD = (int*) malloc(sizeof(int)*d->n);
+	int* tmpB = new int[d->n];
+	int* tmpD = new int[d->n];
 
 	for(i=0; i < d->n ;i++)
 	{
@@ -86,11 +86,6 @@ Client::Client(int id, int n, data* d)
 		i++;
 	}
 
-	// Allocate tables to their good size
-	/*if(((this->id2 * d->c) + d->c) > cpt)
-		this->nbBatch = (this->id2 * d->c + d->c) - cpt;
-	else
-		this->nbBatch = d->c;*/
 	if(cpt > d->c)
 	{
 		if(this->id2*d->c <= cpt)
@@ -101,8 +96,8 @@ Client::Client(int id, int n, data* d)
 	else
 		this->nbBatch = cpt;
 
-	this->batch = (int*) malloc(sizeof(int)*this->nbBatch);
-	this->date = (int*) malloc(sizeof(int)*this->nbBatch);
+	this->batch = new int[this->nbBatch];
+	this->date = new int[this->nbBatch];
 
 	// Copy to the new tables
 	for(i=0;i<this->nbBatch;i++)
@@ -115,18 +110,18 @@ Client::Client(int id, int n, data* d)
 	this->calcSCost();
 	this->calcTCost();
 
-	free(tmpB);
-	free(tmpD);
+	delete tmpB;
+	delete tmpD;
 }
 
 Client::~Client()
 {
 	if(this->nbBatch != 0)
 	{
-		free(this->batch);
-		this->batch = NULL;
-		free(this->date);
-		this->date = NULL;
+		delete this->batch;
+		this->batch = 0;
+		delete this->date;
+		this->date = 0;
 	}
 }
 
@@ -136,46 +131,15 @@ void Client::addTime(int toAdd)
 	this->calcSCost();
 }
 
-int Client::getTCost()
-{
-	return this->tCost;
-}
-
-double Client::getSCost()
-{
-	return this->sCost;
-}
-
-double Client::getFullCost()
-{
-	return (this->tCost + this->sCost);
-}
-
-void Client::calcTCost()
-{
-	this->tCost = this->timeTransport * this->eta * 2;
-}
-
 void Client::remTime(int t)
 {
 	this->t -= t;
 	this->calcSCost();
 }
 
-void Client::addTimeToDate(int t)
+void Client::calcTCost()
 {
-	int i;
-
-	for(i=0;i<this->nbBatch;i++)
-		this->date[i] += t;
-}
-
-void Client::remTimeToDate(int t)
-{
-	int i;
-
-	for(i=0;i<this->nbBatch;i++)
-		this->date[i] -= t;
+	this->tCost = this->timeTransport * this->eta * 2;
 }
 
 void Client::calcSCost()
@@ -185,49 +149,6 @@ void Client::calcSCost()
 	this->sCost = 0;
 	for(i=0; i < this->nbBatch; i++)
 		this->sCost += this->beta * (this->date[i] - this->t) * this->id;
-}
-
-int Client::getId()
-{
-	return this->id;
-}
-
-void Client::delBatch(int id)
-{
-	int i,cpt = 0;
-	bool find = false;
-
-	for(i=0;i< this->nbBatch;i++)
-	{
-		if(this->batch[i] == id)
-			find = true;
-	}
-
-	if(!find)
-		return;
-
-	int* tmpB = (int*) malloc(sizeof(int)*(this->nbBatch-1));
-	int* tmpD = (int*) malloc(sizeof(int)*(this->nbBatch-1));
-
-	for(i=0;i< this->nbBatch;i++)
-	{
-		if(this->batch[i] != id)
-		{
-			tmpB[i] = this->batch[i];
-			tmpD[i] = this->date[i];
-			cpt++;
-		}
-	}
-
-	this->nbBatch--;
-	this->batch = tmpB;
-	this->date = tmpD;
-	this->calcSCost();
-}
-
-int Client::getTimeTransport()
-{
-	return this->timeTransport;
 }
 
 int Client::getMinDate()

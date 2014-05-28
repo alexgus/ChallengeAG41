@@ -8,8 +8,6 @@
 #ifndef CLIENT_H_
 #define CLIENT_H_
 
-#include <cstdlib>
-
 #include "data.h"
 
 /**
@@ -38,11 +36,6 @@ public:
 	virtual ~Client();
 
 	/**
-	 * Get id of the client
-	 */
-	int getId();
-
-	/**
 	 * Add time to the current time
 	 */
 	void addTime(const int toAdd);
@@ -53,64 +46,73 @@ public:
 	void remTime(int t);
 
 	/**
-	 * Return the transport Cost
-	 */
-	int getTCost();
-
-	/**
-	 * Return the storage cost
-	 */
-	double getSCost();
-
-	/**
-	 * Return the storage cost + transport cost
-	 */
-	double getFullCost();
-
-	/**
-	 * Get the time to go to the client
-	 */
-	int getTimeTransport();
-
-	/**
 	 * Return the minimum date for delivering a batch
 	 */
 	int getMinDate();
 
 	/**
-	 * Add time to batch delivery date
-	 * @param Time to add
+	 * Get id of client
 	 */
-	void addTimeToDate(int t);
+	int getId() const
+	{
+		return id;
+	}
 
 	/**
-	 * Remove time to batch delivery date
-	 * @param Time to remove
+	 * Get id2 of client
 	 */
-	void remTimeToDate(int t);
-
-	/**
-	 * Delete batch
-	 */
-	void delBatch(int id);
-
 	int getId2() const
 	{
 		return id2;
 	}
 
 	/**
-	 * Set time current time of the client
+	 * Get the time multiplier
 	 */
-	void setT(int t)
-	{
-		this->t = t;
-		this->calcSCost();
-	}
-
 	int getEta() const
 	{
 		return eta;
+	}
+
+	/**
+	 * Return the transport Cost
+	 */
+	int getTCost() const
+	{
+		return tCost;
+	}
+
+	/**
+	 * Return the storage cost
+	 */
+	double getSCost() const
+	{
+		return sCost;
+	}
+
+	/**
+	 * Return the storage cost + transport cost
+	 */
+	double getFullCost() const
+	{
+		return (tCost + sCost);
+	}
+
+	/**
+	 * Get the time to go to the client
+	 */
+	int getTimeTransport() const
+	{
+		return timeTransport;
+	}
+
+	/**
+	 * Set time current time of client
+	 */
+	void setTime(int t)
+	{
+		this->t = t;
+		this->calcSCost();
 	}
 
 private:
