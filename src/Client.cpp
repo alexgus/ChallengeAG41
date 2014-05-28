@@ -148,7 +148,7 @@ int Client::getMinDate()
 
 	vector<int>::iterator min = this->date->begin();
 
-	for(vector<int>::iterator it; it != this->date->end();++it)
+	for(vector<int>::iterator it = this->date->begin(); it != this->date->end();++it)
 	{
 		if(*min > *it)
 			min = it;
