@@ -8,7 +8,11 @@
 #ifndef CLIENT_H_
 #define CLIENT_H_
 
+#include <vector>
+
 #include "data.h"
+
+using namespace std;
 
 /**
  * Define a Client with the products he wants
@@ -111,7 +115,7 @@ public:
 	 */
 	void setTime(int t)
 	{
-		this->t = t;
+		this->time = t;
 		this->calcSCost();
 	}
 
@@ -153,24 +157,14 @@ private:
 	double sCost;
 
 	/**
-	 * Number of batch asked by the client
+	 * Vector to stock batch and id of the batch
 	 */
-	int nbBatch;
-
-	/**
-	 * Id of batch asked
-	 */
-	int *batch;
-
-	/**
-	 * Date to have the batch
-	 */
-	int *date;
+	vector<int> *date;
 
 	/**
 	 * Actual time
 	 */
-	int t;
+	int time;
 
 	/**
 	 * Calculate transport cost

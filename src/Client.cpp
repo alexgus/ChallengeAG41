@@ -11,14 +11,12 @@ Client::Client()
 {
 	this->id=0;
 	this->id2 =0;
-	this->t = 0;
+	this->time = 0;
 	this->beta = 0;
 	this->eta = 0;
 	this->timeTransport = 0;
 	this->tCost = 0;
 	this->sCost = 0;
-	this->nbBatch = 0;
-	this->batch = 0;
 	this->date = 0;
 }
 
@@ -26,7 +24,7 @@ Client::Client(int id, int n, data* d)
 {
 	this->id = id;
 	this->id2 = n;
-	this->t = 0;
+	this->time = 0;
 	this->beta = d->beta;
 	this->eta = d->eta;
 	this->timeTransport = d->tau[id];
@@ -34,7 +32,7 @@ Client::Client(int id, int n, data* d)
 	this->sCost = 0;
 
 	// Fill Batch date and nbBatch corresponding to the right client
-	int i,cpt=0;
+	int i,cpt=0, nb = 0;
 
 	int* tmpB = new int[d->n];
 	int* tmpD = new int[d->n];
@@ -89,22 +87,18 @@ Client::Client(int id, int n, data* d)
 	if(cpt > d->c)
 	{
 		if(this->id2*d->c <= cpt)
-			this->nbBatch = d->c;
+			nb = d->c;
 		else
-			this->nbBatch = (this->id2 * d->c) - cpt;
+			nb = (this->id2 * d->c) - cpt;
 	}
 	else
-		this->nbBatch = cpt;
+		nb = cpt;
 
-	this->batch = new int[this->nbBatch];
-	this->date = new int[this->nbBatch];
+	this->date = new vector<int>();
 
 	// Copy to the new tables
-	for(i=0;i<this->nbBatch;i++)
-	{
-		this->batch[i] = tmpB[(this->id2 - 1)+i];
-		this->date[i] = tmpD[(this->id2 -1)+i];
-	}
+	for(i=0;i<nb;i++)
+		this->date->push_back(tmpD[(this->id2 -1)+i]);
 
 	// init cost
 	this->calcSCost();
@@ -116,10 +110,8 @@ Client::Client(int id, int n, data* d)
 
 Client::~Client()
 {
-	if(this->nbBatch != 0)
+	if(this->date->size() > 0)
 	{
-		delete this->batch;
-		this->batch = 0;
 		delete this->date;
 		this->date = 0;
 	}
@@ -127,13 +119,13 @@ Client::~Client()
 
 void Client::addTime(int toAdd)
 {
-	this->t += toAdd;
+	this->time += toAdd;
 	this->calcSCost();
 }
 
 void Client::remTime(int t)
 {
-	this->t -= t;
+	this->time -= t;
 	this->calcSCost();
 }
 
@@ -144,23 +136,26 @@ void Client::calcTCost()
 
 void Client::calcSCost()
 {
-	int i;
+	unsigned int i;
 
 	this->sCost = 0;
-	for(i=0; i < this->nbBatch; i++)
-		this->sCost += this->beta * (this->date[i] - this->t) * this->id;
+	for(i=0; i < this->date->size(); i++)
+		this->sCost += this->beta * (this->date->at(i) - this->time) * this->id;
 }
 
 int Client::getMinDate()
 {
-	if(this->nbBatch == 0)
+	if(this->date->size() <= 0)
 		return -1;
 
-	int i, min = this->date[0];
-	for(i=0; i < this->nbBatch;i++)
+	unsigned int i;
+	int min = this->date->at(0);
+
+	for(i=1; i < this->date->size();i++)
 	{
-		if(min > this->date[i])
-			min = this->date[i];
+		if(min > this->date->at(i))
+			min = this->date->at(i);
 	}
+
 	return min;
 }
