@@ -39,7 +39,7 @@ Tab::Tab(data* d)
 
 	// Create
 	this->lClient = new vector<Client*>();
-	for(i=1;i<=d->n;i++)
+	for(i=1;i<=d->m;i++)
 	{
 		if(nbBpC[i] >= 1)
 		{
