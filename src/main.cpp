@@ -45,9 +45,8 @@ int main(int argc, char *argv[])
 	int i,j;
 	data *d;
 	ImportData *imp;
-	Tab *t;
+	CostTab *t;
 	Solution *solution;
-	vector<Client*> *lClient;
 // Initialize
 	handle_arg(argc, argv);
 	// Data
@@ -81,7 +80,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Structure
-	t = new Tab(d);
+	t = new CostTab(d);
 	cout << endl << "Base Matrix" << endl;
 
 	if(verbose)
@@ -108,7 +107,6 @@ int main(int argc, char *argv[])
 
 	// Evaluate the solution
 	solution = t->getSol();
-	lClient = solution->getClient();
 
 	solution->evaluate();
 

@@ -7,7 +7,7 @@
 
 #include "Tab.h"
 
-Tab::Tab()
+CostTab::CostTab()
 {
 	this->eval = 0;
 	this->t = 0;
@@ -15,7 +15,7 @@ Tab::Tab()
 	this->sol =0;
 }
 
-Tab::Tab(Tab& t)
+CostTab::CostTab(CostTab& t)
 {
 	this->eval = t.eval;
 	this->t = t.t;
@@ -23,7 +23,7 @@ Tab::Tab(Tab& t)
 	this->sol = t.sol;
 }
 
-Tab::Tab(data* d)
+CostTab::CostTab(data* d)
 {
 	this->eval = 0;
 	this->t = 0;
@@ -60,7 +60,7 @@ Tab::Tab(data* d)
 	delete nbBpC;
 }
 
-Tab::~Tab()
+CostTab::~CostTab()
 {
 	unsigned int i;
 
@@ -70,7 +70,7 @@ Tab::~Tab()
 	delete this->sol;
 }
 
-Tab& Tab::operator =(Tab& t)
+CostTab& CostTab::operator =(CostTab& t)
 {
 	this->eval = t.eval;
 	this->t = t.t;
@@ -79,7 +79,7 @@ Tab& Tab::operator =(Tab& t)
 	return *this;
 }
 
-int Tab::getMinIndexLine()
+int CostTab::getMinIndexLine()
 {
 	int minIndex = 0;
 	vector<Client*>::iterator min = this->lClient->begin();
@@ -96,7 +96,7 @@ int Tab::getMinIndexLine()
 	return minIndex;
 }
 
-Client* Tab::getMinClientLine()
+Client* CostTab::getMinClientLine()
 {
 	vector<Client*>::iterator min = this->lClient->begin();
 
@@ -109,7 +109,7 @@ Client* Tab::getMinClientLine()
 	return *min;
 }
 
-double Tab::getMinValLine()
+double CostTab::getMinValLine()
 {
 	vector<Client*>::iterator min = this->lClient->begin();
 
@@ -122,27 +122,27 @@ double Tab::getMinValLine()
 	return (*min)->getFullCost();
 }
 
-void Tab::addTime(int t)
+void CostTab::addTime(int t)
 {
 	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 		(*it)->addTime(t);
 	this->t += t;
 }
 
-void Tab::remTime(int t)
+void CostTab::remTime(int t)
 {
 	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 			(*it)->remTime(t);
 	this->t -= t;
 }
 
-void Tab::deleteClientOrder(int numClient)
+void CostTab::deleteClientOrder(int numClient)
 {
 	this->sol->addWay(this->getMinClientLine());
 	lClient->erase(lClient->begin()+numClient);
 }
 
-void Tab::printCost()
+void CostTab::printCost()
 {
 	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 		cout << setw(SETW - 3) << "C" << (*it)->getId() << " " << (*it)->getId2();

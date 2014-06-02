@@ -24,35 +24,35 @@ using namespace std;
 /**
  * Create tab for applying little+ algorithm on it.
  */
-class Tab
+class CostTab
 {
 public:
 	/**
 	 * Initialize the class
 	 * Default constructor
 	 */
-	Tab();
+	CostTab();
 
 	/**
 	 * Copy constructor. Copy a state of the algorithm
 	 */
-	Tab(Tab& t);
+	CostTab(CostTab& t);
 
 	/**
 	 * Initialize the class with data extracted
 	 */
-	Tab(data *d);
+	CostTab(data *d);
 
 	/**
 	 * Destroyer of the class.
 	 * Deallocate memory
 	 */
-	virtual ~Tab();
+	virtual ~CostTab();
 
 	/**
 	 * Override = operator for affectation
 	 */
-	Tab& operator=(Tab& t);
+	CostTab& operator=(CostTab& t);
 
 	/**
 	 * Get the index of the minimum

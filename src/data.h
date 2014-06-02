@@ -10,8 +10,8 @@
 
 #define SETW 8
 
-#define MAX_TAU 15
-#define MAX_N	30
+#define MAX_TAU 150
+#define MAX_N	300
 
 typedef struct inputData
 {
