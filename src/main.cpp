@@ -9,7 +9,6 @@
 #include "Tab.h"
 
 #include <vector>
-#define SETW 5
 
 using namespace std;
 
@@ -115,9 +114,10 @@ int main(int argc, char *argv[])
 
 	if(verbose)
 	{
-		cout << "Travel solution :" << endl;
-		for(unsigned int i =0;i<lClient->size();i++)
-			cout<<lClient->at(i)->getId()<<" "<<lClient->at(i)->getId2()<<endl;
+		cout << "Travel solution :" << endl <<
+				"Begin time : " << solution->getTime() << endl;
+		for(vector<Client*>::iterator it = solution->getClient()->begin(); it != solution->getClient()->end(); ++it)
+			cout << "Client " << (*it)->getId() << " delivering number " << (*it)->getId2() << endl;
 	}
 
 	cout << "Final value of the solution " << solution->getEval() << endl;

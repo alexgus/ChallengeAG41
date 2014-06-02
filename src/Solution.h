@@ -46,17 +46,6 @@ public:
 	void addWay(Client * c);
 
 	/**
-	 * Delete the way nb i in solution tab.
-	 * @param The i-eme way to delete
-	 */
-	void deleteWay(int i);
-
-	/**
-	 * Delete the last way from the solution tab
-	 */
-	void deleteLastWay();
-
-	/**
 	 * Check if the ways choose make an Hamiltonian path
 	 * @return true if hamiltonian false otherwise
 	 */
@@ -83,27 +72,14 @@ public:
 		return eval;
 	}
 
-	/**
-	 * Get the current nb of client in the solution's tab
-	 * @return The nb of current client in the solution's tab
-	 */
-	int getNbW() const
-	{
-		return nbW;
-	}
-
-	/**
-	 * Get the solution's tab
-	 * @return The solution's tab
-	 */
-	int* getWay() const
-	{
-		return way;
-	}
-
 	 vector<Client*>* getClient() const
 	{
 		return lClient;
+	}
+
+	double getTime() const
+	{
+		return bTime;
 	}
 
 private:
@@ -114,14 +90,9 @@ private:
 	double eval;
 
 	/**
-	 * The way tab to follow
+	 * Begin time associates to the solution
 	 */
-	int *way;
-
-	/**
-	 * the current nb of way in the tab
-	 */
-	int nbW;
+	double bTime;
 
 	/**
 	 * List of clients

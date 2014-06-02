@@ -145,8 +145,9 @@ void Tab::deleteClientOrder(int numClient)
 void Tab::printCost()
 {
 	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
-	{
-		cout << setw(5) << (*it)->getFullCost();
-		cout << endl;
-	}
+		cout << setw(SETW - 3) << "C" << (*it)->getId() << " " << (*it)->getId2();
+	cout << endl;
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
+		cout << setw(SETW) << (*it)->getFullCost();
+	cout << endl;
 }
