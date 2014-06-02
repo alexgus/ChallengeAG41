@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 		cout << "Travel solution :" << endl <<
 				"Begin time : " << solution->getTime() << endl;
 		for(vector<Client*>::iterator it = solution->getClient()->begin(); it != solution->getClient()->end(); ++it)
-			cout << "Client " << (*it)->getId() << " delivering number " << (*it)->getId2() << endl;
+			cout << "Client " << (*it)->getId() << " received its order number " << (*it)->getId2() << endl;
 	}
 
 	cout << "Final value of the solution " << solution->getEval() << endl;
