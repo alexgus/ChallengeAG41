@@ -22,7 +22,7 @@
 using namespace std;
 
 /**
- * Create tab for applying little+ algorithm on it.
+ * Create tab for applying little algorithm on it.
  */
 class CostTab
 {

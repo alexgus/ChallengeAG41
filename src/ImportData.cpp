@@ -46,27 +46,47 @@ void ImportData::startParsing()
 {
 	string tmpS;
 
-	string n = string("n");
-	string m = string("m");
-	string c = string("c");
-	string eta = string("eta");
-	string beta = string("beta");
-	string tau = string("tau");
-	string cli = string("cli");
-	string di = string("di");
+	string customer = string("CUSTOMER");
+	string n = string("NBR_PRODUCT");
+	string c = string("TRANSPORTER_CAPACITY");
+	string eta = string("TRANSPORTER_DELIVERY_COST_ETA");
+	string beta = string("CUSTOMER_HOLDING_COSTS");
+	string tau = string("TRANSPORTER_DELIVERY_TIME_SUPPLIER_CUSTOMER");
+	string cli = string("JOB_CUSTOMER");
+	string di = string("JOB_DUE_DATES");
+
+	this->d->m = 0;
 
 	while(!this->cfile.eof())
 	{
 		getline(this->cfile,tmpS);
 
-		this->setValue(&tmpS, &n, &this->d->n);
-		this->setValue(&tmpS, &m, &this->d->m);
-		this->setValue(&tmpS, &c, &this->d->c);
-		this->setValue(&tmpS, &eta, &this->d->eta);
-		this->setValue(&tmpS, &beta, &this->d->beta);
-		this->setTable(&tmpS, &tau, this->d->tau);
-		this->setTable(&tmpS, &cli, this->d->cl);
-		this->setTable(&tmpS, &di, this->d->d);
+		if(tmpS.find(n) >= 0)
+		{
+			this->setValue(&tmpS, &n, &this->d->n);
+
+			getline(this->cfile,tmpS);
+			this->setValue(&tmpS, &c, &this->d->c);
+			getline(this->cfile,tmpS);
+			this->setValue(&tmpS, &eta, &this->d->eta);
+
+			while(!this->cfile.eof())
+			{
+				getline(this->cfile,tmpS);
+				if(tmpS.find(customer) > 0)
+				{
+					getline(this->cfile,tmpS);
+					this->setValueTable(&tmpS, &beta, this->d->beta, this->d->m);
+					getline(this->cfile,tmpS);
+					this->setValueTable(&tmpS, &tau, this->d->tau, this->d->m);
+					this->d->m++;
+				}
+
+				this->setTable(&tmpS, &cli, this->d->cl);
+				getline(this->cfile,tmpS);
+				this->setTable(&tmpS, &di, this->d->d);
+			}
+		}
 	}
 }
 
@@ -75,10 +95,10 @@ void ImportData::setValue(string *s, string *toFind, int *val)
 	size_t i, pos;
 
 	pos = s->find(*toFind);
-	if(pos != 0 || (*s)[toFind->length()] != '=') // If not find or not corresponding
+	if(pos < 0) // If not find or not corresponding
 		return;
 
-	for(i = toFind->length() + 1; i < s->length(); i++)
+	for(i = toFind->length() + pos + 1;( i < s->length()); i++)
 		*val = ((*val)*10) + ((*s)[i] - '0');
 }
 
@@ -87,7 +107,7 @@ void ImportData::setValue(string* s, string* toFind, double* val)
 	size_t i,j,pos;
 
 	pos = s->find(*toFind);
-	if(pos != 0 || (*s)[toFind->length()] != '=') // If not find or not corresponding
+	if(pos < 0) // If not find or not corresponding
 		return;
 
 	char* tmp = (char*) malloc(sizeof(char)*s->length());
@@ -96,7 +116,7 @@ void ImportData::setValue(string* s, string* toFind, double* val)
 		tmp[i] = '\0';
 
 	j=0;
-	for(i = toFind->length() + 1; i < s->length(); i++)
+	for(i = toFind->length() + pos +1; i < s->length(); i++)
 	{
 		tmp[j] = (*s)[i];
 		j++;
@@ -110,14 +130,49 @@ void ImportData::setTable(string* s, string* toFind, int* val)
 	size_t i = 0, pos, cpt = 0;
 
 	pos = s->find(*toFind);
-	if(pos != 0 || (*s)[toFind->length()] != '=') // If not find or not corresponding
+	if(pos < 0) // If not find or not corresponding
 		return;
 
-	i = toFind->length();
+	i = toFind->length() + pos;
 	while(i < s->length() && (cpt < MAX_TAU || cpt < MAX_N))
 	{
-		for(i = i + 1; (*s)[i] != ' ' && i < s->length(); i++)
+		for(i = i + 1; (*s)[i] != ';' && i < s->length(); i++)
 			val[cpt] = ((val[cpt])*10) + ((*s)[i] - '0');
 		cpt++;
 	}
+}
+
+void ImportData::setValueTable(string* s, string* toFind, int* val, int index)
+{
+	size_t i, pos;
+
+	pos = s->find(*toFind);
+	if(pos < 0) // If not find or not corresponding
+		return;
+
+	for(i = toFind->length() + pos + 1; i < s->length(); i++)
+		val[index] = ((val[index])*10) + ((*s)[i] - '0');
+}
+
+void ImportData::setValueTable(string* s, string* toFind, double* val, int index)
+{
+	size_t i,j,pos;
+
+	pos = s->find(*toFind);
+	if(pos < 0) // If not find or not corresponding
+		return;
+
+	char* tmp = (char*) malloc(sizeof(char)*s->length());
+
+	for(i = 0 ; i < s->length(); i++)
+		tmp[i] = '\0';
+
+	j=0;
+	for(i = toFind->length() + pos + 1; i < s->length(); i++)
+	{
+		tmp[j] = (*s)[i];
+		j++;
+	}
+
+	val[index] = atof(tmp);
 }

@@ -75,6 +75,20 @@ private:
 	 * character of s in val table
 	 */
 	void setTable(string *s, string *toFind, int* val);
+
+	/**
+	 * Search the string toFind in s and if there is an
+	 * occurrence of toFind in s it extract the value after the equal
+	 * character of s in val table at index i
+	 */
+	void setValueTable(string* s, string* toFind, int* val, int index);
+
+	/**
+	 * Search the string toFind in s and if there is an
+	 * occurrence of toFind in s it extract the value after the equal
+	 * character of s in val table at index i
+	 */
+	void setValueTable(string* s, string* toFind, double* val, int index);
 };
 
 #endif /* IMPORTDATA_H_ */

@@ -6,7 +6,7 @@
 #include <iomanip>
 
 #include "ImportData.h"
-#include "Tab.h"
+#include "CostTab.h"
 
 #include <vector>
 

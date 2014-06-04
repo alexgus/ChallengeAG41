@@ -5,7 +5,7 @@
  *      Author: alexandre
  */
 
-#include "Tab.h"
+#include "CostTab.h"
 
 CostTab::CostTab()
 {
