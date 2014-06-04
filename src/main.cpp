@@ -29,6 +29,17 @@ void printTable(int *d, int max)
 		cout << setw(SETW) << d[i];
 }
 
+/**
+ * print a matrix
+ */
+void printTable(double *d, int max)
+{
+	int i;
+
+	for(i=0; i<max; i++)
+		cout << setw(SETW) << d[i];
+}
+
 void handle_arg(int argc, char *argv[])
 {
 	int i;
@@ -60,8 +71,8 @@ int main(int argc, char *argv[])
 				<< "m    : " << d->m				 << endl
 				<< "c    : " << d->c				 << endl
 				<< "eta  : " << d->eta				 << endl
-				<< "beta : " << d->beta			 << endl
-				<< "tau  : Distance entre le fournisseur et les clients" << endl;
+				<< "beta : "; printTable(d->beta, d->m); cout << endl
+				<< "tau  : Distance entre le fournisseur et les client " << endl;
 		for(i=1; i<=d->m; i++)
 			cout << setw(SETW) << i;
 		cout << endl;
@@ -81,7 +92,7 @@ int main(int argc, char *argv[])
 
 	// Structure
 	t = new CostTab(d);
-	cout << endl << "Base Matrix" << endl;
+/*	cout << endl << "Base Matrix" << endl;
 
 	if(verbose)
 		t->printCost();
@@ -119,7 +130,7 @@ int main(int argc, char *argv[])
 	}
 
 	cout << "Final value of the solution " << solution->getEval() << endl;
-
+*/
 // Finalize
 	delete imp;
 	delete t;

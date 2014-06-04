@@ -73,7 +73,15 @@ void ImportData::startParsing()
 			while(!this->cfile.eof())
 			{
 				getline(this->cfile,tmpS);
-				if(tmpS.find(customer) > 0)
+
+				int test1 = tmpS.find(cli);
+				int test2 = tmpS.find(di);
+				int test3 = tmpS.find(customer);
+				if(test1 >= 0)
+					this->setTable(&tmpS, &cli, this->d->cl);
+				else if(test2 >= 0)
+					this->setTable(&tmpS, &di, this->d->d);
+				else if(test3 >= 0)
 				{
 					getline(this->cfile,tmpS);
 					this->setValueTable(&tmpS, &beta, this->d->beta, this->d->m);
@@ -81,11 +89,8 @@ void ImportData::startParsing()
 					this->setValueTable(&tmpS, &tau, this->d->tau, this->d->m);
 					this->d->m++;
 				}
-
-				this->setTable(&tmpS, &cli, this->d->cl);
-				getline(this->cfile,tmpS);
-				this->setTable(&tmpS, &di, this->d->d);
 			}
+			this->d->m--;
 		}
 	}
 }
@@ -138,6 +143,34 @@ void ImportData::setTable(string* s, string* toFind, int* val)
 	{
 		for(i = i + 1; (*s)[i] != ';' && i < s->length(); i++)
 			val[cpt] = ((val[cpt])*10) + ((*s)[i] - '0');
+		cpt++;
+	}
+}
+
+void ImportData::setTable(string* s, string* toFind, double* val)
+{
+	size_t i = 0, j, pos, cpt = 0;
+	char* tmp;
+
+	pos = s->find(*toFind);
+	if(pos < 0) // If not find or not corresponding
+		return;
+
+	i = toFind->length() + pos;
+	for(i = i + 1; (*s)[i] != ';' && i < s->length(); i++)
+	{
+		tmp = (char*) malloc(sizeof(char)*s->length());
+		for(j=0;j<s->length();j++)
+			tmp[j] = '\0';
+		j=0;
+		for(; i < s->length() && (*s)[i] != ';'; i++)
+		{
+			tmp[j] = (*s)[i];
+			j++;
+		}
+
+		val[cpt] = atof(tmp);
+		free(tmp);
 		cpt++;
 	}
 }
