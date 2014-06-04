@@ -139,17 +139,17 @@ private:
 	/**
 	 * Transport multiplier
 	 */
-	int eta;
+	double eta;
 
 	/**
 	 * Time to go from the deliverer to this clients
 	 */
-	int timeTransport;
+	double timeTransport;
 
 	/**
 	 * transport cost
 	 */
-	int tCost;
+	double tCost;
 
 	/**
 	 * Storage cost

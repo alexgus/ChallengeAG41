@@ -92,11 +92,12 @@ int main(int argc, char *argv[])
 
 	// Structure
 	t = new CostTab(d);
-/*	cout << endl << "Base Matrix" << endl;
 
 	if(verbose)
+	{
+		cout << endl << "Base Matrix" << endl;
 		t->printCost();
-
+	}
 	j = t->getNumberOfDelivery();
 
 // Begin
@@ -130,7 +131,7 @@ int main(int argc, char *argv[])
 	}
 
 	cout << "Final value of the solution " << solution->getEval() << endl;
-*/
+
 // Finalize
 	delete imp;
 	delete t;
