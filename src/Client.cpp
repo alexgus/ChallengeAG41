@@ -27,7 +27,7 @@ Client::Client(int id, int n, data* d)
 	this->time = 0;
 	this->beta = d->beta[id-1];
 	this->eta = d->eta;
-	this->timeTransport = d->tau[id];
+	this->timeTransport = d->tau[id-1];
 	this->tCost = 0;
 	this->sCost = 0;
 
