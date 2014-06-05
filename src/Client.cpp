@@ -35,7 +35,7 @@ Client::Client(int id, int n, data* d)
 	int i,cpt=0, nb = 0;
 
 	int* tmpB = new int[d->n];
-	int* tmpD = new int[d->n];
+	double* tmpD = new double[d->n];
 
 	for(i=0; i < d->n ;i++)
 	{
@@ -94,7 +94,7 @@ Client::Client(int id, int n, data* d)
 	else
 		nb = cpt;
 
-	this->date = new vector<int>();
+	this->date = new vector<double>();
 
 	// Copy to the new tables
 	for(i=0;i<nb;i++)
@@ -117,13 +117,13 @@ Client::~Client()
 	}
 }
 
-void Client::addTime(int toAdd)
+void Client::addTime(double toAdd)
 {
 	this->time += toAdd;
 	this->calcSCost();
 }
 
-void Client::remTime(int t)
+void Client::remTime(double t)
 {
 	this->time -= t;
 	this->calcSCost();
@@ -137,18 +137,18 @@ void Client::calcTCost()
 void Client::calcSCost()
 {
 	this->sCost = 0;
-	for(vector<int>::iterator it= this->date->begin(); it != this->date->end(); ++it)
-		this->sCost += this->beta * (*it - this->time) * this->id;
+	for(vector<double>::iterator it= this->date->begin(); it != this->date->end(); ++it)
+		this->sCost += this->beta * (*it - this->time);
 }
 
-int Client::getMinDate()
+double Client::getMinDate()
 {
 	if(this->date->size() <= 0)
 		return -1;
 
-	vector<int>::iterator min = this->date->begin();
+	vector<double>::iterator min = this->date->begin();
 
-	for(vector<int>::iterator it = this->date->begin(); it != this->date->end();++it)
+	for(vector<double>::iterator it = this->date->begin(); it != this->date->end();++it)
 	{
 		if(*min > *it)
 			min = it;

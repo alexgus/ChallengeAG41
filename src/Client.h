@@ -42,17 +42,17 @@ public:
 	/**
 	 * Add time to the current time
 	 */
-	void addTime(const int toAdd);
+	void addTime(const double toAdd);
 
 	/**
 	 * Remove time to avoid problems when calculating cost
 	 */
-	void remTime(int t);
+	void remTime(double t);
 
 	/**
 	 * Return the minimum date for delivering a batch
 	 */
-	int getMinDate();
+	double getMinDate();
 
 	/**
 	 * Get id of client
@@ -73,7 +73,7 @@ public:
 	/**
 	 * Get the time multiplier
 	 */
-	int getEta() const
+	double getEta() const
 	{
 		return eta;
 	}
@@ -81,7 +81,7 @@ public:
 	/**
 	 * Return the transport Cost
 	 */
-	int getTCost() const
+	double getTCost() const
 	{
 		return tCost;
 	}
@@ -105,7 +105,7 @@ public:
 	/**
 	 * Get the time to go to the client
 	 */
-	int getTimeTransport() const
+	double getTimeTransport() const
 	{
 		return timeTransport;
 	}
@@ -113,7 +113,7 @@ public:
 	/**
 	 * Set time current time of client
 	 */
-	void setTime(int t)
+	void setTime(double t)
 	{
 		this->time = t;
 		this->calcSCost();
@@ -159,12 +159,12 @@ private:
 	/**
 	 * Vector to stock batch and id of the batch
 	 */
-	vector<int> *date;
+	vector<double> *date;
 
 	/**
 	 * Actual time
 	 */
-	int time;
+	double time;
 
 	/**
 	 * Calculate transport cost

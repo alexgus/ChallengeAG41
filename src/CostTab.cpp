@@ -122,14 +122,14 @@ double CostTab::getMinValLine()
 	return (*min)->getFullCost();
 }
 
-void CostTab::addTime(int t)
+void CostTab::addTime(double t)
 {
 	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 		(*it)->addTime(t);
 	this->t += t;
 }
 
-void CostTab::remTime(int t)
+void CostTab::remTime(double t)
 {
 	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 			(*it)->remTime(t);

@@ -44,7 +44,12 @@ data* ImportData::getData()
 
 void ImportData::startParsing()
 {
+	bool setNbCust = false;
 	string tmpS;
+	char *str;
+	char *str2;
+	char *tok;
+	int numCLient;
 
 	string customer = string("CUSTOMER");
 	string n = string("NBR_PRODUCT");
@@ -54,6 +59,8 @@ void ImportData::startParsing()
 	string tau = string("TRANSPORTER_DELIVERY_TIME_SUPPLIER_CUSTOMER");
 	string cli = string("JOB_CUSTOMER");
 	string di = string("JOB_DUE_DATES");
+	string nbCust = string("NBR_CUSTOMER");
+	string CustToCust = string("TIME_CUSTOMER_CUSTOMER");
 
 	this->d->m = 0;
 
@@ -66,6 +73,13 @@ void ImportData::startParsing()
 			this->setValue(&tmpS, &n, &this->d->n);
 
 			getline(this->cfile,tmpS);
+			if(tmpS.find(nbCust) >= 0)
+			{
+				this->setValue(&tmpS, &nbCust, &this->d->m);
+				getline(this->cfile,tmpS);
+				setNbCust = true;
+			}
+
 			this->setValue(&tmpS, &c, &this->d->c);
 			getline(this->cfile,tmpS);
 			this->setValue(&tmpS, &eta, &this->d->eta);
@@ -77,57 +91,75 @@ void ImportData::startParsing()
 				int test1 = tmpS.find(cli);
 				int test2 = tmpS.find(di);
 				int test3 = tmpS.find(customer);
+				int test4 = tmpS.find(CustToCust);
 				if(test1 >= 0)
 					this->setTable(&tmpS, &cli, this->d->cl);
 				else if(test2 >= 0)
 					this->setTable(&tmpS, &di, this->d->d);
-				else if(test3 >= 0)
+				else if(test3 >= 0 && test4 < 0)
 				{
+					str = const_cast<char*>(tmpS.c_str());
+					tok = strtok(str,":");
+					str = NULL;
+					tok = strtok(str,":");
+					str2 = tok;
+					tok = strtok(str2,";");
+					numCLient = atoi(tok);
+
 					getline(this->cfile,tmpS);
-					this->setValueTable(&tmpS, &beta, this->d->beta, this->d->m);
+					this->setValue(&tmpS, &beta, &(this->d->beta[numCLient-1]));
 					getline(this->cfile,tmpS);
-					this->setValueTable(&tmpS, &tau, this->d->tau, this->d->m);
-					this->d->m++;
+					this->setValue(&tmpS, &tau, &(this->d->tau[numCLient-1]));
+					if(!setNbCust)
+						this->d->m++;
 				}
 			}
-			this->d->m--;
+			if(!setNbCust)
+				this->d->m--;
 		}
 	}
 }
 
 void ImportData::setValue(string *s, string *toFind, int *val)
 {
-	size_t i, pos;
+	size_t pos;
+	char *str = const_cast<char*>(s->c_str());
+	char *str2;
+	char *tok;
+
 
 	pos = s->find(*toFind);
 	if(pos < 0) // If not find or not corresponding
 		return;
 
-	for(i = toFind->length() + pos + 1;( i < s->length()); i++)
-		*val = ((*val)*10) + ((*s)[i] - '0');
+	tok = strtok(str,":");
+	str = NULL;
+	tok = strtok(str,":");
+	str2 = tok;
+	tok = strtok(str2,";");
+
+	*val = atoi(tok);
 }
 
 void ImportData::setValue(string* s, string* toFind, double* val)
 {
-	size_t i,j,pos;
+	size_t pos;
+	char *str = const_cast<char*>(s->c_str());
+	char *str2;
+	char *tok;
+
 
 	pos = s->find(*toFind);
 	if(pos < 0) // If not find or not corresponding
 		return;
 
-	char* tmp = (char*) malloc(sizeof(char)*s->length());
+	tok = strtok(str,":");
+	str = NULL;
+	tok = strtok(str,":");
+	str2 = tok;
+	tok = strtok(str2,";");
 
-	for(i = 0 ; i < s->length(); i++)
-		tmp[i] = '\0';
-
-	j=0;
-	for(i = toFind->length() + pos +1; i < s->length(); i++)
-	{
-		tmp[j] = (*s)[i];
-		j++;
-	}
-
-	*val = atof(tmp);
+	*val = atof(tok);
 }
 
 void ImportData::setTable(string* s, string* toFind, int* val)
@@ -173,39 +205,4 @@ void ImportData::setTable(string* s, string* toFind, double* val)
 		free(tmp);
 		cpt++;
 	}
-}
-
-void ImportData::setValueTable(string* s, string* toFind, int* val, int index)
-{
-	size_t i, pos;
-
-	pos = s->find(*toFind);
-	if(pos < 0) // If not find or not corresponding
-		return;
-
-	for(i = toFind->length() + pos + 1; i < s->length(); i++)
-		val[index] = ((val[index])*10) + ((*s)[i] - '0');
-}
-
-void ImportData::setValueTable(string* s, string* toFind, double* val, int index)
-{
-	size_t i,j,pos;
-
-	pos = s->find(*toFind);
-	if(pos < 0) // If not find or not corresponding
-		return;
-
-	char* tmp = (char*) malloc(sizeof(char)*s->length());
-
-	for(i = 0 ; i < s->length(); i++)
-		tmp[i] = '\0';
-
-	j=0;
-	for(i = toFind->length() + pos + 1; i < s->length(); i++)
-	{
-		tmp[j] = (*s)[i];
-		j++;
-	}
-
-	val[index] = atof(tmp);
 }

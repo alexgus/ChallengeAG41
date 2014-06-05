@@ -115,6 +115,12 @@ int main(int argc, char *argv[])
 
 		t->addTime(c->getTCost()/d->eta);
 		t->deleteClientOrder(t->getMinIndexLine());
+
+		if(verbose)
+		{
+			cout << endl << "New Matrix" << endl;
+			t->printCost();
+		}
 	}
 
 	// Evaluate the solution

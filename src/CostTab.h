@@ -80,19 +80,19 @@ public:
 	 * Add time t to the current time for computing right cost.
 	 * @param t Time to add
 	 */
-	void addTime(int t);
+	void addTime(double t);
 
 	/**
 	 * Remove time t to the current time for computing right cost
 	 * @param t Time to remove
 	 */
-	void remTime(int t);
+	void remTime(double t);
 
 	/**
 	 * Get the time of the current matrix
 	 * @return The time of the current matrix
 	 */
-	int getTime() const
+	double getTime() const
 	{
 		return t;
 	}
@@ -135,7 +135,7 @@ private:
 	/**
 	 * Time for computing right cost
 	 */
-	int t;
+	double t;
 
 	/**
 	 * List of client

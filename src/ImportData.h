@@ -8,6 +8,7 @@
 #ifndef IMPORTDATA_H_
 #define IMPORTDATA_H_
 
+#include <cstring>
 #include <string>
 #include <fstream>
 #include <iostream>
