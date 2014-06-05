@@ -59,7 +59,6 @@ double Solution::evaluate()
 	// Initialize
 	c = this->lClient->at(this->lClient->size()-1);
 	this->bTime = c->getMinDate();
-	this->setTime((c->getTCost()/2)/c->getEta());
 	this->bTime -= (c->getTCost()/2)/c->getEta();
 
 	// Iterate over the vector decreasingly
