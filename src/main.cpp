@@ -102,7 +102,6 @@ int main(int argc, char *argv[])
 
 // Begin
 	Client* c;
-	unsigned int j;
 
 	t->addTime(t->getMinClientDate()->getMinDate());
 
