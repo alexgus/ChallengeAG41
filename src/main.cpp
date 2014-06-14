@@ -53,7 +53,7 @@ void handle_arg(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 // Declaration
-	int i,j;
+	int i;
 	data *d;
 	ImportData *imp;
 	CostTab *t;
@@ -71,12 +71,13 @@ int main(int argc, char *argv[])
 				<< "m    : " << d->m				 << endl
 				<< "c    : " << d->c				 << endl
 				<< "eta  : " << d->eta				 << endl
-				<< "beta : "; printTable(d->beta, d->m); cout << endl
-				<< "tau  : Distance entre le fournisseur et les client " << endl;
+				<< "tau  : Distance entre le fournisseur et les client et cout associés" << endl;
 		for(i=1; i<=d->m; i++)
 			cout << setw(SETW) << i;
 		cout << endl;
 		printTable(d->tau, d->m);
+		cout << endl;
+		printTable(d->beta, d->m);
 
 		cout << endl << endl << endl
 				<< "Dates dues et clients associés aux produits demandés" << endl
@@ -98,22 +99,18 @@ int main(int argc, char *argv[])
 		cout << endl << "Base Matrix" << endl;
 		t->printCost();
 	}
-	j = t->getNumberOfDelivery();
 
 // Begin
-	for(int i =0; i<j;i++){
-		Client* c;
+	Client* c;
+	unsigned int j;
 
+	t->addTime(t->getMinClientDate()->getMinDate());
+
+	while(t->getNumberOfDelivery() > 0)
+	{
 		c = t->getMinClientLine();
 
-		// Adjust the time for non negative storage cost
-		if(c->getSCost() < 0)
-		{
-			t->remTime(t->getTime() - c->getMinDate());
-			c = t->getMinClientLine();
-		}
-
-		t->addTime(c->getTCost()/d->eta);
+		t->remTime(c->getTCost()/c->getEta());
 		t->deleteClientOrder(t->getMinIndexLine());
 
 		if(verbose)
@@ -126,17 +123,17 @@ int main(int argc, char *argv[])
 	// Evaluate the solution
 	solution = t->getSol();
 
-	solution->evaluate();
+	//solution->evaluate();
 
 	if(verbose)
 	{
-		cout << "Travel solution :" << endl <<
-				"Begin time : " << solution->getTime() << endl;
+		//cout << "Travel solution :" << endl <<
+		//		"Begin time : " << solution->getTime() << endl;
 		for(vector<Client*>::iterator it = solution->getClient()->begin(); it != solution->getClient()->end(); ++it)
 			cout << "Client " << (*it)->getId() << " received its order number " << (*it)->getId2() << endl;
 	}
 
-	cout << "Final value of the solution " << solution->getEval() << endl;
+	//cout << "Final value of the solution " << solution->getEval() << endl;
 
 // Finalize
 	delete imp;

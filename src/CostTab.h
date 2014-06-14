@@ -65,10 +65,15 @@ public:
 	 */
 	Client* getMinClientLine();
 
-	/*
+	/**
 	 * @return the minimum cost
 	 */
 	double getMinValLine();
+
+	/**
+	 * Get the client with minimum date to deliver
+	 */
+	Client* getMinClientDate();
 
 	/*
 	 * delete the Client from lClient and set -1 to its cost in mat

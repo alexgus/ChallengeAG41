@@ -151,3 +151,14 @@ void CostTab::printCost()
 		cout << setw(SETW) << (*it)->getFullCost();
 	cout << endl;
 }
+
+Client* CostTab::getMinClientDate()
+{
+	Client* cMin = this->lClient->at(0);
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
+	{
+		if(cMin->getMinDate() > (*it)->getMinDate())
+			cMin = (*it);
+	}
+	return cMin;
+}
