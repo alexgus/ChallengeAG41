@@ -66,7 +66,7 @@ double Solution::evaluate()
 	int t;
 	int tCost = 0, sCost = 0;
 
-// Find the right t
+	// Find the right t
 	// Initialize
 	c = this->lClient->at(this->lClient->size()-1);
 	this->bTime = c->getMinDate();
@@ -121,4 +121,47 @@ void Solution::printSolution()
 				<< "Fcost="<<(*it)->getFullCost() <<endl;
 		cout << endl;
 	}
+}
+
+void Solution::separateBatch()
+{
+	vector<Client*> *toAdd = new vector<Client*>();
+	window *w = new window[this->lClient->size()];
+	int i = 0;
+
+	// Create windows
+	for(vector<Client*>::iterator it = this->lClient->begin(); it != this->lClient->end();++it)
+	{
+		w[i].begin = (*it)->getTime()-(*it)->getTimeTransport();
+		w[i].end = (*it)->getTime()+(*it)->getTimeTransport();
+		++i;
+	}
+
+	// Check for all clients
+	for(vector<Client*>::iterator it = this->lClient->begin(); it != this->lClient->end();++it)
+	{
+		// Check for all batch
+		vector<double> *b = (*it)->getDate();
+		double tDeliver = (*it)->getTimeTransport();
+		for(vector<double>::iterator date = b->begin(); date != b->end();++date)
+		{
+			if((w[this->lClient->size()-1].end + tDeliver) <= *date)
+				;// TODO Evaluate for separate or not. Create new client and insert it in toAdd
+			else
+			{
+				i=1;
+				while(w[i].end <= ((*it)->getTime() + (*it)->getTimeTransport()))
+				{
+					if(w[i].end <= (date - tDeliver) && w[i-1].begin >= (date + tDeliver))
+					{
+						// TODO Evaluate for separate or not. Create new client and insert it in toAdd
+						break;
+					}
+					i++;
+				}
+			}
+		}
+	}
+
+	// TODO Insert toAdd in list of Client
 }

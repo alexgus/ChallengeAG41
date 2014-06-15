@@ -46,6 +46,11 @@ public:
 	void addWay(Client * c);
 
 	/**
+	 * Create new clients with his own batch which can be delivered later
+	 */
+	void separateBatch();
+
+	/**
 	 * Compute the value of the solution
 	 * @return the current evaluation of the solution
 	 */
@@ -92,6 +97,15 @@ private:
 	 * List of clients
 	 */
 	vector<Client*> *lClient;
+
+	/**
+	 * Define a busy window
+	 */
+	typedef struct
+	{
+		double begin;
+		double end;
+	} window;
 };
 
 #endif /* SOLUTION_H_ */

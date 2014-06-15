@@ -124,6 +124,11 @@ public:
 		return time;
 	}
 
+	vector<double>* getDate() const
+	{
+		return date;
+	}
+
 private:
 
 	/**
