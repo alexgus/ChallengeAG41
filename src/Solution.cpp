@@ -28,7 +28,14 @@ Solution::~Solution()
 
 void Solution::addWay(Client* c)
 {
-	this->lClient->push_back(c);
+	vector<Client*>::iterator it = this->lClient->begin();
+	while(it != this->lClient->end()&& (*it)->getSCost()>= c->getSCost())
+		++it;
+
+	if(it!= this->lClient->end())
+		this->lClient->insert(it,c);
+	else if (this->lClient->size()== 0)
+		this->lClient->push_back(c);
 }
 
 double Solution::evaluate()

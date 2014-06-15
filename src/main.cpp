@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
 	Client* c;
 
 	// TODO Algorithm
+t->calculatePerfectTime();
 
 	// Evaluate the solution
 	solution = t->getSol();
