@@ -104,29 +104,7 @@ int main(int argc, char *argv[])
 // Begin
 	Client* c;
 
-	// Deliver the first client
-	c = t->getMinClientDate();
-	t->addTime(c->getMinDate());
-	t->deleteClient(c);
-
-	if(verbose)
-	{
-		cout << endl << "--> New Matrix <--" << endl;
-		t->printCost();
-	}
-
-	while(t->getNumberOfDelivery() > 0)
-	{
-		c = t->getMinClientLine();
-		t->remTime(c->getTCost()/c->getEta());
-		t->deleteClient(c);
-
-		if(verbose)
-		{
-			cout << endl << "--> New Matrix <--" << endl;
-			t->printCost();
-		}
-	}
+	// TODO Algorithm
 
 	// Evaluate the solution
 	solution = t->getSol();
