@@ -19,6 +19,11 @@ using namespace std;
 bool verbose = false;
 
 /**
+ * Data of the file
+ */
+data *d;
+
+/**
  * print a matrix
  */
 void printTable(int *d, int max)
@@ -54,7 +59,6 @@ int main(int argc, char *argv[])
 {
 // Declaration
 	int i;
-	data *d;
 	ImportData *imp;
 	CostTab *t;
 // Initialize
@@ -105,6 +109,8 @@ int main(int argc, char *argv[])
 	// TODO Algorithm
 t->calculatePerfectTime();
 t->getSol()->printSolution();
+t->getSol()->separateBatch();
+
 
 // Finalize
 	delete imp;

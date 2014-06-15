@@ -55,6 +55,22 @@ public:
 	double getMinDate();
 
 	/**
+	 * Suppress date in lit of batch
+	 */
+	void supprDate(double date);
+
+	/**
+	 * Suppressed all batch for this client
+	 */
+	void supprAllDate(void);
+
+	/**
+	 * Add date in list of batch
+	 * @param date Date to add
+	 */
+	void addDate(double date);
+
+	/**
 	 * Get id of client
 	 */
 	int getId() const

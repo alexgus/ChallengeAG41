@@ -134,6 +134,17 @@ void Client::calcTCost()
 	this->tCost = this->timeTransport * this->eta * 2;
 }
 
+void Client::supprAllDate(void)
+{
+	delete this->date;
+	this->date = new vector<double>();
+}
+
+void Client::addDate(double date)
+{
+	this->date->push_back(date);
+}
+
 void Client::calcSCost()
 {
 	this->sCost = 0;
@@ -155,4 +166,14 @@ double Client::getMinDate()
 	}
 
 	return *min;
+}
+
+void Client::supprDate(double date)
+{
+	vector<double>::iterator it = this->date->begin();
+	while(it != this->date->end() && (*it) != date)
+		++it;
+
+	if(*it == date)
+		this->date->erase(it);
 }
