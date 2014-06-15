@@ -136,10 +136,22 @@ void CostTab::remTime(double t)
 	this->t -= t;
 }
 
-void CostTab::deleteClientOrder(int numClient)
+void CostTab::deleteClient(Client* cRem)
 {
-	this->sol->addWay(this->getMinClientLine());
-	lClient->erase(lClient->begin()+numClient);
+	unsigned int i = 0;
+
+	vector<Client*>::iterator it = this->lClient->begin();
+	while(it != this->lClient->end() && (*it) != cRem)
+	{
+		++it;
+		++i;
+	}
+
+	if(it != this->lClient->end())
+	{
+		this->sol->addWay(cRem);
+		this->lClient->erase(lClient->begin()+i);
+	}
 }
 
 void CostTab::printCost()

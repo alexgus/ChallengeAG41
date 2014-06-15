@@ -77,9 +77,9 @@ public:
 
 	/*
 	 * delete the Client from lClient and set -1 to its cost in mat
-	 * @param numClient id of the client
+	 * @param cRem Client to delete and add to the solution
 	 */
-	void deleteClientOrder(int numClient);
+	void deleteClient(Client* cRem);
 
 	/**
 	 * Add time t to the current time for computing right cost.

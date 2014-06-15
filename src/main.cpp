@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 
 	if(verbose)
 	{
-		cout << "Initialized constants :" 		 << endl
+		cout << "================== Initialized constants :" 		 << endl
 				<< "n    : " << d->n				 << endl
 				<< "m    : " << d->m				 << endl
 				<< "c    : " << d->c				 << endl
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 		cout << endl;
 		printTable(d->beta, d->m);
 
-		cout << endl << endl << endl
+		cout << endl
 				<< "Dates dues et clients associés aux produits demandés" << endl
 				<< " i ";
 		for(i=1; i<=d->n; i++)
@@ -96,25 +96,34 @@ int main(int argc, char *argv[])
 
 	if(verbose)
 	{
-		cout << endl << "Base Matrix" << endl;
+		cout << endl << "================== Begin :";
+		cout << endl << "--> Base Matrix <--" << endl;
 		t->printCost();
 	}
 
 // Begin
 	Client* c;
 
-	t->addTime(t->getMinClientDate()->getMinDate());
+	// Deliver the first client
+	c = t->getMinClientDate();
+	t->addTime(c->getMinDate());
+	t->deleteClient(c);
+
+	if(verbose)
+	{
+		cout << endl << "--> New Matrix <--" << endl;
+		t->printCost();
+	}
 
 	while(t->getNumberOfDelivery() > 0)
 	{
 		c = t->getMinClientLine();
-
 		t->remTime(c->getTCost()/c->getEta());
-		t->deleteClientOrder(t->getMinIndexLine());
+		t->deleteClient(c);
 
 		if(verbose)
 		{
-			cout << endl << "New Matrix" << endl;
+			cout << endl << "--> New Matrix <--" << endl;
 			t->printCost();
 		}
 	}
@@ -122,17 +131,17 @@ int main(int argc, char *argv[])
 	// Evaluate the solution
 	solution = t->getSol();
 
-	//solution->evaluate();
+	solution->evaluate();
 
 	if(verbose)
 	{
-		//cout << "Travel solution :" << endl <<
-		//		"Begin time : " << solution->getTime() << endl;
+		cout << endl <<"==================  Solution :" << endl <<
+				"Begin time : " << solution->getTime() << endl;
 		for(vector<Client*>::iterator it = solution->getClient()->begin(); it != solution->getClient()->end(); ++it)
 			cout << "Client " << (*it)->getId() << " received its order number " << (*it)->getId2() << endl;
 	}
 
-	//cout << "Final value of the solution " << solution->getEval() << endl;
+	cout << "Final value of the solution " << solution->getEval() << endl;
 
 // Finalize
 	delete imp;
