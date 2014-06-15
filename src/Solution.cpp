@@ -30,13 +30,19 @@ void Solution::addWay(Client* c)
 {
 	//Insert client to right place
 	vector<Client*>::iterator it = this->lClient->begin();
-	while(it != this->lClient->end()&& (*it)->getSCost()>= c->getSCost())
-		++it;
 
-	if(it!= this->lClient->end())
-		this->lClient->insert(it,c);
-	else if (this->lClient->size()== 0)
+	if(this->lClient->size() == 0)
 		this->lClient->push_back(c);
+	else
+	{
+		while(it != this->lClient->end()&& (*it)->getSCost()>= c->getSCost())
+			++it;
+
+		if(it!= this->lClient->end())
+			this->lClient->insert(it,c);
+		else
+			this->lClient->push_back(c);
+	}
 
 	//Calculate real time for clients
 	it = this->lClient->begin()+1;
