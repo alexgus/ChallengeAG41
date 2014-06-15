@@ -75,7 +75,7 @@ public:
 	{
 		return bTime;
 	}
-
+void printSolution();
 private:
 
 	/**

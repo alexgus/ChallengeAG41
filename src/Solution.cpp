@@ -28,6 +28,7 @@ Solution::~Solution()
 
 void Solution::addWay(Client* c)
 {
+	//Insert client to right place
 	vector<Client*>::iterator it = this->lClient->begin();
 	while(it != this->lClient->end()&& (*it)->getSCost()>= c->getSCost())
 		++it;
@@ -36,7 +37,21 @@ void Solution::addWay(Client* c)
 		this->lClient->insert(it,c);
 	else if (this->lClient->size()== 0)
 		this->lClient->push_back(c);
+
+	//Calculate real time for clients
+	it = this->lClient->begin()+1;
+	double timeTemp= lClient->at(0)->getMinDate();
+	double timeTrans = lClient->at(0)->getTimeTransport();
+	while(it != this->lClient->end()){
+		(*it)->setTime(timeTemp-timeTrans-(*it)->getTimeTransport());
+		timeTemp =(*it)->getTime();
+		timeTrans=(*it)->getTimeTransport();
+		this->bTime = timeTemp-timeTrans;
+		++it;
+	}
+
 }
+
 
 double Solution::evaluate()
 {
@@ -87,4 +102,17 @@ void Solution::setTime(int t)
 
 	for(i=0;i<this->lClient->size();i++)
 		this->lClient->at(i)->setTime(t);
+}
+
+void Solution::printSolution()
+{
+	for(vector<Client*>::iterator it = this->lClient->begin(); it != this->lClient->end();++it)
+	{
+		cout << "Client " <<(*it)->getId() << " " << (*it)->getId2() << endl
+				<< "t=" <<(*it)->getTime() << endl
+				<< "Tcost=" <<(*it)->getTCost() <<endl
+				<< "Scost="<<(*it)->getSCost() <<endl
+				<< "Fcost="<<(*it)->getFullCost() <<endl;
+		cout << endl;
+	}
 }

@@ -119,6 +119,11 @@ public:
 		this->calcSCost();
 	}
 
+	double getTime() const
+	{
+		return time;
+	}
+
 private:
 
 	/**

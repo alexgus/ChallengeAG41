@@ -57,7 +57,6 @@ int main(int argc, char *argv[])
 	data *d;
 	ImportData *imp;
 	CostTab *t;
-	Solution *solution;
 // Initialize
 	handle_arg(argc, argv);
 	// Data
@@ -102,25 +101,10 @@ int main(int argc, char *argv[])
 	}
 
 // Begin
-	Client* c;
 
 	// TODO Algorithm
 t->calculatePerfectTime();
-
-	// Evaluate the solution
-	solution = t->getSol();
-
-	solution->evaluate();
-
-	if(verbose)
-	{
-		cout << endl <<"==================  Solution :" << endl <<
-				"Begin time : " << solution->getTime() << endl;
-		for(vector<Client*>::iterator it = solution->getClient()->begin(); it != solution->getClient()->end(); ++it)
-			cout << "Client " << (*it)->getId() << " received its order number " << (*it)->getId2() << endl;
-	}
-
-	cout << "Final value of the solution " << solution->getEval() << endl;
+t->getSol()->printSolution();
 
 // Finalize
 	delete imp;
