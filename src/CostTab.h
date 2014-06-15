@@ -122,6 +122,11 @@ public:
 	 */
 	void printCost();
 
+	/*
+	 * Calculate cost at perfect time
+	 */
+	void calculatePerfectTime();
+
 private:
 
 	/**
