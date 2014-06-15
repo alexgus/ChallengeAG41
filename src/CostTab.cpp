@@ -178,7 +178,9 @@ Client* CostTab::getMinClientDate()
 
 void CostTab::calculatePerfectTime()
 {
-	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
-		 (*it)->setTime((*it)->getMinDate());
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it){
 
+		 (*it)->setTime((*it)->getMinDate());
+		 sol->addWay(*it);
+	}
 }
