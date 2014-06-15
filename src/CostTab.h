@@ -64,6 +64,16 @@ public:
 	 */
 	double getMinVal();
 
+	/*
+	 * @return the client which has the maximum cost
+	 */
+	Client* getMaxClient();
+
+	/**
+	 * @return the maximum cost
+	 */
+	double getMaxVal();
+
 	/**
 	 * Get the client with minimum date to deliver
 	 */
@@ -74,18 +84,6 @@ public:
 	 * @param cRem Client to delete and add to the solution
 	 */
 	void deleteClient(Client* cRem);
-
-	/**
-	 * Add time t to the current time for computing right cost.
-	 * @param t Time to add
-	 */
-	void addTime(double t);
-
-	/**
-	 * Remove time t to the current time for computing right cost
-	 * @param t Time to remove
-	 */
-	void remTime(double t);
 
 	/**
 	 * Get the time of the current matrix

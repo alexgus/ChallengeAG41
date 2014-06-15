@@ -105,6 +105,33 @@ double CostTab::getMinVal()
 	return (*min)->getSCost();
 }
 
+
+Client* CostTab::getMaxClient()
+{
+	vector<Client*>::iterator max = this->lClient->begin();
+
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
+	{
+		if((*max)->getSCost() < (*it)->getSCost())
+			max = it;
+	}
+
+	return *max;
+}
+
+double CostTab::getMaxVal()
+{
+	vector<Client*>::iterator max = this->lClient->begin();
+
+	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
+	{
+		if((*max)->getSCost() < (*it)->getSCost())
+			max = it;
+	}
+
+	return (*max)->getSCost();
+}
+
 void CostTab::deleteClient(Client* cRem)
 {
 	unsigned int i = 0;
