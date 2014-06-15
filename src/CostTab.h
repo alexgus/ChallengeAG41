@@ -54,21 +54,15 @@ public:
 	 */
 	CostTab& operator=(CostTab& t);
 
-	/**
-	 * Get the index of the minimum
-	 * @return the index of the column where the min is located
-	 */
-	int getMinIndexLine();
-
 	/*
 	 * @return the client which has the minimum cost
 	 */
-	Client* getMinClientLine();
+	Client* getMinClient();
 
 	/**
 	 * @return the minimum cost
 	 */
-	double getMinValLine();
+	double getMinVal();
 
 	/**
 	 * Get the client with minimum date to deliver

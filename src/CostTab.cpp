@@ -79,61 +79,30 @@ CostTab& CostTab::operator =(CostTab& t)
 	return *this;
 }
 
-int CostTab::getMinIndexLine()
-{
-	int minIndex = 0;
-	vector<Client*>::iterator min = this->lClient->begin();
-
-	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
-	{
-		if((*min)->getFullCost() > (*it)->getFullCost())
-		{
-			min = it;
-			minIndex = it - this->lClient->begin(); // Get the index from the begin (pointer size soustraction)
-		}
-	}
-
-	return minIndex;
-}
-
-Client* CostTab::getMinClientLine()
+Client* CostTab::getMinClient()
 {
 	vector<Client*>::iterator min = this->lClient->begin();
 
 	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 	{
-		if((*min)->getFullCost() > (*it)->getFullCost())
+		if((*min)->getSCost() > (*it)->getSCost())
 			min = it;
 	}
 
 	return *min;
 }
 
-double CostTab::getMinValLine()
+double CostTab::getMinVal()
 {
 	vector<Client*>::iterator min = this->lClient->begin();
 
 	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
 	{
-		if((*min)->getFullCost() > (*it)->getFullCost())
+		if((*min)->getSCost() > (*it)->getSCost())
 			min = it;
 	}
 
-	return (*min)->getFullCost();
-}
-
-void CostTab::addTime(double t)
-{
-	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
-		(*it)->addTime(t);
-	this->t += t;
-}
-
-void CostTab::remTime(double t)
-{
-	for(vector<Client*>::iterator it = this->lClient->begin();it != this->lClient->end();++it)
-			(*it)->remTime(t);
-	this->t -= t;
+	return (*min)->getSCost();
 }
 
 void CostTab::deleteClient(Client* cRem)
