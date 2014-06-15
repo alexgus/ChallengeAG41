@@ -31,23 +31,6 @@ void Solution::addWay(Client* c)
 	this->lClient->push_back(c);
 }
 
-bool Solution::checkHamiltonian()
-{
-	/*unsigned int i,j;
-	for(i=0;i<this->lClient->size();i++)
-	{
-		if(this->way[i] != -1)
-		{
-			j=0;
-			while(j<this->lClient->size() && this->way[i] != this->way[j])
-				j++;
-			if(this->way[j] == this->way[i])
-				return false;
-		}
-	}*/
-	return true;
-}
-
 double Solution::evaluate()
 {
 	unsigned int i = this->lClient->size();

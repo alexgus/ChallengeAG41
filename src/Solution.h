@@ -46,12 +46,6 @@ public:
 	void addWay(Client * c);
 
 	/**
-	 * Check if the ways choose make an Hamiltonian path
-	 * @return true if hamiltonian false otherwise
-	 */
-	bool checkHamiltonian();
-
-	/**
 	 * Compute the value of the solution
 	 * @return the current evaluation of the solution
 	 */
