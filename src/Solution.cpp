@@ -95,54 +95,51 @@ void Solution::printSolution()
 
 void Solution::separateBatch()
 {
-	vector<Client*> *toAdd = new vector<Client*>();
 	window *w = new window[this->lClient->size()];
-	unsigned int i = 0;
-	unsigned int j = 0;
+	unsigned int itWin = 0;
 
 	// Create windows
 	for(vector<Client*>::iterator it = this->lClient->begin(); it != this->lClient->end();++it)
 	{
-		w[i].begin = (*it)->getTime()-(*it)->getTimeTransport();
-		w[i].end = (*it)->getTime()+(*it)->getTimeTransport();
-		++i;
+		w[itWin].begin = (*it)->getTime()-(*it)->getTimeTransport();
+		w[itWin].end = (*it)->getTime()+(*it)->getTimeTransport();
+		++itWin;
 	}
 
 	// Check for all clients
-	for(vector<Client*>::iterator it = this->lClient->begin(); it != this->lClient->end();++it)
+	for(unsigned int itClient = 0; itClient < this->lClient->size();++itClient)
 	{
 		// Check for all batch
-		vector<double> *b = (*it)->getDate();
-		double tDeliver = (*it)->getTimeTransport();
-		for(j=0; j < b->size();++j)
+		vector<double> *lDate = this->lClient->at(itClient)->getDate();
+		double tDeliver = this->lClient->at(itClient)->getTimeTransport();
+		for(unsigned int itDate = 0; itDate < lDate->size();++itDate)
 		{
-			if((w[0].end + tDeliver) <= b->at(j))
+			if((w[0].end + tDeliver) <= lDate->at(itDate))
 			{
 				// TODO Evaluate for separate or not
-				Client c = *(*it);
+				Client c = *this->lClient->at(itClient);
 				c.supprAllDate();
-				c.addDate(b->at(j));
-				toAdd->push_back(&c);
+				c.addDate(lDate->at(itDate));
+				this->lClient->insert(this->lClient->begin(),&c);
+				--itClient;
 
-				(*it)->supprDate(b->at(j));
-				--j;
+				this->lClient->at(itClient+2)->supprDate(lDate->at(itDate));
+				--itDate;
 			}
 			else
 			{
-				i=1;
-				while(i < this->lClient->size() && w[i].end <= ((*it)->getTime() + (*it)->getTimeTransport()))
+				itWin=1;
+				while(itWin < this->lClient->size() && w[itWin].end <= (this->lClient->at(itClient)->getTime() + this->lClient->at(itClient)->getTimeTransport()))
 				{
-					if(w[i].end <= (b->at(j) - tDeliver) && w[i-1].begin >= (b->at(j) + tDeliver))
+					if(w[itWin].end <= (lDate->at(itDate) - tDeliver) && w[itWin-1].begin >= (lDate->at(itDate) + tDeliver))
 					{
-						cout << b->at(j) << endl;
+						cout << lDate->at(itDate) << endl;
 						// TODO Evaluate for separate or not. Create new client and insert it in toAdd
 						break;
 					}
-					i++;
+					itWin++;
 				}
 			}
 		}
 	}
-
-	// TODO Insert toAdd in list of Client
 }
