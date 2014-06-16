@@ -159,6 +159,7 @@ void Client::supprAllDate(void)
 void Client::addDate(double date)
 {
 	this->date->push_back(date);
+	this->calcSCost();
 }
 
 void Client::calcSCost()
