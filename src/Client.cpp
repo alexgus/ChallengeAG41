@@ -108,6 +108,22 @@ Client::Client(int id, int n, data* d)
 	delete tmpD;
 }
 
+Client::Client(Client& c)
+{
+	this->id = c.id;
+	this->id2 = c.id2;
+	this->eta = c.eta;
+	this->beta = c.beta;
+	this->timeTransport = c.timeTransport;
+	this->date = new vector<double>();
+	for(vector<double>::iterator d = c.date->begin(); d != c.date->end(); ++d)
+		this->date->push_back(*d);
+	this->time = c.time;
+	this->sCost = c.sCost;
+	this->tCost = c.tCost;
+}
+
+
 Client::~Client()
 {
 	if(this->date->size() > 0)
@@ -176,4 +192,9 @@ void Client::supprDate(double date)
 
 	if(*it == date)
 		this->date->erase(it);
+}
+
+Client& Client::operator =(Client& c)
+{
+	return c;
 }

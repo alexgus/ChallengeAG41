@@ -35,6 +35,11 @@ public:
 	Client(int id, int n, data *d);
 
 	/**
+	 * Copy constructor
+	 */
+	Client(Client& c);
+
+	/**
 	 * Destroyer of the class
 	 */
 	virtual ~Client();
@@ -144,6 +149,12 @@ public:
 	{
 		return date;
 	}
+
+	/**
+	 * Define the behavior of = operator.
+	 * Copy a Client
+	 */
+	Client& operator=(Client& c);
 
 private:
 

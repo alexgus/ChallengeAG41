@@ -98,6 +98,7 @@ void Solution::separateBatch()
 	vector<Client*> *toAdd = new vector<Client*>();
 	window *w = new window[this->lClient->size()];
 	unsigned int i = 0;
+	unsigned int j = 0;
 
 	// Create windows
 	for(vector<Client*>::iterator it = this->lClient->begin(); it != this->lClient->end();++it)
@@ -113,26 +114,27 @@ void Solution::separateBatch()
 		// Check for all batch
 		vector<double> *b = (*it)->getDate();
 		double tDeliver = (*it)->getTimeTransport();
-		for(vector<double>::iterator date = b->begin(); date != b->end();++date)
+		for(j=0; j < b->size();++j)
 		{
-			if((w[0].end + tDeliver) <= *date)
+			if((w[0].end + tDeliver) <= b->at(j))
 			{
-				cout << *date << endl;
 				// TODO Evaluate for separate or not
-				Client *c = (*it);
-				(*it)->supprDate(*date);
-				c->supprAllDate();
-				c->addDate(*date);
-				toAdd->push_back(c);
+				Client c = *(*it);
+				c.supprAllDate();
+				c.addDate(b->at(j));
+				toAdd->push_back(&c);
+
+				(*it)->supprDate(b->at(j));
+				--j;
 			}
 			else
 			{
 				i=1;
 				while(i < this->lClient->size() && w[i].end <= ((*it)->getTime() + (*it)->getTimeTransport()))
 				{
-					if(w[i].end <= (*date - tDeliver) && w[i-1].begin >= (*date + tDeliver))
+					if(w[i].end <= (b->at(j) - tDeliver) && w[i-1].begin >= (b->at(j) + tDeliver))
 					{
-						cout << *date << endl;
+						cout << b->at(j) << endl;
 						// TODO Evaluate for separate or not. Create new client and insert it in toAdd
 						break;
 					}
