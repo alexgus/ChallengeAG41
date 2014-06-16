@@ -124,53 +124,34 @@ int main(int argc, char *argv[])
 
 	for(i=0;i<d->n;++i)
 	{
+		const int index = (d->n*(d->cl[i]-1));
 		if(nbNewClient[(d->cl[i])-1] != 0)
 		{
+			// Check if we can deport the current product in other client or if the client reached the limit of the transporter
 			int j = 0;
-			int date = d->d[i];
-			int nb = nbNewClient[(d->cl[i])-1];
-			int tmp = bpc[(d->n*(d->cl[i]-1))+j].at(bpc[(d->n*(d->cl[i]-1))+j].size()-1);
-			int dateF = tmp + d->tau[(d->cl[i]-1)];
-			int dateD = *bpc[(d->n*(d->cl[i]-1))+j].begin() - d->tau[d->cl[i]-1];
-			while((j < nbNewClient[(d->cl[i])-1]) && // Search if there's time to deliver it before or after
-					(d->d[i] >= *bpc[(d->n*(d->cl[i]-1))+j].begin() - d->tau[d->cl[i]-1]
-							&& d->d[i] <= ((bpc[(d->n*(d->cl[i]-1))+j].at(bpc[(d->n*(d->cl[i]-1))+j].size()-1)) + d->tau[(d->cl[i]-1)])))
-			{
-				date = d->d[i];
-				nb = nbNewClient[(d->cl[i])-1];
-				dateF = ((*bpc[(d->n*(d->cl[i]-1))+j].end()-1) + d->tau[(d->cl[i]-1)]);
-				dateD = *bpc[(d->n*(d->cl[i]-1))+j].begin() - d->tau[d->cl[i]-1];
 
-				++j;
-			}
+			double tl = d->tau[d->cl[i]-1];
+			double date = d->d[i];
+			double dateL = bpc[index + j].at(0);
+			while(j < nbNewClient[d->cl[i]-1]
+			    && !((int) bpc[index + j].size() >= d->c
+			    ||date >= dateL + tl
+			    ||date <= dateL - tl))
+			    j++;
 
-			// If there's no time to deliver it before or after, try to insert it in not full client
-			if(j >= nbNewClient[(d->cl[i])-1])
+			if(j < nbNewClient[d->cl[i]-1]) // Insert in a new client
 			{
-				int k = 0; // Search if the transporter going to be full or not
-				while(k < nbNewClient[d->cl[i]-1] && (int) bpc[(d->n*(d->cl[i]-1))+k].size() > d->c) // FIXME Cast unsigned
-					++k;
-
-				if(k >= nbNewClient[d->cl[i]-1]) // If batch take all place, create new client
-				{
-					bpc[(d->n*(d->cl[i]-1))+k] = vector<double>();
-					bpc[(d->n*(d->cl[i]-1))+k].push_back(d->d[i]);
-					++nbNewClient[d->cl[i]-1];
-				}
-				else // else insert it
-					bpc[(d->n*(d->cl[i]-1))+k].push_back(d->d[i]);
-			}
-			else // If there's time, create new client
-			{
-				bpc[(d->n*(d->cl[i]-1))+j] = vector<double>();
-				bpc[(d->n*(d->cl[i]-1))+j].push_back(d->d[i]);
+				bpc[index+nbNewClient[d->cl[i]-1]] = vector<double>();
+				bpc[index+nbNewClient[d->cl[i]-1]].push_back(d->d[i]);
 				++nbNewClient[d->cl[i]-1];
 			}
+			else
+				bpc[index].push_back(d->d[i]);
 		}
 		else
 		{
-			bpc[(d->n*(d->cl[i]-1))] = vector<double>();
-			bpc[(d->n*(d->cl[i]-1))].push_back(d->d[i]);
+			bpc[index] = vector<double>();
+			bpc[index].push_back(d->d[i]);
 			++nbNewClient[d->cl[i]-1];
 		}
 	}
