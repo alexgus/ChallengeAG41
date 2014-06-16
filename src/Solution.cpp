@@ -55,50 +55,15 @@ void Solution::addWay(Client* c)
 		this->bTime = timeTemp-timeTrans;
 		++it;
 	}
-
+	this->evaluate();
 }
 
 
 double Solution::evaluate()
 {
-	unsigned int i = this->lClient->size();
-	Client *c = this->lClient->at(i-1);
-	int t;
-	int tCost = 0, sCost = 0;
-
-	// Find the right t
-	// Initialize
-	c = this->lClient->at(this->lClient->size()-1);
-	this->bTime = c->getMinDate();
-	this->bTime -= (c->getTCost()/2)/c->getEta();
-
-	// Iterate over the vector decreasingly
-	for(i=i-1; i > 0; i--)
-	{
-		c = this->lClient->at(i);
-		this->bTime -= (c->getTCost()/2)/c->getEta();
-
-		if(c->getMinDate() < this->bTime)
-			this->bTime = c->getMinDate();
-
-		this->bTime -= (c->getTCost()/2)/c->getEta();
-	}
-	t = this->bTime;
-	// t is now corresponding to serve all clients correctly and it's placed in the first client
-
-	// Iterate for compute the evaluation
-	for(i = 0; i < this->lClient->size(); i++)
-	{
-		c = this->lClient->at(i);
-		t += (c->getTCost()/2)/c->getEta();
-		c->setTime(t);
-		tCost += c->getTCost();
-		sCost += c->getSCost();
-		t += ((c->getTCost()/2)/c->getEta());
-	}
-
-	this->eval = tCost + sCost;
-
+	this->eval = 0;
+	for(vector<Client*>::iterator it = this->lClient->begin(); it != this->lClient->end();++it)
+		this->eval += (*it)->getFullCost();
 	return this->eval;
 }
 
@@ -121,6 +86,11 @@ void Solution::printSolution()
 				<< "Fcost="<<(*it)->getFullCost() <<endl;
 		cout << endl;
 	}
+
+	cout << endl <<
+			"======= Solution :" <<endl<<
+			"Begin time : " << this->bTime<<endl<<
+			"Evaluation : "<< this->eval<< endl;
 }
 
 void Solution::separateBatch()
