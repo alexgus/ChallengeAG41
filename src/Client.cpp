@@ -108,6 +108,30 @@ Client::Client(int id, int n, data* d)
 	delete tmpD;
 }
 
+Client::Client(int id, int n, data* d, int nbDate, ...)
+{
+	this->id = id;
+	this->id2 = n;
+	this->time = 0;
+	this->beta = d->beta[id-1];
+	this->eta = d->eta;
+	this->timeTransport = d->tau[id-1];
+	this->tCost = 0;
+	this->sCost = 0;
+
+	this->date = new vector<double>();
+
+	va_list list;
+	va_start(list, nbDate);
+	for (int nArg=0; nArg < nbDate; nArg++)
+		this->date->push_back(va_arg(list, double));
+
+    va_end(list);
+
+    this->calcSCost();
+    this->calcTCost();
+}
+
 Client::Client(Client& c)
 {
 	this->id = c.id;

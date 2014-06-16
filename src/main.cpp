@@ -113,7 +113,9 @@ int main(int argc, char *argv[])
 	t->getSol()->separateBatch();
 	cout << "================== Separate :" << endl << endl;
 	t->getSol()->printSolution();
+
 	// TODO Branch and cut
+
 
 // Finalize
 	delete imp;
