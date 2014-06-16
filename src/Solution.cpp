@@ -116,7 +116,10 @@ void Solution::separateBatch()
 		{
 			if((w[0].end + tDeliver) <= lDate->at(itDate))
 			{
-				// TODO Evaluate for separate or not
+				// Get the old value of cost
+				int oldVal = this->lClient->at(itClient)->getFullCost();
+
+				// Create new client
 				Client c = *this->lClient->at(itClient);
 				c.supprAllDate();
 				c.addDate(lDate->at(itDate));
@@ -125,6 +128,14 @@ void Solution::separateBatch()
 
 				this->lClient->at(itClient+2)->supprDate(lDate->at(itDate));
 				--itDate;
+
+				int newCVal = c.getFullCost();
+				int newVal = this->lClient->at(itClient)->getFullCost();
+
+				if(oldVal > (newVal+newCVal))
+					cout << endl << "WIN !" << endl;
+				else
+					; // TODO revert change
 			}
 			else
 			{
