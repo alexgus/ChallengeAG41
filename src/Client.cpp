@@ -192,6 +192,8 @@ void Client::supprDate(double date)
 
 	if(*it == date)
 		this->date->erase(it);
+
+	this->calcSCost();
 }
 
 Client& Client::operator =(Client& c)
