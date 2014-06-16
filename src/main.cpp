@@ -110,6 +110,7 @@ int main(int argc, char *argv[])
 t->calculatePerfectTime();
 t->getSol()->printSolution();
 t->getSol()->separateBatch();
+t->getSol()->printSolution();
 
 
 // Finalize
