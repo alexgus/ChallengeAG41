@@ -115,7 +115,76 @@ int main(int argc, char *argv[])
 	t->getSol()->printSolution();
 
 	// TODO Branch and cut
+	// Separate batch (batch are grouped if there's no time to deliver them next)
+	vector<double> *bpc = new vector<double>[d->m*d->n];
+	int *nbNewClient = new int[d->m];
 
+	for(i = 0; i < d->m ; ++i)
+		nbNewClient[i] = 0;
+
+	for(i=0;i<d->n;++i)
+	{
+		if(nbNewClient[(d->cl[i])-1] != 0)
+		{
+			int j = 0;
+			int date = d->d[i];
+			int nb = nbNewClient[(d->cl[i])-1];
+			int tmp = bpc[(d->n*(d->cl[i]-1))+j].at(bpc[(d->n*(d->cl[i]-1))+j].size()-1);
+			int dateF = tmp + d->tau[(d->cl[i]-1)];
+			int dateD = *bpc[(d->n*(d->cl[i]-1))+j].begin() - d->tau[d->cl[i]-1];
+			while((j < nbNewClient[(d->cl[i])-1]) && // Search if there's time to deliver it before or after
+					(d->d[i] >= *bpc[(d->n*(d->cl[i]-1))+j].begin() - d->tau[d->cl[i]-1]
+							&& d->d[i] <= ((bpc[(d->n*(d->cl[i]-1))+j].at(bpc[(d->n*(d->cl[i]-1))+j].size()-1)) + d->tau[(d->cl[i]-1)])))
+			{
+				date = d->d[i];
+				nb = nbNewClient[(d->cl[i])-1];
+				dateF = ((*bpc[(d->n*(d->cl[i]-1))+j].end()-1) + d->tau[(d->cl[i]-1)]);
+				dateD = *bpc[(d->n*(d->cl[i]-1))+j].begin() - d->tau[d->cl[i]-1];
+
+				++j;
+			}
+
+			// If there's no time to deliver it before or after, try to insert it in not full client
+			if(j >= nbNewClient[(d->cl[i])-1])
+			{
+				int k = 0; // Search if the transporter going to be full or not
+				while(k < nbNewClient[d->cl[i]-1] && (int) bpc[(d->n*(d->cl[i]-1))+k].size() > d->c) // FIXME Cast unsigned
+					++k;
+
+				if(k >= nbNewClient[d->cl[i]-1]) // If batch take all place, create new client
+				{
+					bpc[(d->n*(d->cl[i]-1))+k] = vector<double>();
+					bpc[(d->n*(d->cl[i]-1))+k].push_back(d->d[i]);
+					++nbNewClient[d->cl[i]-1];
+				}
+				else // else insert it
+					bpc[(d->n*(d->cl[i]-1))+k].push_back(d->d[i]);
+			}
+			else // If there's time, create new client
+			{
+				bpc[(d->n*(d->cl[i]-1))+j] = vector<double>();
+				bpc[(d->n*(d->cl[i]-1))+j].push_back(d->d[i]);
+				++nbNewClient[d->cl[i]-1];
+			}
+		}
+		else
+		{
+			bpc[(d->n*(d->cl[i]-1))] = vector<double>();
+			bpc[(d->n*(d->cl[i]-1))].push_back(d->d[i]);
+			++nbNewClient[d->cl[i]-1];
+		}
+	}
+
+	for(i = 0 ; i < d->m*d->n; ++i)
+	{
+		cout << "N :" << i << "\t";
+		for(vector<double>::iterator it = bpc[i].begin(); it != bpc[i].end();++it)
+			cout << *it << " ";
+		cout <<endl;
+	}
+
+	// Create tab of Client object
+	// Evaluate
 
 // Finalize
 	delete imp;
