@@ -106,14 +106,14 @@ int main(int argc, char *argv[])
 
 // Begin
 
-	// TODO Algorithm
-t->calculatePerfectTime();
-t->getSol()->printSolution();
-t->getSol()->separateBatch();
-
-cout << "================== Separate :" << endl << endl;
-t->getSol()->printSolution();
-
+	// Get first solution
+	t->calculatePerfectTime();
+	t->getSol()->printSolution();
+	// Get second solution
+	t->getSol()->separateBatch();
+	cout << "================== Separate :" << endl << endl;
+	t->getSol()->printSolution();
+	// TODO Branch and cut
 
 // Finalize
 	delete imp;
