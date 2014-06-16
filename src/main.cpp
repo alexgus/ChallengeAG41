@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 	int i;
 	ImportData *imp;
 	CostTab *t;
+	Solution *bestSol;
 // Initialize
 	handle_arg(argc, argv);
 	// Data
@@ -108,11 +109,17 @@ int main(int argc, char *argv[])
 
 	// Get first solution
 	t->calculatePerfectTime();
-	t->getSol()->printSolution();
+	bestSol = t->getSol();
+	if(verbose)
+		bestSol->printSolution();
+
 	// Get second solution
-	t->getSol()->separateBatch();
-	cout << "================== Separate :" << endl << endl;
-	t->getSol()->printSolution();
+	bestSol->separateBatch();
+	if(verbose)
+	{
+		cout << "================== Separate :" << endl << endl;
+		t->getSol()->printSolution();
+	}
 
 	// TODO Branch and cut
 	// Separate batch (batch are grouped if there's no time to deliver them next)
@@ -156,18 +163,36 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	for(i = 0 ; i < d->m*d->n; ++i)
+	if(verbose)
 	{
-		cout << "N :" << i << "\t";
-		for(vector<double>::iterator it = bpc[i].begin(); it != bpc[i].end();++it)
-			cout << *it << " ";
-		cout <<endl;
+		for(i = 0 ; i < d->m*d->n; ++i)
+		{
+			cout << "N :" << i << "\t";
+			for(vector<double>::iterator it = bpc[i].begin(); it != bpc[i].end();++it)
+				cout << *it << " ";
+			cout <<endl;
+		}
 	}
 
+	// Get the number of client create
+	// Declare two list of client
+		// One composed of complete client
+		// second composed of many client who can be delivered several times
+	for(i = 0 ; i < d->m*d->n; ++i)
+	{
+		if(!bpc[i].empty())
+			;
+	}
 
-
-	// Create tab of Client object
-	// Evaluate
+	// Test all possibilities on complete list
+		// Add way in solution
+		// print evaluation
+	// Test all possibilities on the other
+		// Add way in solution
+		// print evaluation
+	// Mix them up
+		// Add way in solution
+		// print evaluation
 
 // Finalize
 	delete imp;
