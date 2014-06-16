@@ -154,7 +154,7 @@ public:
 	 * Define the behavior of = operator.
 	 * Copy a Client
 	 */
-	Client& operator=(Client& c);
+	Client* operator=(Client& c);
 
 private:
 

@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 	// TODO Algorithm
 t->calculatePerfectTime();
 t->getSol()->printSolution();
-t->getSol()->separateBatch();
+t->getSol()->separateBatch();cout << "================" << endl << endl;
 t->getSol()->printSolution();
 
 

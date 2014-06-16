@@ -152,8 +152,8 @@ void Client::calcTCost()
 
 void Client::supprAllDate(void)
 {
-	delete this->date;
-	this->date = new vector<double>();
+	while(!this->date->empty())
+		this->date->pop_back();
 }
 
 void Client::addDate(double date)
@@ -197,7 +197,7 @@ void Client::supprDate(double date)
 	this->calcSCost();
 }
 
-Client& Client::operator =(Client& c)
+Client* Client::operator =(Client& c)
 {
-	return c;
+	return new Client(c);
 }

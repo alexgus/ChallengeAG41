@@ -83,8 +83,11 @@ void Solution::printSolution()
 				<< "t=" <<(*it)->getTime() << endl
 				<< "Tcost=" <<(*it)->getTCost() <<endl
 				<< "Scost="<<(*it)->getSCost() <<endl
-				<< "Fcost="<<(*it)->getFullCost() <<endl;
-		cout << endl;
+				<< "Fcost="<<(*it)->getFullCost() <<endl
+				<< "Date livré :";
+		for(vector<double>::iterator date = (*it)->getDate()->begin(); date != (*it)->getDate()->end();++date)
+			cout << " " << *date;
+		cout << endl << endl;
 	}
 
 	cout << endl <<
@@ -120,22 +123,26 @@ void Solution::separateBatch()
 				int oldVal = this->lClient->at(itClient)->getFullCost();
 
 				// Create new client
-				Client c = *this->lClient->at(itClient);
-				c.supprAllDate();
-				c.addDate(lDate->at(itDate));
-				this->lClient->insert(this->lClient->begin(),&c);
+				Client *c = new Client(*this->lClient->at(itClient));
+				c->supprAllDate();
+				c->addDate(lDate->at(itDate));
+				c->setTime(lDate->at(itDate));
+				this->lClient->insert(this->lClient->begin(),c);
 				--itClient;
 
 				this->lClient->at(itClient+2)->supprDate(lDate->at(itDate));
 				--itDate;
 
-				int newCVal = c.getFullCost();
-				int newVal = this->lClient->at(itClient)->getFullCost();
+				int newCVal = c->getFullCost();
+				int newVal = this->lClient->at(itClient+2)->getFullCost();
 
-				if(oldVal > (newVal+newCVal))
-					cout << endl << "WIN !" << endl;
-				else
-					; // TODO revert change
+				// Delete change if new solution is not better than old one
+				if(oldVal <= (newVal+newCVal))
+				{
+					this->lClient->at(itClient+2)->addDate(lDate->at(itDate));
+					this->lClient->erase(this->lClient->begin());
+					++itClient;
+				}
 			}
 			else
 			{
@@ -153,4 +160,5 @@ void Solution::separateBatch()
 			}
 		}
 	}
+	this->evaluate();
 }
