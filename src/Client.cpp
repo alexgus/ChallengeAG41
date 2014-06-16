@@ -20,6 +20,27 @@ Client::Client()
 	this->date = 0;
 }
 
+Client::Client(int id, data* d)
+{
+	this->id = id;
+	this->id2 = 0;
+	this->time = 0;
+	this->beta = d->beta[id-1];
+	this->eta = d->eta;
+	this->timeTransport = d->tau[id-1];
+	this->tCost = 0;
+	this->sCost = 0;
+
+	for(int i=0; i < d->n ;i++)
+	{
+		if(d->cl[i] == id)
+			this->date->push_back(d->d[i]);
+	}
+
+	this->calcSCost();
+	this->calcTCost();
+}
+
 Client::Client(int id, int n, data* d)
 {
 	this->id = id;
@@ -108,10 +129,10 @@ Client::Client(int id, int n, data* d)
 	delete tmpD;
 }
 
-Client::Client(int id, int n, data* d, int nbDate, ...)
+Client::Client(int id,  data* d, vector<double> *dateIn)
 {
 	this->id = id;
-	this->id2 = n;
+	this->id2 = 0;
 	this->time = 0;
 	this->beta = d->beta[id-1];
 	this->eta = d->eta;
@@ -121,12 +142,8 @@ Client::Client(int id, int n, data* d, int nbDate, ...)
 
 	this->date = new vector<double>();
 
-	va_list list;
-	va_start(list, nbDate);
-	for (int nArg=0; nArg < nbDate; nArg++)
-		this->date->push_back(va_arg(list, double));
-
-    va_end(list);
+	for(vector<double>::iterator it = dateIn->begin(); it != dateIn->end();++it)
+		this->date->push_back(*it);
 
     this->calcSCost();
     this->calcTCost();

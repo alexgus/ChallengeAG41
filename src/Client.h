@@ -9,7 +9,6 @@
 #define CLIENT_H_
 
 #include <vector>
-#include <cstdarg>
 
 #include "data.h"
 
@@ -30,6 +29,13 @@ public:
 	/**
 	 * Initialize the client with the id and data
 	 * @param id Id of Client
+	 * @param d Data to initialize
+	 */
+	Client(int id, data *d);
+
+	/**
+	 * Initialize the client with the id and data
+	 * @param id Id of Client
 	 * @param n The client nb n with the same id
 	 * @param d Data to initialize
 	 */
@@ -41,7 +47,7 @@ public:
 	 * @param n The client nb n with the same id
 	 * @param d Data to initialize
 	 */
-	Client(int id, int n, data *d, int nbDate, ...);
+	Client(int id, data *d, vector<double> *date);
 
 	/**
 	 * Copy constructor
