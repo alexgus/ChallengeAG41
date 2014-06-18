@@ -46,6 +46,11 @@ public:
 	void addWay(Client * c);
 
 	/**
+	 * Test Way
+	 */
+	void testWay(Client * c);
+
+	/**
 	 * Create new clients with his own batch which can be delivered later
 	 */
 	void separateBatch();

@@ -31,6 +31,8 @@ Client::Client(int id, data* d)
 	this->tCost = 0;
 	this->sCost = 0;
 
+	this->date = new vector<double>();
+
 	for(int i=0; i < d->n ;i++)
 	{
 		if(d->cl[i] == id)

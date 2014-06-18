@@ -32,7 +32,10 @@ void Solution::addWay(Client* c)
 	vector<Client*>::iterator it = this->lClient->begin();
 
 	if(this->lClient->size() == 0)
+	{
+		c->setTime(c->getMinDate());
 		this->lClient->push_back(c);
+	}
 	else
 	{
 		while(it != this->lClient->end()&& (*it)->getSCost()>= c->getSCost())
@@ -58,6 +61,25 @@ void Solution::addWay(Client* c)
 	this->evaluate();
 }
 
+
+void Solution::testWay(Client* c)
+{
+	if(this->lClient->size() == 0)
+	{
+		c->setTime(c->getMinDate());
+		this->lClient->push_back(c);
+	}
+	else
+	{
+		int t;
+		Client *last = this->lClient->at(this->lClient->size()-1);
+		t = last->getTime()-last->getTimeTransport()-c->getTimeTransport();
+		c->setTime(t);
+		this->lClient->push_back(c);
+		this->bTime = t - c->getTimeTransport();
+	}
+	this->evaluate();
+}
 
 double Solution::evaluate()
 {

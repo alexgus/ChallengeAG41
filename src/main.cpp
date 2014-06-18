@@ -4,6 +4,10 @@
 
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
+
+#include <time.h>
+#include <unistd.h>
 
 #include "ImportData.h"
 #include "CostTab.h"
@@ -22,6 +26,11 @@ bool verbose = false;
  * Data of the file
  */
 data *d;
+
+/**
+ * best solution of the problem
+ */
+Solution *bestSol;
 
 /**
  * print a matrix
@@ -55,13 +64,58 @@ void handle_arg(int argc, char *argv[])
 	}
 }
 
+void testList(vector<Client*> *list)
+{
+	Solution *test = new Solution();
+
+	for(unsigned int k = 0; k < list->size();++k)
+		test->testWay(list->at(k));
+	if(bestSol->getEval() > test->getEval() && test->getEval() != 0)
+	{
+		delete bestSol;
+		bestSol = test;
+		test = new Solution();
+		if(verbose)
+		{
+			cout << "******************************************" << endl;
+			bestSol->printSolution();
+		}
+	}
+	else
+	{
+		delete test;
+		test = new Solution();
+	}
+
+	while(next_permutation(list->begin(), list->begin()+(list->size())))
+	{
+		for(unsigned int k = 0; k < list->size();++k)
+			test->testWay(list->at(k));
+		if(bestSol->getEval() > test->getEval() && test->getEval() != 0)
+		{
+			delete bestSol;
+			bestSol = test;
+			test = new Solution();
+			if(verbose)
+			{
+				cout << "******************************************" << endl;
+				bestSol->printSolution();
+			}
+		}
+		else
+		{
+			delete test;
+			test = new Solution();
+		}
+	}
+}
+
 int main(int argc, char *argv[])
 {
 // Declaration
 	int i;
 	ImportData *imp;
 	CostTab *t;
-	Solution *bestSol;
 // Initialize
 	handle_arg(argc, argv);
 	// Data
@@ -118,10 +172,9 @@ int main(int argc, char *argv[])
 	if(verbose)
 	{
 		cout << "================== Separate :" << endl << endl;
-		t->getSol()->printSolution();
+		bestSol->printSolution();
 	}
 
-	// TODO Branch and cut
 	// Separate batch (batch are grouped if there's no time to deliver them next)
 	vector<double> *bpc = new vector<double>[d->m*d->n];
 	int *nbNewClient = new int[d->m];
@@ -163,6 +216,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
+
+	// Check Clients
 	if(verbose)
 	{
 		for(i = 0 ; i < d->m*d->n; ++i)
@@ -174,25 +229,47 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	// Get the number of client create
+	// Get the number of client to create
+	int nbClient = 0;
+	for(int k = 0; k < d->m ;++k)
+		nbClient+=nbNewClient[k];
+
 	// Declare two list of client
-		// One composed of complete client
-		// second composed of many client who can be delivered several times
-	for(i = 0 ; i < d->m*d->n; ++i)
+	vector<Client*> *lCompleteClient = new vector<Client*>();
+	vector<Client*> *lSeparateClient = new vector<Client*>();
+	vector<Client*> *lMixedClient = new vector<Client*>();
+
+	// Fill it
+	for(i = 1 ; i <= d->m; ++i)
 	{
-		if(!bpc[i].empty())
-			;
+		Client *c = new Client(i,d);
+		lCompleteClient->push_back(c);
+		lMixedClient->push_back(c);
+	}
+	for(i = 0 ; i < d->m; ++i)
+	{
+		for(int k = 0 ; k < nbNewClient[i] ; ++k)
+		{
+			Client *c = new Client(i+1,d,&bpc[(d->n * i)+k]);
+			lSeparateClient->push_back(c);
+			lMixedClient->push_back(c);
+		}
 	}
 
 	// Test all possibilities on complete list
-		// Add way in solution
-		// print evaluation
+	testList(lCompleteClient);
+
 	// Test all possibilities on the other
-		// Add way in solution
-		// print evaluation
-	// Mix them up
-		// Add way in solution
-		// print evaluation
+	testList(lSeparateClient);
+
+	// Mixed solution
+	testList(lMixedClient);
+
+	cout << endl <<endl << "***********************************" << endl
+			<< "********* Best solution ***********" << endl
+			<< "***********************************" << endl;
+
+	bestSol->printSolution();
 
 // Finalize
 	delete imp;
