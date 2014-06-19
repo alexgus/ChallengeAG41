@@ -169,7 +169,7 @@ void testSol(vector<Client*> *list)
 		++k;
 	}
 	cout << endl;
-	if(bestSol->getEval() > test->getEval() && test->getEval() != 0 && dateUnused->size() != 0)
+	if(bestSol->getEval() > test->getEval() && test->getEval() != 0 && dateUnused->size() == 0)
 	{
 		*bestSol = *test;
 		test = new Solution();
