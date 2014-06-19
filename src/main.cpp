@@ -31,6 +31,11 @@ data *d;
 Solution *bestSol;
 
 /**
+ * List of date
+ */
+vector<double> *date = new vector<double>();
+
+/**
  * Print a matrix
  */
 void printTable(int *d, int max)
@@ -41,6 +46,7 @@ void printTable(int *d, int max)
 		cout << setw(SETW) << d[i];
 }
 
+
 /**
  * print a matrix
  */
@@ -50,6 +56,45 @@ void printTable(double *d, int max)
 
 	for(i=0; i<max; i++)
 		cout << setw(SETW) << d[i];
+}
+
+bool searchAllDate(vector<double> *v, Client *c)
+{
+	unsigned int cpt = 0;
+	vector<double>::iterator it = v->begin();
+
+	for(vector<double>::iterator date = c->getDate()->begin(); date != c->getDate()->end() ; ++date)
+	{
+		while(it != v->end() && *it != *date)
+			++it;
+
+		if(it != v->end())
+			cpt++;
+	}
+
+	if(cpt == c->getDate()->size())
+		return true;
+	return false;
+}
+
+void eraseDate(vector<double> *v, double date)
+{
+	vector<double>::iterator it = v->begin();
+	while(it != v->end() && *it != date)
+		++it;
+
+	if(it == v->end())
+		return;
+	v->erase(it);
+}
+
+vector<double>* copyVector(vector<double> *v)
+{
+	vector<double> *n = new vector<double>();
+
+	for(vector<double>::iterator it = v->begin(); it != v->end();++it)
+		n->push_back(*it);
+	return n;
 }
 
 /**
@@ -99,13 +144,32 @@ void handle_arg(int argc, char *argv[])
 void testSol(vector<Client*> *list)
 {
 	Solution *test = new Solution();
+	vector<double> *dateUnused = copyVector(date);
+	unsigned int k = 0;
 
-	for(unsigned int k = 0; k < list->size();++k)
+	while(k < list->size() && bestSol->getEval() > test->getEval())
 	{
-		if(bestSol->getEval() > test->getEval())
+		if(searchAllDate(dateUnused,list->at(k)))
+		{
+			if(list->at(0)->getId() == 1 && list->at(0)->getDate()->size() == 1
+					&& list->at(1)->getId() == 2 && list->at(1)->getDate()->size() == 3
+					&& list->at(2)->getId() == 1 && list->at(2)->getDate()->size()==3
+					&& list->at(3)->getId()== 3 && list->at(3)->getDate()->size() == 3)
+				cout << "Coucou" << endl;
+
+			cout << list->at(k)->getId() << ") ";
+			vector<double> *dateClient = list->at(k)->getDate();
+			for(vector<double>::iterator it = dateClient->begin(); it != dateClient->end();++it)
+			{
+				cout << *it << " ";
+				eraseDate(dateUnused,*it);
+			}
 			test->testWay(list->at(k));
+		}
+		++k;
 	}
-	if(bestSol->getEval() > test->getEval() && test->getEval() != 0)
+	cout << endl;
+	if(bestSol->getEval() > test->getEval() && test->getEval() != 0 && dateUnused->size() != 0)
 	{
 		*bestSol = *test;
 		test = new Solution();
@@ -154,6 +218,9 @@ int main(int argc, char *argv[])
 	// Data
 	imp = new ImportData();
 	d = imp->getData();
+
+	for(int j = 0; j < d->n ;++j)
+		date->push_back(d->d[j]);
 
 	if(verbose)
 		displayData();
