@@ -329,7 +329,8 @@ int main(int argc, char *argv[])
 	for(i = 1 ; i <= d->m; ++i)
 	{
 		Client *c = new Client(i,d);
-		lMixedClient->push_back(c);
+		if(c->getDate()->size() != 0)
+			lMixedClient->push_back(c);
 	}
 	// tab of separate client and mixed client
 	for(i = 0 ; i < d->m; ++i)
