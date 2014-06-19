@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
 		bestSol->printSolution();
 
 	// Get second solution
-	bestSol->separateBatch();
+	//bestSol->separateBatch();
 	if(verbose)
 	{
 		cout << "================== Separate :" << endl << endl;
@@ -315,6 +315,16 @@ int main(int argc, char *argv[])
 			lSeparateClient->push_back(c);
 			lMixedClient->push_back(c);
 		}
+	}
+
+	if(verbose)
+	{
+		// Display list size
+		cout << "**********************************************************" <<endl;
+		cout << "Size Complete client : " << lCompleteClient->size()<<endl;
+		cout << "Size Separate client : " << lSeparateClient->size()<<endl;
+		cout << "Size Mixed client : " << lMixedClient->size()<<endl;
+		cout << "**********************************************************" <<endl;
 	}
 
 	// Free memory
