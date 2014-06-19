@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 			// Check if we can deport the current product in other client or if the client reached the limit of the transporter
 			int j = 0;
 
-			double tl = d->tau[d->cl[i]-1]*2;
+			double tl = d->tau[d->cl[i]-1];
 			double date = d->d[i];
 			double dateL = bpc[index + j].at(0);
 			while(j < nbNewClient[d->cl[i]-1]
