@@ -10,6 +10,8 @@
 #include "ImportData.h"
 #include "CostTab.h"
 
+#define COEF_TAU 1
+
 #include <vector>
 
 using namespace std;
@@ -190,6 +192,32 @@ void testList(vector<Client*> *list)
 		testSol(list);
 }
 
+/**
+ * find a client in a list
+ */
+bool findClient(vector<Client*>* list, Client *c)
+{
+	// test on id and size
+	for(vector<Client*>::iterator lc = list->begin();lc != list->end();++lc)
+	{
+		if((*lc)->getId() == c->getId())
+		{
+			unsigned int cpt = 0;
+			for(vector<double>::iterator dateList = (*lc)->getDate()->begin() ; dateList != (*lc)->getDate()->end() ; ++dateList)
+			{
+				for(vector<double>::iterator date = c->getDate()->begin() ; date != c->getDate()->end() ; ++date)
+				{
+					if(*date == *dateList)
+						cpt++;
+				}
+			}
+			if(cpt == (*lc)->getDate()->size())
+				return true;
+		}
+	}
+	return false;
+}
+
 int main(int argc, char *argv[])
 {
 // Declaration
@@ -197,7 +225,7 @@ int main(int argc, char *argv[])
 	ImportData *imp;
 	CostTab *t;
 
-	clock_t tBegin,tInit,tFirstSol,tPrepAlgo,tAlgoComplete,tAlgoSeparate,tAlgoMixed,tEnd;
+	clock_t tBegin,tInit,tFirstSol,tPrepAlgo,tAlgoMixed,tEnd;
 
 // Initialize
 
@@ -262,7 +290,7 @@ int main(int argc, char *argv[])
 			// Check if we can deport the current product in other client or if the client reached the limit of the transporter
 			int j = 0;
 
-			double tl = d->tau[d->cl[i]-1];
+			double tl = d->tau[d->cl[i]-1]*COEF_TAU;
 			double date = d->d[i];
 			double dateL = bpc[index + j].at(0);
 			while(j < nbNewClient[d->cl[i]-1]
@@ -293,9 +321,7 @@ int main(int argc, char *argv[])
 	for(int k = 0; k < d->m ;++k)
 		nbClient+=nbNewClient[k];
 
-	// Declare three lists of clients
-	vector<Client*> *lCompleteClient = new vector<Client*>();
-	vector<Client*> *lSeparateClient = new vector<Client*>();
+	// Declare lists of clients
 	vector<Client*> *lMixedClient = new vector<Client*>();
 
 	// **** Fill tabs ****
@@ -303,7 +329,6 @@ int main(int argc, char *argv[])
 	for(i = 1 ; i <= d->m; ++i)
 	{
 		Client *c = new Client(i,d);
-		lCompleteClient->push_back(c);
 		lMixedClient->push_back(c);
 	}
 	// tab of separate client and mixed client
@@ -311,9 +336,19 @@ int main(int argc, char *argv[])
 	{
 		for(int k = 0 ; k < nbNewClient[i] ; ++k)
 		{
+			Client *reste = new Client(*lMixedClient->at(i));
 			Client *c = new Client(i+1,d,&bpc[(d->n * i)+k]);
-			lSeparateClient->push_back(c);
-			lMixedClient->push_back(c);
+
+			for(vector<double>::iterator itDateSuppr = bpc[(d->n * i)+k].begin() ; itDateSuppr != bpc[(d->n * i)+k].end() ; ++itDateSuppr)
+				reste->supprDate(*itDateSuppr);
+
+			if((!findClient(lMixedClient,c) || !findClient(lMixedClient,reste)))
+			{
+				if(c->getDate()->size() != 0)
+					lMixedClient->push_back(c);
+				if(reste->getDate()->size() != 0)
+					lMixedClient->push_back(reste);
+			}
 		}
 	}
 
@@ -321,8 +356,6 @@ int main(int argc, char *argv[])
 	{
 		// Display list size
 		cout << "**********************************************************" <<endl;
-		cout << "Size Complete client : " << lCompleteClient->size()<<endl;
-		cout << "Size Separate client : " << lSeparateClient->size()<<endl;
 		cout << "Size Mixed client : " << lMixedClient->size()<<endl;
 		cout << "**********************************************************" <<endl;
 	}
@@ -334,13 +367,14 @@ int main(int argc, char *argv[])
 
 	// **** Begin branch and cut ****
 
-	// Test all possibilities on complete list
-	testList(lCompleteClient);
-	tAlgoComplete = clock();
 
-	// Test all possibilities on the other
-	testList(lSeparateClient);
-	tAlgoSeparate = clock();
+	for(vector<Client*>::iterator cIt = lMixedClient->begin(); cIt != lMixedClient->end(); ++cIt)
+	{
+		cout << (*cIt)->getId() << " ";
+		for(vector<double>::iterator dateC = (*cIt)->getDate()->begin() ; dateC != (*cIt)->getDate()->end(); ++dateC)
+			cout << *dateC << " ";
+		cout << endl;
+	}
 
 	// Mixed solution
 	testList(lMixedClient);
@@ -358,14 +392,10 @@ int main(int argc, char *argv[])
 	cout << endl << endl << "Time init : " << ((float)(tInit-tBegin)/CLOCKS_PER_SEC) << endl
 			<< "Time First Solution : " << ((float)(tFirstSol-tInit)/CLOCKS_PER_SEC) <<endl
 			<< "Time prepare algo : " << ((float)(tPrepAlgo- tFirstSol)/CLOCKS_PER_SEC) <<endl
-			<< "Time Algo with complete list : " <<((float)(tAlgoComplete-tBegin)/CLOCKS_PER_SEC) << endl
-			<< "Time Algo with complete list : " << ((float)(tAlgoSeparate-tAlgoComplete)/CLOCKS_PER_SEC)<<endl
-			<< "Time Algo with complete list : " << ((float)(tAlgoMixed-tAlgoSeparate)/CLOCKS_PER_SEC)<<endl << endl
+			<< "Time Algo : " << ((float)(tAlgoMixed-tPrepAlgo)/CLOCKS_PER_SEC)<<endl << endl
 			<< "Total time : " << ((float)(tEnd-tBegin)/CLOCKS_PER_SEC)<< endl;
 
 // Finalize free memory
-	delete lSeparateClient;
-	delete lCompleteClient;
 	delete lMixedClient;
 	delete imp;
 	delete t;
