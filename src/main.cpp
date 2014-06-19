@@ -151,19 +151,9 @@ void testSol(vector<Client*> *list)
 	{
 		if(searchAllDate(dateUnused,list->at(k)))
 		{
-			if(list->at(0)->getId() == 1 && list->at(0)->getDate()->size() == 1
-					&& list->at(1)->getId() == 2 && list->at(1)->getDate()->size() == 3
-					&& list->at(2)->getId() == 1 && list->at(2)->getDate()->size()==3
-					&& list->at(3)->getId()== 3 && list->at(3)->getDate()->size() == 3)
-				cout << "Coucou" << endl;
-
-			cout << list->at(k)->getId() << ") ";
 			vector<double> *dateClient = list->at(k)->getDate();
 			for(vector<double>::iterator it = dateClient->begin(); it != dateClient->end();++it)
-			{
-				cout << *it << " ";
 				eraseDate(dateUnused,*it);
-			}
 			test->testWay(list->at(k));
 		}
 		++k;
