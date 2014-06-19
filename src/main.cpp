@@ -28,12 +28,12 @@ bool verbose = false;
 data *d;
 
 /**
- * best solution of the problem
+ * Best solution of the problem
  */
 Solution *bestSol;
 
 /**
- * print a matrix
+ * Print a matrix
  */
 void printTable(int *d, int max)
 {
@@ -54,6 +54,37 @@ void printTable(double *d, int max)
 		cout << setw(SETW) << d[i];
 }
 
+/**
+ * Display Data
+ */
+void displayData()
+{
+	int i;
+	cout << "================== Initialized constants :" 		 << endl
+			<< "n    : " << d->n				 << endl
+			<< "m    : " << d->m				 << endl
+			<< "c    : " << d->c				 << endl
+			<< "eta  : " << d->eta				 << endl
+			<< "tau  : Distance entre le fournisseur et les client et cout associés" << endl;
+	for(i=1; i<=d->m; i++)
+		cout << setw(SETW) << i;
+	cout << endl;
+	printTable(d->tau, d->m);
+	cout << endl;
+	printTable(d->beta, d->m);
+
+	cout << endl
+			<< "Dates dues et clients associés aux produits demandés" << endl
+			<< " i ";
+	for(i=1; i<=d->n; i++)
+		cout << setw(SETW) << i;
+	cout << endl;
+	cout << "cl "; printTable(d->cl, d->n);
+	cout << endl;
+	cout << "di "; printTable(d->d, d->n);
+	cout << endl;
+}
+
 void handle_arg(int argc, char *argv[])
 {
 	int i;
@@ -64,12 +95,18 @@ void handle_arg(int argc, char *argv[])
 	}
 }
 
-void testList(vector<Client*> *list)
+/**
+ * Test a solution of the problem
+ */
+void testSol(vector<Client*> *list)
 {
 	Solution *test = new Solution();
 
 	for(unsigned int k = 0; k < list->size();++k)
-		test->testWay(list->at(k));
+	{
+		if(bestSol->getEval() > test->getEval())
+			test->testWay(list->at(k));
+	}
 	if(bestSol->getEval() > test->getEval() && test->getEval() != 0)
 	{
 		delete bestSol;
@@ -87,27 +124,20 @@ void testList(vector<Client*> *list)
 		test = new Solution();
 	}
 
+	delete test;
+}
+
+/**
+ * Test all permutation of the list
+ */
+void testList(vector<Client*> *list)
+{
+	// Test first solution
+	testSol(list);
+
+	// Permut solution
 	while(next_permutation(list->begin(), list->begin()+(list->size())))
-	{
-		for(unsigned int k = 0; k < list->size();++k)
-			test->testWay(list->at(k));
-		if(bestSol->getEval() > test->getEval() && test->getEval() != 0)
-		{
-			delete bestSol;
-			bestSol = test;
-			test = new Solution();
-			if(verbose)
-			{
-				cout << "******************************************" << endl;
-				bestSol->printSolution();
-			}
-		}
-		else
-		{
-			delete test;
-			test = new Solution();
-		}
-	}
+		testSol(list);
 }
 
 int main(int argc, char *argv[])
@@ -116,6 +146,7 @@ int main(int argc, char *argv[])
 	int i;
 	ImportData *imp;
 	CostTab *t;
+
 // Initialize
 	handle_arg(argc, argv);
 	// Data
@@ -123,33 +154,9 @@ int main(int argc, char *argv[])
 	d = imp->getData();
 
 	if(verbose)
-	{
-		cout << "================== Initialized constants :" 		 << endl
-				<< "n    : " << d->n				 << endl
-				<< "m    : " << d->m				 << endl
-				<< "c    : " << d->c				 << endl
-				<< "eta  : " << d->eta				 << endl
-				<< "tau  : Distance entre le fournisseur et les client et cout associés" << endl;
-		for(i=1; i<=d->m; i++)
-			cout << setw(SETW) << i;
-		cout << endl;
-		printTable(d->tau, d->m);
-		cout << endl;
-		printTable(d->beta, d->m);
+		displayData();
 
-		cout << endl
-				<< "Dates dues et clients associés aux produits demandés" << endl
-				<< " i ";
-		for(i=1; i<=d->n; i++)
-			cout << setw(SETW) << i;
-		cout << endl;
-		cout << "cl "; printTable(d->cl, d->n);
-		cout << endl;
-		cout << "di "; printTable(d->d, d->n);
-		cout << endl;
-	}
-
-	// Structure
+	// Initialize first solution
 	t = new CostTab(d);
 
 	if(verbose)
@@ -175,7 +182,10 @@ int main(int argc, char *argv[])
 		bestSol->printSolution();
 	}
 
-	// Separate batch (batch are grouped if there's no time to deliver them next)
+	// ************** Branch and cut *****************
+
+	// ***** Separate batch *****
+	// (batch are grouped if there's no time to deliver them next)
 	vector<double> *bpc = new vector<double>[d->m*d->n];
 	int *nbNewClient = new int[d->m];
 
@@ -216,36 +226,25 @@ int main(int argc, char *argv[])
 		}
 	}
 
-
-	// Check Clients
-	if(verbose)
-	{
-		for(i = 0 ; i < d->m*d->n; ++i)
-		{
-			cout << "N :" << i << "\t";
-			for(vector<double>::iterator it = bpc[i].begin(); it != bpc[i].end();++it)
-				cout << *it << " ";
-			cout <<endl;
-		}
-	}
-
 	// Get the number of client to create
 	int nbClient = 0;
 	for(int k = 0; k < d->m ;++k)
 		nbClient+=nbNewClient[k];
 
-	// Declare two list of client
+	// Declare three lists of clients
 	vector<Client*> *lCompleteClient = new vector<Client*>();
 	vector<Client*> *lSeparateClient = new vector<Client*>();
 	vector<Client*> *lMixedClient = new vector<Client*>();
 
-	// Fill it
+	// **** Fill tabs ****
+	// Tab of complete client and mixed client
 	for(i = 1 ; i <= d->m; ++i)
 	{
 		Client *c = new Client(i,d);
 		lCompleteClient->push_back(c);
 		lMixedClient->push_back(c);
 	}
+	// tab of separate client and mixed client
 	for(i = 0 ; i < d->m; ++i)
 	{
 		for(int k = 0 ; k < nbNewClient[i] ; ++k)
@@ -256,6 +255,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	// Free memory
+	delete nbNewClient;
+	delete bpc;
+
+	// **** Begin branch and cut ****
+
 	// Test all possibilities on complete list
 	testList(lCompleteClient);
 
@@ -265,13 +270,17 @@ int main(int argc, char *argv[])
 	// Mixed solution
 	testList(lMixedClient);
 
+	// ***** Print the best solution found *****
+
 	cout << endl <<endl << "***********************************" << endl
 			<< "********* Best solution ***********" << endl
 			<< "***********************************" << endl;
-
 	bestSol->printSolution();
 
-// Finalize
+// Finalize free memory
+	delete lSeparateClient;
+	delete lCompleteClient;
+	delete lMixedClient;
 	delete imp;
 	delete t;
 	return EXIT_SUCCESS;
