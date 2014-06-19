@@ -5,9 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-
-#include <time.h>
-#include <unistd.h>
+#include <ctime>
 
 #include "ImportData.h"
 #include "CostTab.h"
@@ -147,7 +145,12 @@ int main(int argc, char *argv[])
 	ImportData *imp;
 	CostTab *t;
 
+	clock_t tBegin,tInit,tFirstSol,tPrepAlgo,tAlgoComplete,tAlgoSeparate,tAlgoMixed,tEnd;
+
 // Initialize
+
+	tBegin = clock();
+
 	handle_arg(argc, argv);
 	// Data
 	imp = new ImportData();
@@ -166,6 +169,8 @@ int main(int argc, char *argv[])
 		t->printCost();
 	}
 
+	tInit = clock();
+
 // Begin
 
 	// Get first solution
@@ -181,6 +186,8 @@ int main(int argc, char *argv[])
 		cout << "================== Separate :" << endl << endl;
 		bestSol->printSolution();
 	}
+
+	tFirstSol = clock();
 
 	// ************** Branch and cut *****************
 
@@ -257,25 +264,39 @@ int main(int argc, char *argv[])
 
 	// Free memory
 	delete nbNewClient;
-	delete bpc;
+
+	tPrepAlgo = clock();
 
 	// **** Begin branch and cut ****
 
 	// Test all possibilities on complete list
 	testList(lCompleteClient);
+	tAlgoComplete = clock();
 
 	// Test all possibilities on the other
 	testList(lSeparateClient);
+	tAlgoSeparate = clock();
 
 	// Mixed solution
 	testList(lMixedClient);
+	tAlgoMixed = clock();
 
 	// ***** Print the best solution found *****
+
+	tEnd = clock();
 
 	cout << endl <<endl << "***********************************" << endl
 			<< "********* Best solution ***********" << endl
 			<< "***********************************" << endl;
 	bestSol->printSolution();
+
+	cout << endl << endl << "Time init : " << ((float)(tInit-tBegin)/CLOCKS_PER_SEC) << endl
+			<< "Time First Solution : " << ((float)(tFirstSol-tInit)/CLOCKS_PER_SEC) <<endl
+			<< "Time prepare algo : " << ((float)(tPrepAlgo- tFirstSol)/CLOCKS_PER_SEC) <<endl
+			<< "Time Algo with complete list : " <<((float)(tAlgoComplete-tBegin)/CLOCKS_PER_SEC) << endl
+			<< "Time Algo with complete list : " << ((float)(tAlgoSeparate-tAlgoComplete)/CLOCKS_PER_SEC)<<endl
+			<< "Time Algo with complete list : " << ((float)(tAlgoMixed-tAlgoSeparate)/CLOCKS_PER_SEC)<<endl << endl
+			<< "Total time : " << ((float)(tEnd-tBegin)/CLOCKS_PER_SEC)<< endl;
 
 // Finalize free memory
 	delete lSeparateClient;
@@ -283,5 +304,6 @@ int main(int argc, char *argv[])
 	delete lMixedClient;
 	delete imp;
 	delete t;
+	delete bpc;
 	return EXIT_SUCCESS;
 }
