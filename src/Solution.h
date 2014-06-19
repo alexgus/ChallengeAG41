@@ -85,6 +85,9 @@ public:
 	{
 		return bTime;
 	}
+
+	void operator=(Solution &s);
+
 void printSolution();
 private:
 

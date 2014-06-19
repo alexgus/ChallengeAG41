@@ -107,8 +107,7 @@ void testSol(vector<Client*> *list)
 	}
 	if(bestSol->getEval() > test->getEval() && test->getEval() != 0)
 	{
-		delete bestSol;
-		bestSol = test;
+		*bestSol = *test;
 		test = new Solution();
 		if(verbose)
 		{
@@ -180,7 +179,7 @@ int main(int argc, char *argv[])
 		bestSol->printSolution();
 
 	// Get second solution
-	bestSol->separateBatch();
+	//bestSol->separateBatch();
 	if(verbose)
 	{
 		cout << "================== Separate :" << endl << endl;
@@ -304,6 +303,6 @@ int main(int argc, char *argv[])
 	delete lMixedClient;
 	delete imp;
 	delete t;
-	delete bpc;
+	//delete bpc;
 	return EXIT_SUCCESS;
 }

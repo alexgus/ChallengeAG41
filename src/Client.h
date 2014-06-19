@@ -165,11 +165,16 @@ public:
 		return date;
 	}
 
+	unsigned int getNbBatch() const
+	{
+		return this->date->size();
+	}
+
 	/**
 	 * Define the behavior of = operator.
 	 * Copy a Client
 	 */
-	Client* operator=(Client& c);
+	void operator=(Client& c);
 
 private:
 

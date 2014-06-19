@@ -240,7 +240,17 @@ void Client::supprDate(double date)
 	this->calcSCost();
 }
 
-Client* Client::operator =(Client& c)
+void Client::operator =(Client& c)
 {
-	return new Client(c);
+	this->id = c.id;
+	this->id2 = c.id2;
+	this->eta = c.eta;
+	this->beta = c.beta;
+	this->timeTransport = c.timeTransport;
+	this->date = new vector<double>();
+	for(vector<double>::iterator d = c.date->begin(); d != c.date->end(); ++d)
+		this->date->push_back(*d);
+	this->time = c.time;
+	this->sCost = c.sCost;
+	this->tCost = c.tCost;
 }

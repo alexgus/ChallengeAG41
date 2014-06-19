@@ -97,6 +97,28 @@ void Solution::setTime(int t)
 		this->lClient->at(i)->setTime(t);
 }
 
+void Solution::operator =(Solution& s)
+{
+	Client *c;
+
+	this->eval = 0;
+	this->bTime = s.bTime;
+
+	while(this->lClient->empty())
+		this->lClient->pop_back();
+	delete this->lClient;
+	this->lClient = new vector<Client*>();
+
+	for(vector<Client*>::iterator it = s.getClient()->begin(); it != s.getClient()->end();++it)
+	{
+		c = new Client();
+		*c = **it;
+		this->lClient->push_back(c);
+	}
+
+	this->evaluate();
+}
+
 void Solution::printSolution()
 {
 	for(vector<Client*>::iterator it = this->lClient->begin(); it != this->lClient->end();++it)
