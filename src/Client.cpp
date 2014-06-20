@@ -217,15 +217,15 @@ double Client::getMinDate()
 	if(this->date->size() <= 0)
 		return -1;
 
-	vector<double>::iterator min = this->date->begin();
+	double min = *this->date->begin();
 
 	for(vector<double>::iterator it = this->date->begin(); it != this->date->end();++it)
 	{
-		if(*min > *it)
-			min = it;
+		if(min > *it)
+			min = *it;
 	}
 
-	return *min;
+	return min;
 }
 
 void Client::supprDate(double date)

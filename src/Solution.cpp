@@ -73,13 +73,13 @@ void Solution::testWay(Client* c)
 	{
 		int t;
 		Client *last = this->lClient->at(this->lClient->size()-1);
-		t = last->getTime()-last->getTimeTransport()-c->getTimeTransport();
+		t = last->time-last->timeTransport-c->timeTransport;
 		if(t > c->getMinDate())
 			c->setTime(c->getMinDate());
 		else
 			c->setTime(t);
 		this->lClient->push_back(c);
-		this->bTime = t - c->getTimeTransport();
+		this->bTime = t - c->timeTransport;
 	}
 	this->evaluate();
 }

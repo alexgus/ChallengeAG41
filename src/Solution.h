@@ -89,12 +89,13 @@ public:
 	void operator=(Solution &s);
 
 void printSolution();
-private:
 
 	/**
 	 * Evaluation of the way
 	 */
 	double eval;
+
+private:
 
 	/**
 	 * Begin time associates to the solution

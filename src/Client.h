@@ -176,6 +176,21 @@ public:
 	 */
 	void operator=(Client& c);
 
+	/**
+	 * Vector to stock batch and id of the batch
+	 */
+	vector<double> *date;
+
+	/**
+	 * Actual time
+	 */
+	double time;
+
+	/**
+	 * Time to go from the deliverer to this clients
+	 */
+	double timeTransport;
+
 private:
 
 	/**
@@ -199,11 +214,6 @@ private:
 	double eta;
 
 	/**
-	 * Time to go from the deliverer to this clients
-	 */
-	double timeTransport;
-
-	/**
 	 * transport cost
 	 */
 	double tCost;
@@ -212,16 +222,6 @@ private:
 	 * Storage cost
 	 */
 	double sCost;
-
-	/**
-	 * Vector to stock batch and id of the batch
-	 */
-	vector<double> *date;
-
-	/**
-	 * Actual time
-	 */
-	double time;
 
 	/**
 	 * Calculate transport cost
