@@ -10,7 +10,7 @@
 #include "ImportData.h"
 #include "CostTab.h"
 
-#define COEF_TAU 0.8
+#define COEF_TAU 1
 
 #include <vector>
 
@@ -290,10 +290,17 @@ int main(int argc, char *argv[])
 		{
 			// Check if we can deport the current product in other client or if the client reached the limit of the transporter
 			int j = 0;
-
 			double tl = d->tau[d->cl[i]-1]*COEF_TAU;
 			double date = d->d[i];
-			double dateL = bpc[index + j].at(0);
+			double dateL = date;
+			try
+			{
+				dateL = bpc[index + j].at(0);
+			}
+			catch(exception &e)
+			{
+				;
+			}
 			while(j < nbNewClient[d->cl[i]-1]
 			    && !((int) bpc[index + j].size() >= d->c
 			    ||date >= dateL + tl
@@ -326,12 +333,23 @@ int main(int argc, char *argv[])
 	vector<Client*> *lMixedClient = new vector<Client*>();
 
 	// **** Fill tabs ****
+
+	int *nbBpC = new int[d->n];
+	for(int k = 0 ; k < d->n ; ++k)
+		nbBpC[k]=0;
+	for(int k = 0 ; k < d->n ; ++k)
+		nbBpC[d->cl[k]-1]++;
+
 	// Tab of complete client and mixed client
 	for(i = 1 ; i <= d->m; ++i)
 	{
-		Client *c = new Client(i,d);
-		if(c->getDate()->size() != 0)
-			lMixedClient->push_back(c);
+		int k = 0;
+		for(;(double)k < (double)nbBpC[i-1]/d->c;++k)
+		{
+			Client *c = new Client(i,d,k*d->c);
+			if(c->getDate()->size() != 0)
+				lMixedClient->push_back(c);
+		}
 	}
 	// tab of separate client and mixed client
 	for(i = 0 ; i < d->m; ++i)
@@ -360,7 +378,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Free memory
-	delete nbNewClient;
+	free(nbNewClient);
 
 	tPrepAlgo = clock();
 
@@ -395,9 +413,12 @@ int main(int argc, char *argv[])
 			<< "Total time : " << ((float)(tEnd-tBegin)/CLOCKS_PER_SEC)<< endl;
 
 // Finalize free memory
+	for(vector<Client*>::iterator cIt = lMixedClient->begin(); cIt == lMixedClient->end();++cIt)
+		delete *cIt;
 	delete lMixedClient;
 	delete imp;
 	delete t;
-	//delete bpc;
+	if(bpc ==0)
+		delete bpc;
 	return EXIT_SUCCESS;
 }

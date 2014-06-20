@@ -33,10 +33,49 @@ Client::Client(int id, data* d)
 
 	this->date = new vector<double>();
 
-	for(int i=0; i < d->n ;i++)
+	int cpt = 0;
+	for(int i=0; i < d->n;i++)
+	{
+		if(d->cl[i] == id && cpt < d->c)
+		{
+			this->date->push_back(d->d[i]);
+			cpt++;
+		}
+	}
+
+	this->calcSCost();
+	this->calcTCost();
+}
+
+Client::Client(int id, data* d, int n)
+{
+	this->id = id;
+	this->id2 = 0;
+	this->time = 0;
+	this->beta = d->beta[id-1];
+	this->eta = d->eta;
+	this->timeTransport = d->tau[id-1];
+	this->tCost = 0;
+	this->sCost = 0;
+
+	this->date = new vector<double>();
+
+	int i = 0;
+	int cpt = 0;
+	while(i < d->n && cpt < n)
 	{
 		if(d->cl[i] == id)
+			cpt++;
+		i++;
+	}
+	cpt=0;
+	for(; i < d->n  && cpt < d->c;i++)
+	{
+		if(d->cl[i] == id)
+		{
 			this->date->push_back(d->d[i]);
+			++cpt;
+		}
 	}
 
 	this->calcSCost();

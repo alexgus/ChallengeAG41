@@ -57,7 +57,7 @@ CostTab::CostTab(data* d)
 
 	this->sol = new Solution(this->lClient);
 
-	delete nbBpC;
+	free(nbBpC);
 }
 
 CostTab::~CostTab()

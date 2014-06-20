@@ -47,6 +47,14 @@ public:
 	 * @param n The client nb n with the same id
 	 * @param d Data to initialize
 	 */
+	Client(int id, data *d, int n);
+
+	/**
+	 * Initialize the client with the id and data
+	 * @param id Id of Client
+	 * @param n The client nb n with the same id
+	 * @param d Data to initialize
+	 */
 	Client(int id, data *d, vector<double> *date);
 
 	/**
