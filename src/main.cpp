@@ -10,7 +10,7 @@
 #include "ImportData.h"
 #include "CostTab.h"
 
-#define COEF_TAU 1
+#define COEF_TAU 0.8
 
 #include <vector>
 
@@ -343,13 +343,10 @@ int main(int argc, char *argv[])
 			for(vector<double>::iterator itDateSuppr = bpc[(d->n * i)+k].begin() ; itDateSuppr != bpc[(d->n * i)+k].end() ; ++itDateSuppr)
 				reste->supprDate(*itDateSuppr);
 
-			if((!findClient(lMixedClient,c) || !findClient(lMixedClient,reste)))
-			{
-				if(c->getDate()->size() != 0)
+			if(!findClient(lMixedClient,c) && c->getDate()->size() != 0)
 					lMixedClient->push_back(c);
-				if(reste->getDate()->size() != 0)
-					lMixedClient->push_back(reste);
-			}
+			if(!findClient(lMixedClient,reste) && reste->getDate()->size() != 0)
+				lMixedClient->push_back(reste);
 		}
 	}
 
