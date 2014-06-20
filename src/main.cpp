@@ -177,6 +177,7 @@ void testSol(vector<Client*> *list)
 	}
 
 	delete test;
+	delete dateUnused;
 }
 
 /**
