@@ -149,26 +149,21 @@ void testSol(vector<Client*> *list)
 	vector<double> *dateUnused = copyVector(date);
 	unsigned int k = 0;
 
-	while(k < list->size() && bestSol->getEval() > test->getEval())
+	while(k < list->size() && bestSol->eval > test->eval)
 	{
 		if(searchAllDate(dateUnused,list->at(k)))
 		{
-			vector<double> *dateClient = list->at(k)->getDate();
+			vector<double> *dateClient = list->at(k)->date;
 			for(vector<double>::iterator it = dateClient->begin(); it != dateClient->end();++it)
 				eraseDate(dateUnused,*it);
 			test->testWay(list->at(k));
 		}
 		++k;
 	}
-	if(bestSol->getEval() > test->getEval() && test->getEval() != 0 && dateUnused->size() == 0)
+	if(bestSol->eval > test->eval && dateUnused->size() == 0)
 	{
 		*bestSol = *test;
 		test = new Solution();
-		if(verbose)
-		{
-			cout << "******************************************" << endl;
-			bestSol->printSolution();
-		}
 	}
 	else
 	{
